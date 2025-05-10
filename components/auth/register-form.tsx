@@ -2,10 +2,27 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { BASE_URL } from "@/constants";
 import { registerSchema } from "@/types/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Lock, Mail, UserRound } from "lucide-react";
+import {
+  Calendar,
+  Eye,
+  EyeOff,
+  Lock,
+  Mail,
+  Map,
+  PersonStanding,
+  Phone,
+  UserRound,
+} from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -21,7 +38,14 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+
+import { Lexend } from "next/font/google";
 import Image from "next/image";
+
+const lexend = Lexend({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 export function RegisterForm() {
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -90,18 +114,18 @@ export function RegisterForm() {
   }
 
   return (
-    <div>
+    <div className="rounded-xl border px-4 py-6 shadow-lg md:px-8 md:py-10">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-4"
         >
-          <section className="mb-2 text-center md:text-start">
+          <section className="mb-2 text-center">
             <Link
               href="/"
-              className="mb-3 flex items-center gap-2 font-semibold"
+              className={`mb-3 flex items-center justify-center gap-2 text-2xl font-bold md:text-3xl ${lexend.className}`}
             >
-              <div className="bg-primary text-primary-foreground flex h-6 w-6 items-center justify-center rounded-md">
+              <div className="bg-primary text-primary-foreground flex h-8 w-8 items-center justify-center rounded-md">
                 <Image
                   src={"/assets/emploria-logo.svg"}
                   width={80}
@@ -111,16 +135,14 @@ export function RegisterForm() {
               </div>
               Emploria
             </Link>
-            <p className="mt-2.5 mb-3 text-sm font-bold tracking-wide uppercase">
-              Register
-            </p>
-            <h2 className="text-xl font-bold md:text-2xl">
-              Create an account 📦
-            </h2>
-            <p className="text-muted-foreground text-sm md:text-base">
-              Fill out the form below to create your account and start managing
-              your dashboard with ease.
-            </p>
+            <div className="flex flex-col items-center justify-center">
+              <h2 className="text-lg font-bold md:text-xl">
+                Create your account 🙋‍♂️
+              </h2>
+              <p className="text-muted-foreground max-w-[300px] text-sm">
+                Start managing your company employees data with Emploria
+              </p>
+            </div>
           </section>
           <FormField
             control={form.control}
@@ -164,6 +186,102 @@ export function RegisterForm() {
               </FormItem>
             )}
           />
+          <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone</FormLabel>
+                  <div className="border-input flex items-center justify-center rounded-md border dark:bg-zinc-700">
+                    <Phone size={24} className="mx-2" />
+                    <FormControl>
+                      <Input
+                        placeholder="0812-1212-1313"
+                        {...field}
+                        autoComplete="off"
+                        className="rounded-l-none"
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address</FormLabel>
+                  <div className="border-input flex items-center justify-center rounded-md border dark:bg-zinc-700">
+                    <Map size={24} className="mx-2" />
+                    <FormControl>
+                      <Input
+                        placeholder="e.g.: Jl. Ikan Baung"
+                        {...field}
+                        autoComplete="off"
+                        className="rounded-l-none"
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+            <FormField
+              control={form.control}
+              name="gender"
+              render={() => (
+                <FormItem>
+                  <FormLabel htmlFor="gender">Gender</FormLabel>
+                  <div className="border-input flex items-center justify-center rounded-md border dark:bg-zinc-700">
+                    <PersonStanding size={24} className="mx-2" />
+                    <FormControl>
+                      <Select name="gender">
+                        <SelectTrigger
+                          id="gender"
+                          className="w-full"
+                          aria-label="Select Gender"
+                        >
+                          <SelectValue placeholder="Select Gender" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={"MALE"}>Male</SelectItem>
+                          <SelectItem value={"FEMALE"}>Female</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                  </div>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="dateOfBirth"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Date of Birth</FormLabel>
+                  <div className="border-input flex items-center justify-center rounded-md border dark:bg-zinc-700">
+                    <Calendar size={24} className="mx-2" />
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="e.g.: 2 Jun 1998"
+                        autoComplete="off"
+                        className="rounded-l-none"
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <FormField
             control={form.control}
             name="password"
@@ -205,9 +323,6 @@ export function RegisterForm() {
               Sign In
             </span>
           </Link>
-          <div className="desc-2 mt-3 text-center text-sm md:mt-12 md:text-start">
-            <p>© 2025 Emploria</p>
-          </div>
         </form>
       </Form>
     </div>
