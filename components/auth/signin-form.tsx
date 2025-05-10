@@ -22,6 +22,17 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+import { Inter, Lexend } from "next/font/google";
+
+const lexend = Lexend({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 export function SignInForm() {
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -81,15 +92,18 @@ export function SignInForm() {
   }
 
   return (
-    <div>
+    <div className="rounded-xl border px-4 py-6 shadow-lg md:px-8 md:py-10">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-4"
+          className={`flex flex-col gap-4 ${inter.className}`}
         >
-          <section className="mb-2 text-center md:text-start">
-            <Link href="/" className="flex items-center gap-2 font-semibold">
-              <div className="bg-primary text-primary-foreground flex h-6 w-6 items-center justify-center rounded-md">
+          <section className="mb-2 text-center">
+            <Link
+              href="/"
+              className={`mb-3 flex items-center justify-center gap-2 text-2xl font-bold md:text-3xl ${lexend.className}`}
+            >
+              <div className="bg-primary text-primary-foreground flex h-8 w-8 items-center justify-center rounded-md">
                 <Image
                   src={"/assets/emploria-logo.svg"}
                   width={80}
@@ -99,14 +113,13 @@ export function SignInForm() {
               </div>
               Emploria
             </Link>
-            <p className="mt-2.5 mb-3 text-sm font-bold tracking-wide uppercase">
-              Sign In
-            </p>
-            <h2 className="text-xl font-bold md:text-2xl">Welcome Back 🙋‍♂️</h2>
-            <p className="text-muted-foreground text-sm md:text-base">
-              Fill out the form below to securely access your dashboard and
-              continue with ease.
-            </p>
+            <div className="flex flex-col items-center justify-center">
+              <h2 className="text-lg font-bold md:text-xl">Welcome Back 👋</h2>
+              <p className="text-muted-foreground max-w-[300px] text-sm">
+                Let&apos;s get back to tracking your data, salaries, and leave
+                entitlements.
+              </p>
+            </div>
           </section>
           <FormField
             control={form.control}
@@ -157,49 +170,31 @@ export function SignInForm() {
               </FormItem>
             )}
           />
-
-          <Button
-            type="submit"
-            disabled={submitting}
-            className="mt-2 w-full cursor-pointer"
-          >
-            {submitting ? "Signing In..." : "Sign In"}
-          </Button>
-
-          <div className="my-1 flex items-center gap-4">
-            <div className="bg-primary/20 dark:bg-primary-foreground/80 h-0.5 w-1/2" />
-            <div>OR</div>
-            <div className="bg-primary/20 dark:bg-primary-foreground/80 h-0.5 w-1/2" />
-          </div>
-
-          {/* Google SignIn Button */}
           <div>
             <Button
-              className="w-full cursor-pointer bg-zinc-700 text-white hover:bg-zinc-500"
-              onClick={(e) => {
-                e.preventDefault();
-                signIn("google");
-              }}
+              type="submit"
+              disabled={submitting}
+              className="w-full cursor-pointer"
             >
-              <Image
-                src={"/assets/google.svg"}
-                width={1000}
-                height={1000}
-                alt="Google"
-                className="mr-2 size-4"
-              />
+              {submitting ? "Signing In..." : "Sign In"}
+            </Button>
+            <p className="my-2 grid w-full place-items-center text-center">
+              OR
+            </p>
+            <Button
+              type="button"
+              disabled={submitting}
+              className="w-full cursor-pointer"
+            >
               Sign In with Google
             </Button>
           </div>
           <Link href={"/register"} className="mt-2 text-center text-sm">
-            Don&apos;t have an account?{" "}
+            Don&apos; have an account?{" "}
             <span className="text-main-500 font-semibold underline">
               Register
             </span>
           </Link>
-          <div className="mt-3 text-center text-sm md:mt-10 md:text-start">
-            <p>© 2025 Emploria</p>
-          </div>
         </form>
       </Form>
     </div>

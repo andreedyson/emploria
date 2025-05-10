@@ -39,10 +39,15 @@ import {
   FormMessage,
 } from "../ui/form";
 
-import { Lexend } from "next/font/google";
+import { Inter, Lexend } from "next/font/google";
 import Image from "next/image";
 
 const lexend = Lexend({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
@@ -59,6 +64,9 @@ export function RegisterForm() {
       name: "",
       email: "",
       password: "",
+      address: "",
+      phone: "",
+      dateOfBirth: "",
     },
   });
 
@@ -118,7 +126,7 @@ export function RegisterForm() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-4"
+          className={`flex flex-col gap-4 ${inter.className}`}
         >
           <section className="mb-2 text-center">
             <Link
