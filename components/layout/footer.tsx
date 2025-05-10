@@ -1,4 +1,5 @@
 import { LANDING_PAGE_LINKS } from "@/constants";
+import Image from "next/image";
 import Link from "next/link";
 
 function Footer() {
@@ -12,7 +13,12 @@ function Footer() {
             className="flex items-center gap-2 font-semibold italic"
           >
             <div className="bg-primary flex size-8 items-center justify-center rounded-md font-bold">
-              E
+              <Image
+                src={"/assets/emploria-logo.svg"}
+                width={80}
+                height={80}
+                alt="Emploria Logo"
+              />
             </div>
             <span>Emploria</span>
           </Link>

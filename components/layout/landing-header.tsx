@@ -1,13 +1,13 @@
 "use client";
 
 import { LANDING_PAGE_LINKS } from "@/constants";
-import { GalleryVerticalEnd } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "../ui/button";
 import UserAvatar from "../user-avatar";
 import { ThemeToggle } from "../theme-toggle";
+import Image from "next/image";
 
 function LandingHeader() {
   const pathname = usePathname();
@@ -18,7 +18,12 @@ function LandingHeader() {
       {/* Logo */}
       <Link href="/" className="flex items-center gap-2 font-semibold">
         <div className="bg-primary text-primary-foreground flex h-6 w-6 items-center justify-center rounded-md">
-          <GalleryVerticalEnd className="size-4" />
+          <Image
+            src={"/assets/emploria-logo.svg"}
+            width={80}
+            height={80}
+            alt="Emploria Logo"
+          />
         </div>
         Emploria
       </Link>

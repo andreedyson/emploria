@@ -5,14 +5,7 @@ import { Input } from "@/components/ui/input";
 import { BASE_URL } from "@/constants";
 import { registerSchema } from "@/types/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Eye,
-  EyeOff,
-  GalleryVerticalEnd,
-  Lock,
-  Mail,
-  UserRound,
-} from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, UserRound } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -28,6 +21,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+import Image from "next/image";
 
 export function RegisterForm() {
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -108,7 +102,12 @@ export function RegisterForm() {
               className="mb-3 flex items-center gap-2 font-semibold"
             >
               <div className="bg-primary text-primary-foreground flex h-6 w-6 items-center justify-center rounded-md">
-                <GalleryVerticalEnd className="size-4" />
+                <Image
+                  src={"/assets/emploria-logo.svg"}
+                  width={80}
+                  height={80}
+                  alt="Emploria Logo"
+                />
               </div>
               Emploria
             </Link>

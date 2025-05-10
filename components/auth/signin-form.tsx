@@ -4,14 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { signInSchema } from "@/types/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, GalleryVerticalEnd, Lock, Mail } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
+import { customToast } from "../custom-toast";
 import {
   Form,
   FormControl,
@@ -20,8 +22,6 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import Image from "next/image";
-import { customToast } from "../custom-toast";
 
 export function SignInForm() {
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -90,7 +90,12 @@ export function SignInForm() {
           <section className="mb-2 text-center md:text-start">
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <div className="bg-primary text-primary-foreground flex h-6 w-6 items-center justify-center rounded-md">
-                <GalleryVerticalEnd className="size-4" />
+                <Image
+                  src={"/assets/emploria-logo.svg"}
+                  width={80}
+                  height={80}
+                  alt="Emploria Logo"
+                />
               </div>
               Emploria
             </Link>

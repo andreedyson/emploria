@@ -17,6 +17,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
+import Image from "next/image";
 
 // Menu items. Change according to the needs of your applications
 const items = [
@@ -54,7 +55,12 @@ export function AppSidebar() {
             <SidebarMenuButton size="lg" asChild>
               <Link href="/dashboard">
                 <div className="bg-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg font-bold italic">
-                  E
+                  <Image
+                    src={"/assets/emploria-logo.svg"}
+                    width={80}
+                    height={80}
+                    alt="Emploria Logo"
+                  />
                 </div>
                 <div className="leading-none">
                   <span className="font-semibold italic">Emploria</span>
