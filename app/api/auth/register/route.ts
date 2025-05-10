@@ -4,7 +4,8 @@ import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const { name, email, password } = await req.json();
+  const { name, email, password, address, dateOfBirth, gender, phone } =
+    await req.json();
 
   try {
     const userExists = await prisma.user.findFirst({
@@ -20,10 +21,20 @@ export async function POST(req: Request) {
       );
     }
 
-    const response = registerSchema.safeParse({ name, email, password });
+    const response = registerSchema.safeParse({
+      name,
+      email,
+      password,
+      address,
+      dateOfBirth,
+      gender,
+      phone,
+    });
 
     if (!response.success) {
       const { errors } = response.error;
+
+      console.log(errors);
 
       return NextResponse.json({ message: errors[0].message }, { status: 400 });
     }
@@ -34,6 +45,10 @@ export async function POST(req: Request) {
       data: {
         name: name,
         email: email,
+        phone: phone,
+        address: address,
+        gender: gender,
+        dateOfBirth: new Date(dateOfBirth),
         password: hashedPassword,
       },
     });
@@ -43,6 +58,7 @@ export async function POST(req: Request) {
       { status: 201 },
     );
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ message: `${error}` }, { status: 500 });
   }
 }

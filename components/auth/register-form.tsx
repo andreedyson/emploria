@@ -98,6 +98,10 @@ export function RegisterForm() {
         body: JSON.stringify({
           name: values.name,
           email: values.email,
+          phone: values.phone,
+          address: values.address,
+          gender: values.gender,
+          dateOfBirth: values.dateOfBirth,
           password: values.password,
         }),
       });
@@ -242,13 +246,16 @@ export function RegisterForm() {
             <FormField
               control={form.control}
               name="gender"
-              render={() => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel htmlFor="gender">Gender</FormLabel>
                   <div className="border-input flex items-center justify-center rounded-md border dark:bg-zinc-700">
                     <PersonStanding size={24} className="mx-2" />
                     <FormControl>
-                      <Select name="gender">
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value || ""}
+                      >
                         <SelectTrigger
                           id="gender"
                           className="w-full"
@@ -257,17 +264,17 @@ export function RegisterForm() {
                           <SelectValue placeholder="Select Gender" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value={"MALE"}>Male</SelectItem>
-                          <SelectItem value={"FEMALE"}>Female</SelectItem>
+                          <SelectItem value="MALE">Male</SelectItem>
+                          <SelectItem value="FEMALE">Female</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>
                   </div>
-
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="dateOfBirth"
