@@ -174,7 +174,7 @@ export function SignInForm() {
             <Button
               type="submit"
               disabled={submitting}
-              className="w-full cursor-pointer"
+              className="bg-picton-blue-500 hover:bg-picton-blue-700 w-full cursor-pointer duration-200"
             >
               {submitting ? "Signing In..." : "Sign In"}
             </Button>

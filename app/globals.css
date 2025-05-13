@@ -4,6 +4,17 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --color-picton-blue-50: #f0f7ff;
+  --color-picton-blue-100: #e1effd;
+  --color-picton-blue-200: #bbdefc;
+  --color-picton-blue-300: #7fc4fa;
+  --color-picton-blue-400: #58b3f6;
+  --color-picton-blue-500: #128ae5;
+  --color-picton-blue-600: #066dc3;
+  --color-picton-blue-700: #06569e;
+  --color-picton-blue-800: #094a83;
+  --color-picton-blue-900: #0e3f6c;
+  --color-picton-blue-950: #092848;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);

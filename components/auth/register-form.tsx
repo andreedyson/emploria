@@ -328,7 +328,7 @@ export function RegisterForm() {
           <Button
             type="submit"
             disabled={submitting}
-            className="mt-2 w-full cursor-pointer"
+            className="bg-picton-blue-500 hover:bg-picton-blue-700 mt-2 w-full cursor-pointer duration-200"
           >
             {submitting ? "Registering..." : "Register"}
           </Button>
