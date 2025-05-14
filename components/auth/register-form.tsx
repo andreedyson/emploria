@@ -116,7 +116,7 @@ export function RegisterForm() {
         setSubmitting(false);
         customToast("success", "Success 🌟", data.message);
         form.reset();
-        router.push("/sign-in");
+        router.push("/");
       }
     } catch (error) {
       console.error("Registration error:", error);
@@ -332,7 +332,7 @@ export function RegisterForm() {
           >
             {submitting ? "Registering..." : "Register"}
           </Button>
-          <Link href={"/sign-in"} className="mt-2 text-center text-sm">
+          <Link href={"/"} className="mt-2 text-center text-sm">
             Already have an account?{" "}
             <span className="text-main-500 font-semibold underline">
               Sign In

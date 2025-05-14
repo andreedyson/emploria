@@ -1,6 +1,6 @@
 import { SignInForm } from "@/components/auth/signin-form";
 
-function SignInPage() {
+function LandingPage() {
   return (
     <div className="grid min-h-svh place-items-center max-md:m-4">
       <div className="w-full max-w-md">
@@ -10,4 +10,4 @@ function SignInPage() {
   );
 }
 
-export default SignInPage;
+export default LandingPage;

@@ -134,7 +134,7 @@ export const authOptions: NextAuthOptions = {
 
   // 🌐 Override default sign-in page
   pages: {
-    signIn: "/sign-in",
+    signIn: "/",
   },
 
   // 🔐 NextAuth secret

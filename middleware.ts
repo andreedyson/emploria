@@ -27,7 +27,7 @@ export async function middleware(req: NextRequest) {
       }
 
       // For page routes, redirect to login form
-      const url = new URL("/sign-in", req.url);
+      const url = new URL("/", req.url);
       return NextResponse.redirect(url);
     }
 
