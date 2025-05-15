@@ -10,6 +10,12 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  const roleRoutes: Record<string, string> = {
+    SUPER_ADMIN: "/dashboard/super-admin",
+    SUPER_ADMIN_COMPANY: "/dashboard/admin",
+    USER: "/dashboard/user",
+  };
+
   try {
     const token = await getToken({
       req,
@@ -29,6 +35,26 @@ export async function middleware(req: NextRequest) {
       // For page routes, redirect to login form
       const url = new URL("/", req.url);
       return NextResponse.redirect(url);
+    }
+
+    const userRole = token.role as keyof typeof roleRoutes;
+
+    // Redirect '/' to the correct dashboard
+    if (pathname === "/") {
+      const target = roleRoutes[userRole];
+      return NextResponse.redirect(new URL(target, req.url));
+    }
+
+    if (pathname.startsWith("/dashboard")) {
+      if (
+        (pathname.startsWith("/dashboard/super-admin") &&
+          userRole !== "SUPER_ADMIN") ||
+        (pathname.startsWith("/dashboard/admin") &&
+          userRole !== "SUPER_ADMIN_COMPANY") ||
+        (pathname.startsWith("/dashboard/user") && userRole !== "USER")
+      ) {
+        return NextResponse.redirect(new URL(roleRoutes[userRole], req.url));
+      }
     }
 
     return NextResponse.next();
