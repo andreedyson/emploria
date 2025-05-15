@@ -53,14 +53,15 @@ export function SignInForm() {
     const systemRole = session.data?.user.role;
 
     if (isAutheticated && systemRole == "USER") {
-      router.replace("/");
+      router.replace("/dashboard/user");
     }
 
-    if (
-      isAutheticated &&
-      (systemRole == "SUPER_ADMIN" || systemRole == "ADMIN")
-    ) {
-      router.replace("/dashboard");
+    if (isAutheticated && systemRole == "SUPER_ADMIN_COMPANY") {
+      router.replace("/dashboard/company-admin");
+    }
+
+    if (isAutheticated && systemRole == "SUPER_ADMIN") {
+      router.replace("/dashboard/super-admin");
     }
   }, [session, router]);
 
