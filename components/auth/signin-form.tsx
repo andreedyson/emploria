@@ -57,7 +57,7 @@ export function SignInForm() {
     }
 
     if (isAutheticated && systemRole == "SUPER_ADMIN_COMPANY") {
-      router.replace("/dashboard/company-admin");
+      router.replace("/dashboard/admin");
     }
 
     if (isAutheticated && systemRole == "SUPER_ADMIN") {
