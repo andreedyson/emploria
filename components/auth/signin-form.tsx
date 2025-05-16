@@ -190,6 +190,9 @@ export function SignInForm() {
               Sign In with Google
             </Button>
           </div>
+          <p className="mt-2 text-center text-sm">
+            © {new Date().getFullYear()} Emploria
+          </p>
         </form>
       </Form>
     </div>

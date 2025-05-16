@@ -6,6 +6,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: {
@@ -41,6 +42,7 @@ export default async function AdminLayout({
           />
           <div className="m-4">{children}</div>
         </main>
+        <Toaster position="bottom-center" />
       </SidebarProvider>
     </ReactQueryProvider>
   );
