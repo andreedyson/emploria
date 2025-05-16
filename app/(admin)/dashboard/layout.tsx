@@ -1,5 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
-import { AppSidebar } from "@/components/app-sidebar";
+import { SuperAdminSidebar } from "@/components/sidebars/super-admin-sidebar";
 import AdminHeader from "@/components/layout/admin-header";
 import ReactQueryProvider from "@/components/providers/react-query-provider";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -32,7 +32,7 @@ export default async function AdminLayout({
     // ⚠️ Wraps the dashboard with React Query so all pages inside can use hooks like `useQuery`
     <ReactQueryProvider>
       <SidebarProvider>
-        <AppSidebar />
+        <SuperAdminSidebar />
         <main className={`w-full antialiased`}>
           <AdminHeader
             name={session.user.name as string}
