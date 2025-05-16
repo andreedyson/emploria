@@ -34,8 +34,6 @@ export async function POST(req: Request) {
     if (!response.success) {
       const { errors } = response.error;
 
-      console.log(errors);
-
       return NextResponse.json({ message: errors[0].message }, { status: 400 });
     }
 
