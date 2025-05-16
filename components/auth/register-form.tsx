@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { BASE_URL } from "@/constants";
-import { registerSchema } from "@/types/validations";
+import { registerSchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Calendar,

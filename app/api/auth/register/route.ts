@@ -1,5 +1,5 @@
 import prisma from "@/lib/db";
-import { registerSchema } from "@/types/validations";
+import { registerSchema } from "@/validations";
 import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 
