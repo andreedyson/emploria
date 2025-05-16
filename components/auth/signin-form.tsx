@@ -190,12 +190,6 @@ export function SignInForm() {
               Sign In with Google
             </Button>
           </div>
-          <Link href={"/register"} className="mt-2 text-center text-sm">
-            Don&apos; have an account?{" "}
-            <span className="text-main-500 font-semibold underline">
-              Register
-            </span>
-          </Link>
         </form>
       </Form>
     </div>
