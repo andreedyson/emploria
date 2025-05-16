@@ -25,7 +25,7 @@ import { usePathname } from "next/navigation";
 
 type UserAvatarProps = {
   fullname: string;
-  role: "SUPER_ADMIN" | "ADMIN" | "USER";
+  role: string;
   email: string;
 };
 
@@ -37,7 +37,7 @@ function UserAvatar({ fullname, role, email }: UserAvatarProps) {
     .map((name) => name.charAt(0).toUpperCase())
     .join("");
 
-  const isUserAdmin = role === "ADMIN" || role === "SUPER_ADMIN";
+  const isUserAdmin = role === "SUPER_ADMIN" || role === "SUPER_ADMIN_COMPANY";
 
   const isOnDashboard = pathname.includes("/dashboard");
   const linkHref = isUserAdmin

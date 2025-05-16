@@ -5,7 +5,13 @@ import { usePathname } from "next/navigation";
 import { ThemeToggle } from "../theme-toggle";
 import UserAvatar from "../user-avatar";
 
-function AdminHeader() {
+type AdminHeaderProps = {
+  name: string;
+  email: string;
+  role: string;
+};
+
+function AdminHeader({ name, email, role }: AdminHeaderProps) {
   const pathname = usePathname();
   const pageName =
     pathname.split("/").length >= 3
@@ -20,11 +26,7 @@ function AdminHeader() {
       </div>
       <div className="flex items-center gap-2">
         <ThemeToggle />
-        <UserAvatar
-          fullname="Andre"
-          role="SUPER_ADMIN"
-          email={"andre@mail.com"}
-        />
+        <UserAvatar fullname={name} role={role} email={email} />
       </div>
     </header>
   );

@@ -1,8 +1,11 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { AppSidebar } from "@/components/app-sidebar";
 import AdminHeader from "@/components/layout/admin-header";
 import ReactQueryProvider from "@/components/providers/react-query-provider";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Metadata } from "next";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: {
@@ -19,13 +22,23 @@ export default async function AdminLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    redirect("/");
+  }
+
   return (
     // ⚠️ Wraps the dashboard with React Query so all pages inside can use hooks like `useQuery`
     <ReactQueryProvider>
       <SidebarProvider>
         <AppSidebar />
         <main className={`w-full antialiased`}>
-          <AdminHeader />
+          <AdminHeader
+            name={session.user.name as string}
+            email={session.user.email as string}
+            role={session.user.role}
+          />
           <div className="m-4">{children}</div>
         </main>
       </SidebarProvider>
