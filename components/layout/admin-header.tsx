@@ -14,9 +14,9 @@ type AdminHeaderProps = {
 function AdminHeader({ name, email, role }: AdminHeaderProps) {
   const pathname = usePathname();
   const pageName =
-    pathname.split("/").length >= 3
-      ? pathname.split("/")[1]
-      : pathname.split("/")[0];
+    pathname.split("/").length >= 4
+      ? pathname.split("/")[3]
+      : pathname.split("/")[1];
 
   return (
     <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b px-4">
