@@ -42,8 +42,8 @@ const items = [
     icon: User,
   },
   {
-    title: "Platform",
-    url: "/dashboard/super-admin/platform",
+    title: "Statistic",
+    url: "/dashboard/super-admin/statistic",
     icon: ChartColumn,
   },
 ];
