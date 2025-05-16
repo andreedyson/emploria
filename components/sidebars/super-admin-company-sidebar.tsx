@@ -62,7 +62,7 @@ const items = [
 
 export function SuperAdminCompanySidebar() {
   const pathname = usePathname();
-  const pathnameSplit = pathname.split("/").slice(0, 3).join("/");
+  const pathnameSplit = pathname.split("/").slice(0, 4).join("/");
 
   return (
     <Sidebar collapsible="icon" className="border-r-4">
