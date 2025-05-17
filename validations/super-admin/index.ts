@@ -1,11 +1,22 @@
 import { z } from "zod";
+const ALLOWED_FILE_TYPE = [
+  "image/jpg",
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+];
 
 export const companySchema = z.object({
   name: z
     .string({ required_error: "Name is required" })
     .min(1, { message: "Company Name should be atleast 1 character" })
     .max(50, { message: "Company Name should be less than 50 characters" }),
-  image: z.string().optional(),
+  image: z
+    .any()
+    .refine((file: File) => file.name, { message: "Image is required" })
+    .refine((file: File) => ALLOWED_FILE_TYPE.includes(file.type), {
+      message: "File type is not allowed",
+    }),
 });
 
 export const superAdminUserSchema = z.object({

@@ -7,6 +7,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { IdCard, LetterText } from "lucide-react";
 import DeleteCompanyDialog from "./delete-company-dialog";
 import EditCompanyDialog from "./edit-company-dialog";
+import Image from "next/image";
+import { getImageUrl } from "@/lib/supabase";
 
 export const CompanyColumns: ColumnDef<AllCompaniesProps>[] = [
   {
@@ -27,13 +29,16 @@ export const CompanyColumns: ColumnDef<AllCompaniesProps>[] = [
       return (
         <div className="flex items-center gap-2">
           <div className="size-16 rounded-lg md:size-20">
-            {/* <Image
-              src={getImageUrl(brand.logo, "brands")}
-              alt={brand.name}
+            <Image
+              src={
+                getImageUrl(company.image as string, "employees") ||
+                "/assets/image-placeholder.svg"
+              }
+              alt={company.name}
               width={80}
               height={80}
               className="size-16 object-contain md:size-20"
-            /> */}
+            />
           </div>
           <p>{company.name}</p>
         </div>

@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -30,10 +30,13 @@ import { useRouter } from "next/navigation";
 import { companySchema } from "@/validations/super-admin";
 import { SubmitButton } from "@/components/submit-button";
 import { customToast } from "@/components/custom-toast";
+import Image from "next/image";
 
 function AddCompanyDialog() {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const router = useRouter();
 
@@ -41,23 +44,38 @@ function AddCompanyDialog() {
     resolver: zodResolver(companySchema),
     defaultValues: {
       name: "",
-      image: "",
     },
   });
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setSelectedImage(previewUrl);
+    } else {
+      setSelectedImage(null);
+    }
+  };
+
+  const handleClearImage = () => {
+    setSelectedImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
 
   async function onSubmit(values: z.infer<typeof companySchema>) {
     setSubmitting(true);
 
     try {
+      const formData = new FormData();
+      formData.append("name", values.name);
+      const file = form.getValues().image as File;
+      if (file) formData.append("image", file);
+
       const res = await fetch(`${BASE_URL}/api/super-admin/company`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: values.name,
-          image: values.image,
-        }),
+        body: formData,
       });
 
       const data = await res.json();
@@ -77,6 +95,7 @@ function AddCompanyDialog() {
       console.error(error);
     }
   }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -114,6 +133,54 @@ function AddCompanyDialog() {
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Image</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      accept=".jpg,.png,.jpeg,.webp"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0] ?? null;
+                        field.onChange(file);
+                        handleFileChange(e);
+                      }}
+                      ref={(el) => {
+                        field.ref(el);
+                        fileInputRef.current = el;
+                      }}
+                      className="bg-input w-full"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Image Preview */}
+            {selectedImage ? (
+              <div className="flex flex-col items-center justify-center gap-2">
+                <Image
+                  src={selectedImage}
+                  width={200}
+                  height={200}
+                  alt="Company Logo"
+                  className="max-h-[200px] object-contain"
+                />
+                <p
+                  onClick={handleClearImage}
+                  className="bg-muted w-fit cursor-pointer border px-2 py-1 text-end text-sm"
+                >
+                  Clear
+                </p>
+              </div>
+            ) : (
+              <p className="text-center text-sm">No image selected.</p>
+            )}
 
             <DialogFooter className="flex gap-2">
               <SubmitButton

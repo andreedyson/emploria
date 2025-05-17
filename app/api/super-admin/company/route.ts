@@ -1,23 +1,23 @@
 import prisma from "@/lib/db";
+import { deleteFiles, updateFile, uploadFile } from "@/lib/supabase";
 import { companySchema } from "@/validations/super-admin";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const { name, image } = await req.json();
+  const formData = await req.formData();
+  const name = formData.get("name") as string;
+  const image = formData.get("image") as File;
 
   try {
     const validatedFields = companySchema.safeParse({ name, image });
 
     if (!validatedFields.success) {
       const { errors } = validatedFields.error;
-
       return NextResponse.json({ message: errors[0].message }, { status: 400 });
     }
 
     const nameExist = await prisma.company.findFirst({
-      where: {
-        name: name,
-      },
+      where: { name },
     });
 
     if (nameExist) {
@@ -27,11 +27,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // TODO: Add Supabase Image Storage Logic
+    // Upload image to Supabase Storage
+    const fileName = await uploadFile(image, "employees");
 
     const company = await prisma.company.create({
       data: {
-        name: name,
+        name,
+        image: fileName,
       },
     });
 
@@ -49,14 +51,16 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-  const { companyId, name, image } = await req.json();
+  const formData = await req.formData();
+  const companyId = formData.get("companyId") as string;
+  const name = formData.get("name") as string;
+  const image = formData.get("image") as File | null;
 
   try {
     const validatedFields = companySchema.safeParse({ name, image });
 
     if (!validatedFields.success) {
       const { errors } = validatedFields.error;
-
       return NextResponse.json({ message: errors[0].message }, { status: 400 });
     }
 
@@ -75,26 +79,35 @@ export async function PUT(req: NextRequest) {
 
     const nameExist = await prisma.company.findFirst({
       where: {
-        name: name,
+        name,
+        NOT: {
+          id: companyId, // allow renaming to same name if it's the same company
+        },
       },
     });
 
-    if (validatedFields.data.name === company.name || nameExist) {
+    if (nameExist) {
       return NextResponse.json(
         { message: "Company Name already exist" },
         { status: 409 },
       );
     }
 
-    // TODO: Add Supabase Image Storage Logic
+    let newFilename = company.image;
+
+    // Update image if a new one is uploaded
+    if (image && image.size > 0) {
+      const prevFile = new File([], company.image as string);
+      newFilename = await updateFile(prevFile, image, "employees");
+    }
 
     const editedCompany = await prisma.company.update({
       where: {
         id: companyId,
       },
       data: {
-        name: name,
-        image: image,
+        name,
+        image: newFilename,
       },
     });
 
@@ -105,7 +118,7 @@ export async function PUT(req: NextRequest) {
   } catch (e) {
     console.error(e);
     return NextResponse.json(
-      { message: "Error creating company" },
+      { message: "Error updating company" },
       { status: 500 },
     );
   }
@@ -128,13 +141,13 @@ export async function DELETE(req: NextRequest) {
       );
     }
 
+    await deleteFiles([company.image as string], "employees");
+
     const deletedCompany = await prisma.company.delete({
       where: {
         id: companyId,
       },
     });
-
-    // TODO: Add Supabase Image Storage Logic
 
     return NextResponse.json(
       { message: "Company deleted successfully", data: deletedCompany },

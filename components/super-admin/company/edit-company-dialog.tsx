@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -31,6 +31,7 @@ import { companySchema } from "@/validations/super-admin";
 import { Company } from "@prisma/client";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 type EditCompanyDialogProps = {
   companyData: Company;
@@ -39,7 +40,8 @@ type EditCompanyDialogProps = {
 function EditCompanyDialog({ companyData }: EditCompanyDialogProps) {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
-
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof companySchema>>({
@@ -56,20 +58,36 @@ function EditCompanyDialog({ companyData }: EditCompanyDialogProps) {
     });
   }, [companyData.name, form]);
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setSelectedImage(previewUrl);
+      form.setValue("image", file);
+    }
+  };
+
+  const handleClearImage = () => {
+    setSelectedImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    form.setValue("image", "");
+  };
+
   async function onSubmit(values: z.infer<typeof companySchema>) {
     setSubmitting(true);
-
     try {
+      const formData = new FormData();
+      formData.append("companyId", companyData.id);
+      formData.append("name", values.name);
+      if (values.image instanceof File && values.image.size > 0) {
+        formData.append("image", values.image);
+      }
+
       const res = await fetch(`${BASE_URL}/api/super-admin/company`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          companyId: companyData.id,
-          name: values.name,
-          image: values.image,
-        }),
+        body: formData,
       });
 
       const data = await res.json();
@@ -89,6 +107,7 @@ function EditCompanyDialog({ companyData }: EditCompanyDialogProps) {
       setSubmitting(false);
     }
   }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -124,12 +143,53 @@ function EditCompanyDialog({ companyData }: EditCompanyDialogProps) {
               )}
             />
 
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Image</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      accept=".jpg,.png,.jpeg,.webp"
+                      onChange={handleFileChange}
+                      ref={(el) => {
+                        field.ref(el);
+                        fileInputRef.current = el;
+                      }}
+                      className="bg-input w-full"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {selectedImage && (
+              <div className="flex flex-col items-center justify-center gap-2">
+                <Image
+                  src={selectedImage}
+                  width={200}
+                  height={200}
+                  alt="Selected Logo"
+                  className="max-h-[200px] object-contain"
+                />
+                <p
+                  onClick={handleClearImage}
+                  className="bg-muted w-fit cursor-pointer border px-2 py-1 text-end text-sm"
+                >
+                  Clear
+                </p>
+              </div>
+            )}
+
             <DialogFooter className="flex gap-2">
               <SubmitButton
                 isSubmitting={submitting}
                 className="dark:text-foreground w-full cursor-pointer bg-yellow-500 hover:bg-yellow-600"
               >
-                {submitting ? "Editing" : "Edit"}
+                {submitting ? "Editing..." : "Edit"}
               </SubmitButton>
             </DialogFooter>
           </form>
