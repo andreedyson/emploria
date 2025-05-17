@@ -94,7 +94,7 @@ function EditCompanyDialog({ companyData }: EditCompanyDialogProps) {
       <DialogTrigger asChild>
         <Button
           size={"icon"}
-          className="flex items-center gap-2 bg-yellow-500 text-white duration-200 hover:bg-yellow-600"
+          className="flex cursor-pointer items-center gap-2 bg-yellow-500 text-white duration-200 hover:bg-yellow-600"
         >
           <Pencil size={16} />
         </Button>
@@ -127,7 +127,7 @@ function EditCompanyDialog({ companyData }: EditCompanyDialogProps) {
             <DialogFooter className="flex gap-2">
               <SubmitButton
                 isSubmitting={submitting}
-                className="dark:text-foreground w-full bg-yellow-500 hover:bg-yellow-600"
+                className="dark:text-foreground w-full cursor-pointer bg-yellow-500 hover:bg-yellow-600"
               >
                 {submitting ? "Editing" : "Edit"}
               </SubmitButton>

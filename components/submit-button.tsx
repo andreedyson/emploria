@@ -5,20 +5,27 @@ type SubmitButtonType = {
   children: React.ReactNode;
   isSubmitting: boolean;
   className?: string;
+  onClick?: () => void;
 };
 
 export function SubmitButton({
   children,
   isSubmitting,
   className,
+  onClick,
   ...props
 }: SubmitButtonType) {
   return (
-    <Button disabled={isSubmitting} {...props} className={className}>
+    <Button
+      disabled={isSubmitting}
+      {...props}
+      className={className}
+      onClick={onClick}
+    >
       <span>{children}</span>
 
       {isSubmitting && (
-        <div className="flex items-center pl-3">
+        <div className="flex items-center pl-1.5">
           <Loader2 className="size-5 animate-spin" />
         </div>
       )}
