@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/theme-providers";
 import type { Metadata } from "next";
 import { Lexend } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
 
 const lexend = Lexend({
   subsets: ["latin"],
@@ -29,6 +30,7 @@ export default function RootLayout({
             enableSystem={false}
           >
             {children}
+            <Toaster position="bottom-right" />
           </ThemeProvider>
         </AuthProvider>
       </body>
