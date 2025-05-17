@@ -3,4 +3,6 @@ export type AllCompaniesProps = {
   name: string;
   image: string | null;
   totalUsers: number;
+  createdAt: Date;
+  updatedAt: Date;
 };

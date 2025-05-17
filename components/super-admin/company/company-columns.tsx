@@ -4,6 +4,7 @@ import { AllCompaniesProps } from "@/types/super-admin/company";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { IdCard, LetterText } from "lucide-react";
+import EditCompanyDialog from "./edit-company-dialog";
 
 export const CompanyColumns: ColumnDef<AllCompaniesProps>[] = [
   {
@@ -49,8 +50,13 @@ export const CompanyColumns: ColumnDef<AllCompaniesProps>[] = [
     accessorKey: "actions",
     header: "Actions",
     id: "actions",
-    cell: ({}) => {
-      return <div className="flex items-center gap-1"></div>;
+    cell: ({ row }) => {
+      const company = row.original;
+      return (
+        <div className="flex items-center gap-1">
+          <EditCompanyDialog companyData={company} />
+        </div>
+      );
     },
   },
 ];
