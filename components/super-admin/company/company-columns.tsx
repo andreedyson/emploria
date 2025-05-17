@@ -2,31 +2,24 @@
 
 import { AllCompaniesProps } from "@/types/super-admin/company";
 
+import { DataTableColumnHeader } from "@/components/tables/data-table-column-header";
 import { ColumnDef } from "@tanstack/react-table";
 import { IdCard, LetterText } from "lucide-react";
-import EditCompanyDialog from "./edit-company-dialog";
 import DeleteCompanyDialog from "./delete-company-dialog";
+import EditCompanyDialog from "./edit-company-dialog";
 
 export const CompanyColumns: ColumnDef<AllCompaniesProps>[] = [
   {
     accessorKey: "id",
-    header: () => {
-      return (
-        <div className="flex items-center gap-1">
-          <IdCard size={14} />
-          ID
-        </div>
-      );
+    header: ({ column }) => {
+      return <DataTableColumnHeader column={column} title="ID" icon={IdCard} />;
     },
   },
   {
     accessorKey: "name",
-    header: () => {
+    header: ({ column }) => {
       return (
-        <div className="flex items-center gap-1">
-          <LetterText size={14} />
-          Name
-        </div>
+        <DataTableColumnHeader column={column} title="Name" icon={LetterText} />
       );
     },
     cell: ({ row }) => {
