@@ -93,12 +93,14 @@ export async function PUT(req: NextRequest) {
       );
     }
 
+    const fileUpload = image as File;
+
+    const prevFile = new File([], company.image as string);
     let newFilename = company.image;
 
     // Update image if a new one is uploaded
-    if (image && image.size > 0) {
-      const prevFile = new File([], company.image as string);
-      newFilename = await updateFile(prevFile, image, "companies");
+    if (fileUpload.size > 0) {
+      newFilename = await updateFile(prevFile, fileUpload, "companies");
     }
 
     const editedCompany = await prisma.company.update({

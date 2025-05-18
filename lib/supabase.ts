@@ -49,7 +49,7 @@ export const updateFile = async (
 
   // Delete the old file if it exists
   if (prevFile.name) {
-    await deleteFiles([prevFile.name]);
+    await deleteFiles([prevFile.name], path);
   }
 
   await supabaseClient.upload(newFilePath, newFile, {
