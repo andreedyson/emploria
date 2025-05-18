@@ -3,9 +3,10 @@
 import { DataTableColumnHeader } from "@/components/tables/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
 import { getImageUrl } from "@/lib/supabase";
+import { formatDate } from "@/lib/utils";
 import { SuperAdminCompanyUserProps } from "@/types/super-admin/user";
 import { ColumnDef } from "@tanstack/react-table";
-import { IdCard, LetterText, Mail } from "lucide-react";
+import { Calendar, IdCard, LetterText, Mail } from "lucide-react";
 import Image from "next/image";
 
 export const SuperAdminUserColumns: ColumnDef<SuperAdminCompanyUserProps>[] = [
@@ -52,6 +53,23 @@ export const SuperAdminUserColumns: ColumnDef<SuperAdminCompanyUserProps>[] = [
       return (
         <DataTableColumnHeader column={column} title="Email" icon={Mail} />
       );
+    },
+  },
+  {
+    accessorKey: "createdAt",
+    enableSorting: true,
+    header: ({ column }) => {
+      return (
+        <DataTableColumnHeader
+          column={column}
+          title="Created At"
+          icon={Calendar}
+        />
+      );
+    },
+    cell: ({ row }) => {
+      const user = row.original;
+      return <div>{formatDate(user.createdAt)}</div>;
     },
   },
   {

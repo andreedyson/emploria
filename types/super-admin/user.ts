@@ -4,6 +4,7 @@ export type SuperAdminCompanyUserProps = {
   email: string;
   isActive: boolean;
   image: string | null;
+  createdAt: Date;
   company: {
     id?: string;
     name?: string;
