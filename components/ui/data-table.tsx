@@ -7,6 +7,8 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
@@ -45,6 +47,7 @@ export function DataTable<TData, TValue>({
   columnFilter,
 }: DataTableProps<TData, TValue>) {
   const columFiltered = columnFilter || "name";
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
@@ -55,11 +58,14 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
-    getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setSorting,
     state: {
+      sorting,
       columnFilters,
       columnVisibility,
     },

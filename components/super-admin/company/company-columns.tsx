@@ -14,12 +14,14 @@ import { Badge } from "@/components/ui/badge";
 export const CompanyColumns: ColumnDef<AllCompaniesProps>[] = [
   {
     accessorKey: "id",
+    enableSorting: true,
     header: ({ column }) => {
       return <DataTableColumnHeader column={column} title="ID" icon={IdCard} />;
     },
   },
   {
     accessorKey: "name",
+    enableSorting: true,
     header: ({ column }) => {
       return (
         <DataTableColumnHeader column={column} title="Name" icon={LetterText} />

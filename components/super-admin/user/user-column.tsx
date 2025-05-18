@@ -11,12 +11,14 @@ import Image from "next/image";
 export const SuperAdminUserColumns: ColumnDef<SuperAdminCompanyUserProps>[] = [
   {
     accessorKey: "id",
+    enableSorting: true,
     header: ({ column }) => {
       return <DataTableColumnHeader column={column} title="ID" icon={IdCard} />;
     },
   },
   {
     accessorKey: "name",
+    enableSorting: true,
     header: ({ column }) => {
       return (
         <DataTableColumnHeader column={column} title="Name" icon={LetterText} />
@@ -45,6 +47,7 @@ export const SuperAdminUserColumns: ColumnDef<SuperAdminCompanyUserProps>[] = [
   },
   {
     accessorKey: "email",
+    enableSorting: true,
     header: ({ column }) => {
       return (
         <DataTableColumnHeader column={column} title="Email" icon={Mail} />
@@ -68,7 +71,8 @@ export const SuperAdminUserColumns: ColumnDef<SuperAdminCompanyUserProps>[] = [
     },
   },
   {
-    accessorKey: "company.id",
+    accessorKey: "company",
+    enableSorting: true,
     header: ({ column }) => {
       return (
         <DataTableColumnHeader column={column} title="Company" icon={Mail} />
