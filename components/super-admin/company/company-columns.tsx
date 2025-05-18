@@ -9,6 +9,7 @@ import DeleteCompanyDialog from "./delete-company-dialog";
 import EditCompanyDialog from "./edit-company-dialog";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/supabase";
+import { Badge } from "@/components/ui/badge";
 
 export const CompanyColumns: ColumnDef<AllCompaniesProps>[] = [
   {
@@ -42,6 +43,22 @@ export const CompanyColumns: ColumnDef<AllCompaniesProps>[] = [
           </div>
           <p>{company.name}</p>
         </div>
+      );
+    },
+  },
+  {
+    accessorKey: "isActive",
+    header: "Status",
+    cell: ({ row }) => {
+      const company = row.original;
+      const badgeBackground = company.isActive ? "bg-green-500" : "bg-gray-400";
+
+      return (
+        <Badge
+          className={`${badgeBackground} rounded-full px-3 text-white uppercase`}
+        >
+          {company.isActive ? "Active" : "Inactive"}
+        </Badge>
       );
     },
   },
