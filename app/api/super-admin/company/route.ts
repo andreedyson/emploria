@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Upload image to Supabase Storage
-    const fileName = await uploadFile(image, "employees");
+    const fileName = await uploadFile(image, "companies");
 
     const company = await prisma.company.create({
       data: {
@@ -98,7 +98,7 @@ export async function PUT(req: NextRequest) {
     // Update image if a new one is uploaded
     if (image && image.size > 0) {
       const prevFile = new File([], company.image as string);
-      newFilename = await updateFile(prevFile, image, "employees");
+      newFilename = await updateFile(prevFile, image, "companies");
     }
 
     const editedCompany = await prisma.company.update({
@@ -141,7 +141,7 @@ export async function DELETE(req: NextRequest) {
       );
     }
 
-    await deleteFiles([company.image as string], "employees");
+    await deleteFiles([company.image as string], "companies");
 
     const deletedCompany = await prisma.company.delete({
       where: {

@@ -31,13 +31,13 @@ export const CompanyColumns: ColumnDef<AllCompaniesProps>[] = [
           <div className="size-16 rounded-lg md:size-20">
             <Image
               src={
-                getImageUrl(company.image as string, "employees") ||
+                getImageUrl(company.image as string, "companies") ||
                 "/assets/image-placeholder.svg"
               }
               alt={company.name}
               width={80}
               height={80}
-              className="size-16 object-contain md:size-20"
+              className="size-16 rounded-lg object-contain md:size-20"
             />
           </div>
           <p>{company.name}</p>

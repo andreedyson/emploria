@@ -10,7 +10,7 @@ const supabaseClient = supabase.storage.from("emploria");
 
 export const getImageUrl = (
   name: string,
-  type: "users" | "employees" = "users",
+  type: "users" | "companies" = "users",
 ) => {
   const { data } = supabase.storage
     .from("emploria")
@@ -25,7 +25,7 @@ export const getImageUrl = (
 
 export const uploadFile = async (
   file: File,
-  path: "users" | "employees" = "users",
+  path: "users" | "companies" = "users",
 ) => {
   const fileType = file.type.split("/")[1];
   const fileName = `${path}-${Date.now()}.${fileType}`;
@@ -41,7 +41,7 @@ export const uploadFile = async (
 export const updateFile = async (
   prevFile: File,
   newFile: File,
-  path: "users" | "employees" = "users",
+  path: "users" | "companies" = "users",
 ) => {
   const fileType = newFile.type.split("/")[1];
   const newFilename = `${path}-${Date.now()}.${fileType}`;
@@ -62,7 +62,7 @@ export const updateFile = async (
 
 export const deleteFiles = async (
   fileNames: string[],
-  path: "users" | "employees" = "users",
+  path: "users" | "companies" = "users",
 ) => {
   const filePaths = fileNames.map((fileName) => `public/${path}/${fileName}`);
 
