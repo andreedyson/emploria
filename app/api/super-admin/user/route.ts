@@ -10,6 +10,7 @@ export async function POST(req: NextRequest) {
       name,
       email,
       password,
+      companyId,
     });
 
     if (!validatedFields.success) {
@@ -23,7 +24,7 @@ export async function POST(req: NextRequest) {
 
     if (userExists) {
       return NextResponse.json(
-        { error: "User already exists" },
+        { message: "User already exists" },
         { status: 409 },
       );
     }
@@ -36,7 +37,10 @@ export async function POST(req: NextRequest) {
     });
 
     if (!company) {
-      return NextResponse.json({ error: "Company not found" }, { status: 404 });
+      return NextResponse.json(
+        { message: "Company not found" },
+        { status: 404 },
+      );
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);

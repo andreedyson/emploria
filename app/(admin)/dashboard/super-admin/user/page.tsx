@@ -1,3 +1,4 @@
+import AddSuperAdminUserDialog from "@/components/super-admin/user/add-super-admin-user-dialog";
 import { SuperAdminUserColumns } from "@/components/super-admin/user/user-column";
 import { DataTable } from "@/components/ui/data-table";
 import { getAllSuperAdminCompanyUsers } from "@/lib/data/super-admin/user";
@@ -19,7 +20,9 @@ async function SuperAdminUserPage() {
               Create and manage Super Admin Company users for this application.
             </p>
           </div>
-          <div className="flex w-full justify-end"></div>
+          <div className="flex w-full justify-end">
+            <AddSuperAdminUserDialog />
+          </div>
         </div>
         {/* Data Table */}
         <div>
