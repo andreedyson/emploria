@@ -38,7 +38,7 @@ import { Label } from "@/components/ui/label";
 import { BASE_URL } from "@/constants";
 import { useCompanies } from "@/hooks/use-company";
 import { superAdminUserSchema } from "@/validations/super-admin";
-import { Building } from "lucide-react";
+import { Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 function AddSuperAdminUserDialog() {
@@ -98,7 +98,7 @@ function AddSuperAdminUserDialog() {
           size={"sm"}
           className="bg-picton-blue-400 hover:bg-picton-blue-500 flex h-9 cursor-pointer items-center gap-2 px-3 text-xs text-white duration-200 xl:text-sm"
         >
-          <Building size={16} />
+          <Users size={16} />
           Add Super Admin
         </Button>
       </DialogTrigger>
