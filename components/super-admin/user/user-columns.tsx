@@ -9,6 +9,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Calendar, IdCard, LetterText, Mail } from "lucide-react";
 import Image from "next/image";
 import ViewSuperAdminDialog from "./view-super-admin-dialog";
+import EditSuperAdminUserDialog from "./edit-super-admin-dialog";
 
 export const SuperAdminUserColumns: ColumnDef<SuperAdminCompanyUserProps>[] = [
   {
@@ -111,6 +112,7 @@ export const SuperAdminUserColumns: ColumnDef<SuperAdminCompanyUserProps>[] = [
       return (
         <div className="flex items-center gap-1">
           <ViewSuperAdminDialog user={user} />
+          <EditSuperAdminUserDialog user={user} />
         </div>
       );
     },

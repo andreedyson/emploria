@@ -46,7 +46,7 @@ function ViewSuperAdminDialog({ user }: ViewSuperAdminDialogProps) {
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Super Admin Company Details</SheetTitle>
+          <SheetTitle>Super Admin Company</SheetTitle>
           <SheetDescription>
             Details for the selected Super Admin Company User
           </SheetDescription>
