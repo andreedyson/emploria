@@ -8,6 +8,7 @@ import { SuperAdminCompanyUserProps } from "@/types/super-admin/user";
 import { ColumnDef } from "@tanstack/react-table";
 import { Calendar, IdCard, LetterText, Mail } from "lucide-react";
 import Image from "next/image";
+import ViewSuperAdminDialog from "./view-super-admin-dialog";
 
 export const SuperAdminUserColumns: ColumnDef<SuperAdminCompanyUserProps>[] = [
   {
@@ -101,13 +102,17 @@ export const SuperAdminUserColumns: ColumnDef<SuperAdminCompanyUserProps>[] = [
       return <div>{user.company.name}</div>;
     },
   },
-  // {
-  //   accessorKey: "actions",
-  //   header: "Actions",
-  //   id: "actions",
-  //   cell: ({ row }) => {
-  //     const user = row.original;
-  //     return <div className="flex items-center gap-1"></div>;
-  //   },
-  // },
+  {
+    accessorKey: "actions",
+    header: "Actions",
+    id: "actions",
+    cell: ({ row }) => {
+      const user = row.original;
+      return (
+        <div className="flex items-center gap-1">
+          <ViewSuperAdminDialog user={user} />
+        </div>
+      );
+    },
+  },
 ];
