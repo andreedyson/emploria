@@ -11,9 +11,27 @@ export const companySchema = z.object({
     .string({ required_error: "Name is required" })
     .min(1, { message: "Company Name should be atleast 1 character" })
     .max(50, { message: "Company Name should be less than 50 characters" }),
-  image: z.any().refine((file: File) => ALLOWED_FILE_TYPE.includes(file.type), {
-    message: "File type is not allowed",
-  }),
+  image: z
+    .any()
+    .optional()
+    .refine(
+      (file) => {
+        if (!file) return true; // Allow empty
+        return ALLOWED_FILE_TYPE.includes(file.type);
+      },
+      {
+        message: "File type is not allowed",
+      },
+    )
+    .refine(
+      (file) => {
+        if (!file) return true;
+        return file.size <= 1024 * 1024 * 2; // Max file size is 2MB
+      },
+      {
+        message: "File size must be less than 2MB",
+      },
+    ),
 });
 
 export const superAdminUserSchema = z.object({

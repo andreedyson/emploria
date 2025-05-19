@@ -101,7 +101,7 @@ function AddCompanyDialog() {
       <DialogTrigger asChild>
         <Button
           size={"sm"}
-          className="bg-picton-blue-400 hover:bg-picton-blue-500 flex h-9 items-center gap-2 px-3 text-xs text-white duration-200 xl:text-sm"
+          className="bg-picton-blue-400 hover:bg-picton-blue-500 flex h-9 cursor-pointer items-center gap-2 px-3 text-xs text-white duration-200 xl:text-sm"
         >
           <Building size={16} />
           Add Company
@@ -151,7 +151,7 @@ function AddCompanyDialog() {
                       }}
                       ref={(el) => {
                         field.ref(el);
-                        fileInputRef.current = el;
+                        if (el) fileInputRef.current = el;
                       }}
                       className="bg-input w-full"
                     />

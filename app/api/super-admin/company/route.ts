@@ -7,6 +7,7 @@ export async function POST(req: NextRequest) {
   const formData = await req.formData();
   const name = formData.get("name") as string;
   const image = formData.get("image") as File;
+  let fileName;
 
   try {
     const validatedFields = companySchema.safeParse({ name, image });
@@ -28,12 +29,14 @@ export async function POST(req: NextRequest) {
     }
 
     // Upload image to Supabase Storage
-    const fileName = await uploadFile(image, "companies");
+    if (image) {
+      fileName = await uploadFile(image, "companies");
+    }
 
     const company = await prisma.company.create({
       data: {
         name,
-        image: fileName,
+        image: image ? fileName : "",
       },
     });
 
@@ -55,6 +58,7 @@ export async function PUT(req: NextRequest) {
   const companyId = formData.get("companyId") as string;
   const name = formData.get("name") as string;
   const image = formData.get("image") as File | null;
+  let newFilename;
 
   try {
     const validatedFields = companySchema.safeParse({ name, image });
@@ -93,14 +97,16 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    const fileUpload = image as File;
+    if (image) {
+      const fileUpload = image as File;
 
-    const prevFile = new File([], company.image as string);
-    let newFilename = company.image;
+      const prevFile = new File([], company.image as string);
+      newFilename = company.image;
 
-    // Update image if a new one is uploaded
-    if (fileUpload.size > 0) {
-      newFilename = await updateFile(prevFile, fileUpload, "companies");
+      // Update image if a new one is uploaded
+      if (fileUpload.size > 0) {
+        newFilename = await updateFile(prevFile, fileUpload, "companies");
+      }
     }
 
     const editedCompany = await prisma.company.update({
