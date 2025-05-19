@@ -33,9 +33,10 @@ model User {
   isActive    Boolean    @default(true)
   companyId   String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  company   Company? @relation(fields: [companyId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  company   Company?  @relation(fields: [companyId], references: [id])
+  Employee  Employee?
 }
 
 model Company {
@@ -44,7 +45,93 @@ model Company {
   image    String?
   isActive Boolean @default(true)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  users     User[]
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  users      User[]
+  Employee   Employee[]
+  Department Department[]
+}
+
+model Employee {
+  id           String         @id @default(cuid())
+  userId       String         @unique
+  companyId    String
+  departmentId String?
+  position     String
+  status       EmployeeStatus @default(ACTIVE)
+  joinDate     DateTime       @default(now())
+
+  user       User         @relation(fields: [userId], references: [id])
+  company    Company      @relation(fields: [companyId], references: [id])
+  Department Department?  @relation(fields: [departmentId], references: [id])
+  Salary     Salary[]
+  Attendance Attendance[]
+  Leave      Leave[]
+}
+
+enum EmployeeStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model Department {
+  id        String @id @default(cuid())
+  name      String
+  companyId String
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  company   Company    @relation(fields: [companyId], references: [id])
+  employees Employee[]
+}
+
+model Salary {
+  id              String   @id @default(cuid())
+  employeeId      String
+  month           String
+  year            String
+  baseSalary      Float
+  bonus           Float
+  deduction       Float
+  attendanceBonus Float
+  total           Float
+  date            DateTime @default(now())
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+}
+
+model Attendance {
+  id         String           @id @default(cuid())
+  employeeId String
+  date       DateTime         @default(now())
+  checkIn    DateTime?
+  checkOut   DateTime?
+  status     AttendanceStatus
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  HALF_DAY
+}
+
+model Leave {
+  id          String      @id @default(cuid())
+  employeeId  String
+  startDate   DateTime
+  endDate     DateTime
+  reason      String
+  status      LeaveStatus
+  requestDate DateTime    @default(now())
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
