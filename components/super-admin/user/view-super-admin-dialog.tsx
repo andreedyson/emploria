@@ -21,6 +21,7 @@ import {
   Mail,
 } from "lucide-react";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 type ViewSuperAdminDialogProps = {
   user: SuperAdminCompanyUserProps;
@@ -30,6 +31,9 @@ function ViewSuperAdminDialog({ user }: ViewSuperAdminDialogProps) {
   const handleCopyClick = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
+      toast.success("Copied to clipboard!", {
+        id: "clipboard",
+      });
     } catch (error) {
       console.log(error);
     }

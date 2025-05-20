@@ -1,29 +1,38 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import StatsCard from "@/components/super-admin/stats-card";
+import { getStatsCardData } from "@/lib/data/super-admin/dashboard";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
-function DashboardPage() {
+async function DashboardPage() {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    redirect("/");
+  }
+
+  const statsCardData = await getStatsCardData();
+
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold">Welcome back, Employee 👋</h2>
+      <div>
+        <h2 className="text-lg font-semibold md:text-xl">
+          Welcome Back, {session.user.name} 👋
+        </h2>
+        <p className="text-muted-foreground text-sm">
+          Here&apos;s an overview of the Emploria applications.
+        </p>
+      </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle>Total Employees</CardTitle>
-          </CardHeader>
-          <CardContent className="text-3xl font-semibold">1,024</CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Total companies</CardTitle>
-          </CardHeader>
-          <CardContent className="text-3xl font-semibold">17</CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Active Sessions</CardTitle>
-          </CardHeader>
-          <CardContent className="text-3xl font-semibold">312</CardContent>
-        </Card>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+        {statsCardData.map((data, i) => (
+          <StatsCard
+            key={i}
+            name={data.name}
+            total={data.total}
+            icon={data.icon}
+            bgGradient={data.bgGradient}
+          />
+        ))}
       </div>
     </div>
   );
