@@ -3,6 +3,11 @@ import { SuperAdminUserColumns } from "@/components/super-admin/user/user-column
 import { DataTable } from "@/components/ui/data-table";
 import { getAllSuperAdminCompanyUsers } from "@/lib/data/super-admin/user";
 import { Users } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "User",
+};
 
 async function SuperAdminUserPage() {
   const superAdminCompanyUsers = await getAllSuperAdminCompanyUsers();

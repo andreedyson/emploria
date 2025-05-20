@@ -10,12 +10,11 @@ import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: {
-    // Add metadata to each page with a title to use this page title template
     template: "%s | Dashboard",
     default: "Dashboard",
   },
   description:
-    "Next.js starter kit template that help developer to kickstart their development journey.",
+    "SAP Dashboard for employee management from salary, attendance, leave, and much more.",
 };
 
 export default async function AdminLayout({

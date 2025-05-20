@@ -1,8 +1,13 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import StatsCard from "@/components/super-admin/stats-card";
 import { getStatsCardData } from "@/lib/data/super-admin/dashboard";
+import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Home",
+};
 
 async function DashboardPage() {
   const session = await getServerSession(authOptions);

@@ -3,7 +3,12 @@ import { CompanyColumns } from "@/components/super-admin/company/company-columns
 import { DataTable } from "@/components/ui/data-table";
 import { getAllCompanies } from "@/lib/data/super-admin/company";
 import { Building } from "lucide-react";
+import { Metadata } from "next";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "Company",
+};
 
 async function SuperAdminCompanyPage() {
   const companies = await getAllCompanies();
