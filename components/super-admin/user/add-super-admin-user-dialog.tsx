@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { customToast } from "@/components/custom-toast";
@@ -178,7 +178,7 @@ function AddSuperAdminUserDialog() {
               )}
             />
 
-            <Controller
+            <FormField
               control={form.control}
               name="companyId"
               render={({ field }) => (

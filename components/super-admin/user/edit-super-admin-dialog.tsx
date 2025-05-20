@@ -1,10 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { customToast } from "@/components/custom-toast";
+import { SubmitButton } from "@/components/submit-button";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -22,6 +26,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -29,17 +35,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { customToast } from "@/components/custom-toast";
-import { SubmitButton } from "@/components/submit-button";
-import { useCompanies } from "@/hooks/use-company";
 import { BASE_URL } from "@/constants";
+import { useCompanies } from "@/hooks/use-company";
+import { SuperAdminCompanyUserProps } from "@/types/super-admin/user";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { SuperAdminCompanyUserProps } from "@/types/super-admin/user";
 
 const editSuperAdminUserSchema = z.object({
   name: z.string().min(1),
@@ -150,7 +150,7 @@ function EditSuperAdminUserDialog({ user }: EditSuperAdminUserDialogProps) {
               )}
             />
 
-            <Controller
+            <FormField
               control={form.control}
               name="companyId"
               render={({ field }) => (

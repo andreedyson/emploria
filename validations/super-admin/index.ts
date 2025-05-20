@@ -46,5 +46,7 @@ export const superAdminUserSchema = z.object({
     .string()
     .min(6, { message: "Password should be atleast 6 characters" })
     .max(32, { message: "Password should be less than 32 characters" }),
-  companyId: z.string().optional(),
+  companyId: z
+    .string({ required_error: "Company is required" })
+    .min(1, "Company is required"),
 });
