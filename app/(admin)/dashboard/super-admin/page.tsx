@@ -35,7 +35,7 @@ async function DashboardPage() {
             name={data.name}
             total={data.total}
             icon={data.icon}
-            bgGradient={data.bgGradient}
+            textColor={data.textColor}
           />
         ))}
       </div>
