@@ -109,7 +109,10 @@ async function DashboardPage() {
                   </TabsTrigger>
                 </TabsList>
               </div>
-              <TabsContent value="users" className="grid grid-cols-1 gap-4">
+              <TabsContent
+                value="users"
+                className="mt-2 grid grid-cols-1 gap-4"
+              >
                 {recentlyAddedUsers.length > 0 ? (
                   recentlyAddedUsers.map((user, i) => (
                     <RecentlyAddedUsersList key={i} user={user} />
@@ -118,7 +121,10 @@ async function DashboardPage() {
                   <div></div>
                 )}
               </TabsContent>
-              <TabsContent value="companies" className="h-full">
+              <TabsContent
+                value="companies"
+                className="mt-2 grid h-full grid-cols-1 gap-4"
+              >
                 {recentlyAddedCompanis.length > 0 ? (
                   recentlyAddedCompanis.map((company, i) => (
                     <RecentlyAddedCompaniesList key={i} company={company} />

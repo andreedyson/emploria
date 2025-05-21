@@ -4,7 +4,7 @@ import { StatsCardProps } from "@/types/super-admin/dashboard";
 
 const StatsCard = ({ name, total, icon: Icon, textColor }: StatsCardProps) => {
   return (
-    <div className="bg-background flex items-center justify-between rounded-lg border-2 bg-gradient-to-tr p-4">
+    <div className="bg-card flex items-center justify-between rounded-lg border-2 p-4">
       <div className="space-y-2">
         <p className="line-clamp-1 text-xs font-semibold tracking-tight uppercase">
           {name}
