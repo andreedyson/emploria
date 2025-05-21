@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/db";
 import {
+  RecentlyAddedUsersProps,
   StatsCardProps,
   UserPerCompaniesProps,
 } from "@/types/super-admin/dashboard";
@@ -87,6 +88,59 @@ export async function getTotalUserPerCompanies(): Promise<
       totalUsers: company.users.filter((user) => {
         return user.role === "USER";
       }).length,
+    }));
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
+export async function getRecentUsers(): Promise<RecentlyAddedUsersProps[]> {
+  try {
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+    const recentUsers = await prisma.user.findMany({
+      where: {
+        createdAt: {
+          gte: oneMonthAgo, //
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        image: true,
+        isActive: true,
+        createdAt: true,
+        company: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      take: 5,
+    });
+
+    const data = recentUsers.map((user) => ({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      isActive: user.isActive,
+      image: user.image,
+      createdAt: user.createdAt,
+      role: user.role,
+      company: {
+        id: user.company?.id,
+        name: user.company?.name,
+      },
     }));
 
     return data;

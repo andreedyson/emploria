@@ -9,12 +9,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getStatsCardData } from "@/lib/data/super-admin/dashboard";
-import { ChartNoAxesCombined, Users2 } from "lucide-react";
+import {
+  getRecentUsers,
+  getStatsCardData,
+} from "@/lib/data/super-admin/dashboard";
+import { Building, CalendarPlus, Users2 } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import RecentlyAddedUsersLists from "@/components/lists/recently-added-users-list";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -27,6 +32,7 @@ async function DashboardPage() {
   }
 
   const statsCardData = await getStatsCardData();
+  const recentlyAddedUsers = await getRecentUsers();
 
   return (
     <div className="space-y-6">
@@ -81,10 +87,39 @@ async function DashboardPage() {
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle className="flex items-center gap-1.5">
-              <ChartNoAxesCombined />
-              Growth
+              <CalendarPlus />
+              Recently Added
             </CardTitle>
+            <CardDescription>
+              Showing recently added Users and Companies
+            </CardDescription>
           </CardHeader>
+          <CardContent>
+            <Tabs defaultValue="users" className="h-full w-full">
+              <div className="w-full">
+                <TabsList className="w-[160px]">
+                  <TabsTrigger value="users" className="w-full">
+                    <Users2 size={20} />
+                  </TabsTrigger>
+                  <TabsTrigger value="companies" className="w-full">
+                    <Building size={20} />
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+              <TabsContent value="users" className="grid grid-cols-1 gap-4">
+                {recentlyAddedUsers.length > 0 ? (
+                  recentlyAddedUsers.map((user, i) => (
+                    <RecentlyAddedUsersLists key={i} user={user} />
+                  ))
+                ) : (
+                  <div></div>
+                )}
+              </TabsContent>
+              <TabsContent value="companies" className="h-full">
+                Companies
+              </TabsContent>
+            </Tabs>
+          </CardContent>
         </Card>
       </div>
     </div>
