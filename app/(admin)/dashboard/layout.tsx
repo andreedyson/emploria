@@ -8,6 +8,8 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 import { Geist } from "next/font/google";
+import { SuperAdminCompanySidebar } from "@/components/sidebars/super-admin-company-sidebar";
+import { UserSidebar } from "@/components/sidebars/user-sidebar";
 
 export const metadata: Metadata = {
   title: {
@@ -38,7 +40,13 @@ export default async function AdminLayout({
     // ⚠️ Wraps the dashboard with React Query so all pages inside can use hooks like `useQuery`
     <ReactQueryProvider>
       <SidebarProvider>
-        <SuperAdminSidebar />
+        {session.user.role === "SUPER_ADMIN" ? (
+          <SuperAdminSidebar />
+        ) : session.user.role === "SUPER_ADMIN_COMPANY" ? (
+          <SuperAdminCompanySidebar />
+        ) : (
+          <UserSidebar />
+        )}
         <main className={`w-full antialiased ${geist.className}`}>
           <AdminHeader
             name={session.user.name as string}
