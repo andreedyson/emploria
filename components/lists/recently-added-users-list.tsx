@@ -2,11 +2,11 @@ import { getImageUrl } from "@/lib/supabase";
 import { RecentlyAddedUsersProps } from "@/types/super-admin/dashboard";
 import Image from "next/image";
 
-type RecentlyAddedUsersListsProps = {
+type RecentlyAddedUsersListProps = {
   user: RecentlyAddedUsersProps;
 };
 
-function RecentlyAddedUsersLists({ user }: RecentlyAddedUsersListsProps) {
+function RecentlyAddedUsersList({ user }: RecentlyAddedUsersListProps) {
   const roleText = user.role.split("_").join(" ");
   return (
     <article>
@@ -39,4 +39,4 @@ function RecentlyAddedUsersLists({ user }: RecentlyAddedUsersListsProps) {
   );
 }
 
-export default RecentlyAddedUsersLists;
+export default RecentlyAddedUsersList;

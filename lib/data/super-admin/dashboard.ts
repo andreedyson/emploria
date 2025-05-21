@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/db";
 import {
+  RecentlyAddedCompaniesProps,
   RecentlyAddedUsersProps,
   StatsCardProps,
   UserPerCompaniesProps,
@@ -141,6 +142,48 @@ export async function getRecentUsers(): Promise<RecentlyAddedUsersProps[]> {
         id: user.company?.id,
         name: user.company?.name,
       },
+    }));
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
+export async function getRecentCompanies(): Promise<
+  RecentlyAddedCompaniesProps[]
+> {
+  try {
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+    const recentCompanies = await prisma.company.findMany({
+      where: {
+        createdAt: {
+          gte: oneMonthAgo, //
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+        name: true,
+
+        image: true,
+        isActive: true,
+        createdAt: true,
+      },
+      take: 5,
+    });
+
+    const data = recentCompanies.map((company) => ({
+      id: company.id,
+      name: company.name,
+      isActive: company.isActive,
+      image: company.image,
+      createdAt: company.createdAt,
     }));
 
     return data;

@@ -28,3 +28,11 @@ export type RecentlyAddedUsersProps = {
     name?: string;
   };
 };
+
+export type RecentlyAddedCompaniesProps = {
+  id: string;
+  name: string;
+  isActive: boolean;
+  image: string | null;
+  createdAt: Date;
+};

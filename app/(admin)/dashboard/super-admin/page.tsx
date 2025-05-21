@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  getRecentCompanies,
   getRecentUsers,
   getStatsCardData,
 } from "@/lib/data/super-admin/dashboard";
@@ -19,7 +20,8 @@ import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import RecentlyAddedUsersLists from "@/components/lists/recently-added-users-list";
+import RecentlyAddedUsersList from "@/components/lists/recently-added-users-list";
+import RecentlyAddedCompaniesList from "@/components/lists/recently-added-companies-list";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -33,6 +35,7 @@ async function DashboardPage() {
 
   const statsCardData = await getStatsCardData();
   const recentlyAddedUsers = await getRecentUsers();
+  const recentlyAddedCompanis = await getRecentCompanies();
 
   return (
     <div className="space-y-6">
@@ -109,14 +112,20 @@ async function DashboardPage() {
               <TabsContent value="users" className="grid grid-cols-1 gap-4">
                 {recentlyAddedUsers.length > 0 ? (
                   recentlyAddedUsers.map((user, i) => (
-                    <RecentlyAddedUsersLists key={i} user={user} />
+                    <RecentlyAddedUsersList key={i} user={user} />
                   ))
                 ) : (
                   <div></div>
                 )}
               </TabsContent>
               <TabsContent value="companies" className="h-full">
-                Companies
+                {recentlyAddedCompanis.length > 0 ? (
+                  recentlyAddedCompanis.map((company, i) => (
+                    <RecentlyAddedCompaniesList key={i} company={company} />
+                  ))
+                ) : (
+                  <div></div>
+                )}
               </TabsContent>
             </Tabs>
           </CardContent>
