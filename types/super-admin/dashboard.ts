@@ -10,5 +10,6 @@ export type StatsCardProps = {
 export type UserPerCompaniesProps = {
   id: string;
   name: string;
+  image: string | null;
   totalUsers: number;
 };

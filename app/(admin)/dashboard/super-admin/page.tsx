@@ -1,8 +1,19 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import { UserPerCompaniesCharts } from "@/components/charts/user-per-companies-charts";
 import StatsCard from "@/components/super-admin/stats-card";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { getStatsCardData } from "@/lib/data/super-admin/dashboard";
+import { ChartNoAxesCombined, Users2 } from "lucide-react";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -42,7 +53,40 @@ async function DashboardPage() {
         ))}
       </div>
 
-      <div className="grid h-full w-full grid-cols-1 gap-4 md:grid-cols-8"></div>
+      <div className="grid h-full w-full grid-cols-1 gap-4 lg:grid-cols-2">
+        {/* User Per Company Card */}
+        <Card className="col-span-1">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-1.5">
+                  <Users2 />
+                  User Per Company
+                </CardTitle>
+                <CardDescription>Total users from each company</CardDescription>
+              </div>
+              <Link href={"/dashboard/super-admin/company"}>
+                <Button variant={"outline"} size={"sm"}>
+                  View All
+                </Button>
+              </Link>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <UserPerCompaniesCharts />
+          </CardContent>
+        </Card>
+
+        {/* Recently Added Card */}
+        <Card className="col-span-1">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-1.5">
+              <ChartNoAxesCombined />
+              Growth
+            </CardTitle>
+          </CardHeader>
+        </Card>
+      </div>
     </div>
   );
 }

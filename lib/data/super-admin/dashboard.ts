@@ -1,3 +1,5 @@
+"use server";
+
 import prisma from "@/lib/db";
 import {
   StatsCardProps,
@@ -81,6 +83,7 @@ export async function getTotalUserPerCompanies(): Promise<
     const data = companies.map((company) => ({
       id: company.id,
       name: company.name,
+      image: company.image,
       totalUsers: company.users.filter((user) => {
         return user.role === "USER";
       }).length,
