@@ -7,6 +7,7 @@ import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { Toaster } from "react-hot-toast";
+import { Geist } from "next/font/google";
 
 export const metadata: Metadata = {
   title: {
@@ -16,6 +17,11 @@ export const metadata: Metadata = {
   description:
     "SAP Dashboard for employee management from salary, attendance, leave, and much more.",
 };
+
+const geist = Geist({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 export default async function AdminLayout({
   children,
@@ -33,7 +39,7 @@ export default async function AdminLayout({
     <ReactQueryProvider>
       <SidebarProvider>
         <SuperAdminSidebar />
-        <main className={`w-full antialiased`}>
+        <main className={`w-full antialiased ${geist.className}`}>
           <AdminHeader
             name={session.user.name as string}
             email={session.user.email as string}

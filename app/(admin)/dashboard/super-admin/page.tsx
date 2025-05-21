@@ -19,6 +19,7 @@ async function DashboardPage() {
 
   return (
     <div className="space-y-6">
+      {/* Welcome Message */}
       <div>
         <h2 className="text-lg font-semibold md:text-xl">
           Welcome Back, {session.user.name} 👋
@@ -28,6 +29,7 @@ async function DashboardPage() {
         </p>
       </div>
 
+      {/* Stats Card */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
         {statsCardData.map((data, i) => (
           <StatsCard
@@ -39,6 +41,8 @@ async function DashboardPage() {
           />
         ))}
       </div>
+
+      <div className="grid h-full w-full grid-cols-1 gap-4 md:grid-cols-8"></div>
     </div>
   );
 }
