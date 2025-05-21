@@ -6,3 +6,9 @@ export type StatsCardProps = {
   icon: LucideIcon;
   textColor: string;
 };
+
+export type UserPerCompaniesProps = {
+  id: string;
+  name: string;
+  totalUsers: number;
+};

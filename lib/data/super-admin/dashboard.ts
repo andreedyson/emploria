@@ -1,5 +1,8 @@
 import prisma from "@/lib/db";
-import { StatsCardProps } from "@/types/super-admin/dashboard";
+import {
+  StatsCardProps,
+  UserPerCompaniesProps,
+} from "@/types/super-admin/dashboard";
 import { Building, Building2, Users, UserSquare } from "lucide-react";
 
 export async function getStatsCardData(): Promise<StatsCardProps[]> {
@@ -47,6 +50,41 @@ export async function getStatsCardData(): Promise<StatsCardProps[]> {
         textColor: "text-violet-600",
       },
     ];
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
+export async function getTotalUserPerCompanies(): Promise<
+  UserPerCompaniesProps[]
+> {
+  try {
+    const companies = await prisma.company.findMany({
+      select: {
+        id: true,
+        name: true,
+        image: true,
+        users: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+          },
+        },
+      },
+    });
+
+    const data = companies.map((company) => ({
+      id: company.id,
+      name: company.name,
+      totalUsers: company.users.filter((user) => {
+        return user.role === "USER";
+      }).length,
+    }));
 
     return data;
   } catch (error) {
