@@ -81,7 +81,7 @@ export const SuperAdminUserColumns: ColumnDef<SuperAdminCompanyUserProps>[] = [
       const company = row.original;
       const badgeStyle = company.isActive
         ? "bg-green-400/30 text-green-500 border-green-500"
-        : "bg-gray-400/30 text-gray-500 border-gray-500";
+        : "bg-gray-400/30 text-gray-500 border-gray-500 dark:text-white";
 
       return (
         <Badge
@@ -102,7 +102,7 @@ export const SuperAdminUserColumns: ColumnDef<SuperAdminCompanyUserProps>[] = [
     },
     cell: ({ row }) => {
       const user = row.original;
-      return <div>{user.company.name ?? "-"}</div>;
+      return <div>{user.company.name ?? "-  "}</div>;
     },
   },
   {

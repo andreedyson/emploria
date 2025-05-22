@@ -1,11 +1,22 @@
 import { ALLOWED_FILE_TYPE } from "@/constants";
 import { z } from "zod";
 
-export const companySchema = z.object({
+export const employeeSchema = z.object({
   name: z
     .string({ required_error: "Name is required" })
-    .min(1, { message: "Company Name should be atleast 1 character" })
-    .max(50, { message: "Company Name should be less than 50 characters" }),
+    .min(1, { message: "Name is required" })
+    .max(50, { message: "Name should be less than 50 characters" }),
+  email: z
+    .string({ required_error: "Email is required" })
+    .email({ message: "Invalid Email" }),
+  password: z
+    .string({ required_error: "Password is required" })
+    .min(6, { message: "Password must be minimum of 6 characters" })
+    .max(32, { message: "Password must be less than 32 characters" }),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+  gender: z.enum(["MALE", "FEMALE"]),
+  dateOfBirth: z.string().optional(),
   image: z
     .any()
     .optional()
@@ -27,20 +38,6 @@ export const companySchema = z.object({
         message: "File size must be less than 2MB",
       },
     ),
-});
-
-export const superAdminUserSchema = z.object({
-  email: z
-    .string({ required_error: "Email is required" })
-    .email({ message: "Invalid Email" }),
-  name: z
-    .string({ required_error: "Name is required" })
-    .min(1, { message: "Name should be atleast 1 character" })
-    .max(50, { message: "Name should be less than 50 characters" }),
-  password: z
-    .string()
-    .min(6, { message: "Password should be atleast 6 characters" })
-    .max(32, { message: "Password should be less than 32 characters" }),
   companyId: z
     .string({ required_error: "Company is required" })
     .min(1, "Company is required"),
