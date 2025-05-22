@@ -108,7 +108,7 @@ export async function POST(req: NextRequest) {
     const newEmployee = await prisma.employee.create({
       data: {
         userId: newUser.id,
-        companyId: validatedFields.data.companyId,
+        companyId: validatedFields.data.companyId ?? "",
         departmentId: validatedFields.data.departmentId || null,
         position: validatedFields.data.position,
         role: validatedFields.data.employeeRole,

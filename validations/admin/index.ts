@@ -39,21 +39,14 @@ export const employeeSchema = z.object({
         message: "File size must be less than 2MB",
       },
     ),
-  companyId: z
-    .string({ required_error: "Company is required" })
-    .min(1, "Company is required"),
+  companyId: z.string({ required_error: "Company ID is required" }).min(1),
   departmentId: z.string().optional(),
   position: z
     .string({ required_error: "Position is required" })
     .min(1, { message: "Position is required" })
     .max(50, { message: "Position should be less than 50 characters" }),
-  employeeRole: z
-    .string({ required_error: "Employee role is required" })
-    .refine(
-      (val): val is EmployeeRole =>
-        Object.values(EmployeeRole).includes(val as EmployeeRole),
-      {
-        message: "Invalid employee role. Must be 'MANAGER' or 'USER'",
-      },
-    ),
+  employeeRole: z.nativeEnum(EmployeeRole, {
+    required_error: "Employee role is required",
+    invalid_type_error: "Invalid employee role. Must be MANAGER or USER",
+  }),
 });

@@ -21,6 +21,7 @@ export function SubmitButton({
       {...props}
       className={className}
       onClick={onClick}
+      type="submit"
     >
       <span>{children}</span>
 

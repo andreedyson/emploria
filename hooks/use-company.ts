@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export function useCompanies() {
   const { data, isLoading, isError, error } = useQuery<AllCompaniesProps[]>({
-    queryKey: ["categories"],
+    queryKey: ["companies"],
     queryFn: () => getAllCompanies(),
   });
 

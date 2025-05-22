@@ -100,6 +100,7 @@ export const authOptions: NextAuthOptions = {
         session.user.image = token.image;
         session.user.createdAt = token.createdAt;
         session.user.role = token.role;
+        session.user.companyId = token.companyId;
       }
       return session;
     },
@@ -123,6 +124,7 @@ export const authOptions: NextAuthOptions = {
         createdAt: dbUser.createdAt,
         role: dbUser.role,
         image: dbUser.image,
+        companyId: dbUser.companyId,
       };
     },
 
