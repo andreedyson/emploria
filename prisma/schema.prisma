@@ -62,7 +62,7 @@ model Employee {
   position     String
   isActive     Boolean      @default(true)
   joinDate     DateTime     @default(now())
-  role         EmployeeRole @default(USER) // <-- Added
+  role         EmployeeRole @default(STAFF)
 
   user       User         @relation(fields: [userId], references: [id])
   company    Company      @relation(fields: [companyId], references: [id])
@@ -73,7 +73,7 @@ model Employee {
 }
 
 enum EmployeeRole {
-  USER
+  STAFF
   MANAGER
 }
 

@@ -345,7 +345,7 @@ function AdminCompanyEmployeeCreatePage() {
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="MANAGER">Manager</SelectItem>
-                        <SelectItem value="USER">User</SelectItem>
+                        <SelectItem value="STAFF">Staff</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
