@@ -45,7 +45,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: errors[0].message }, { status: 400 });
     }
 
-    // Check if user already exist in the company
     const company = await prisma.company.findUnique({
       where: {
         id: companyId,
@@ -59,6 +58,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Check if user email is already registered in the system
+    const userExistInSystem = await prisma.user.findUnique({
+      where: {
+        email: validatedFields.data.email,
+      },
+    });
+
+    if (userExistInSystem) {
+      return NextResponse.json(
+        { message: "Email is already registered" },
+        { status: 409 },
+      );
+    }
+
+    // Check if user already exist in the company
     const userExistInCompany = await prisma.user.findUnique({
       where: {
         email: validatedFields.data.email,

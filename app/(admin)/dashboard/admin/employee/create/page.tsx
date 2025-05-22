@@ -306,7 +306,7 @@ function AdminCompanyEmployeeCreatePage() {
                     >
                       <FormControl>
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select department" />
+                          <SelectValue placeholder="Select Department" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
