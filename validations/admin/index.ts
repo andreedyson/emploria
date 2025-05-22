@@ -1,4 +1,5 @@
 import { ALLOWED_FILE_TYPE } from "@/constants";
+import { EmployeeRole } from "@prisma/client";
 import { z } from "zod";
 
 export const employeeSchema = z.object({
@@ -41,4 +42,18 @@ export const employeeSchema = z.object({
   companyId: z
     .string({ required_error: "Company is required" })
     .min(1, "Company is required"),
+  departmentId: z.string().optional(),
+  position: z
+    .string({ required_error: "Position is required" })
+    .min(1, { message: "Position is required" })
+    .max(50, { message: "Position should be less than 50 characters" }),
+  employeeRole: z
+    .string({ required_error: "Employee role is required" })
+    .refine(
+      (val): val is EmployeeRole =>
+        Object.values(EmployeeRole).includes(val as EmployeeRole),
+      {
+        message: "Invalid employee role. Must be 'MANAGER' or 'USER'",
+      },
+    ),
 });

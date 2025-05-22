@@ -36,8 +36,8 @@ model User {
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   company   Company?   @relation(fields: [companyId], references: [id])
-  Employee  Employee?
-  Activity  Activity[]
+  employee  Employee?
+  activity  Activity[]
 }
 
 model Company {
@@ -49,31 +49,32 @@ model Company {
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
   users      User[]
-  Employee   Employee[]
-  Department Department[]
-  Activity   Activity[]
+  employee   Employee[]
+  department Department[]
+  activity   Activity[]
 }
 
 model Employee {
-  id           String         @id @default(cuid())
-  userId       String         @unique
+  id           String       @id @default(cuid())
+  userId       String       @unique
   companyId    String
   departmentId String?
   position     String
-  status       EmployeeStatus @default(ACTIVE)
-  joinDate     DateTime       @default(now())
+  isActive     Boolean      @default(true)
+  joinDate     DateTime     @default(now())
+  role         EmployeeRole @default(USER) // <-- Added
 
   user       User         @relation(fields: [userId], references: [id])
   company    Company      @relation(fields: [companyId], references: [id])
-  Department Department?  @relation(fields: [departmentId], references: [id])
-  Salary     Salary[]
-  Attendance Attendance[]
-  Leave      Leave[]
+  department Department?  @relation(fields: [departmentId], references: [id])
+  salary     Salary[]
+  attendance Attendance[]
+  leave      Leave[]
 }
 
-enum EmployeeStatus {
-  ACTIVE
-  INACTIVE
+enum EmployeeRole {
+  USER
+  MANAGER
 }
 
 model Department {

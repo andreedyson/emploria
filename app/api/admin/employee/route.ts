@@ -15,6 +15,9 @@ export async function POST(req: NextRequest) {
     dateOfBirth,
     image,
     companyId,
+    departmentId,
+    position,
+    employeeRole,
   } = await req.json();
 
   try {
@@ -29,6 +32,9 @@ export async function POST(req: NextRequest) {
       dateOfBirth,
       image,
       companyId,
+      departmentId,
+      position,
+      employeeRole,
     });
 
     let fileName;
@@ -49,7 +55,7 @@ export async function POST(req: NextRequest) {
     if (!company) {
       return NextResponse.json(
         { message: "Company not found" },
-        { status: 400 },
+        { status: 404 },
       );
     }
 
@@ -62,27 +68,29 @@ export async function POST(req: NextRequest) {
 
     if (userExistInCompany) {
       return NextResponse.json(
-        { message: `That user is already part of ${company.name}` },
+        {
+          message: `${userExistInCompany.email} is already part of ${company.name}`,
+        },
         { status: 409 },
       );
     }
-
-    const hashedPassword = await bcrypt.hash(password, 12);
 
     // Upload image to Supabase Storage
     if (image) {
       fileName = await uploadFile(image, "users");
     }
 
+    const hashedPassword = await bcrypt.hash(password, 12);
+
     // Create a new employee data
-    const newEmployee = await prisma.user.create({
+    const newUser = await prisma.user.create({
       data: {
         name: name,
         email: email,
         phone: phone,
         address: address,
         gender: gender,
-        dateOfBirth: dateOfBirth,
+        dateOfBirth: new Date(dateOfBirth),
         image: image ? fileName : "",
         password: hashedPassword,
         role: "USER",
@@ -94,6 +102,43 @@ export async function POST(req: NextRequest) {
         name: true,
         role: true,
         companyId: true,
+      },
+    });
+
+    const newEmployee = await prisma.employee.create({
+      data: {
+        userId: newUser.id,
+        companyId: validatedFields.data.companyId,
+        departmentId: validatedFields.data.departmentId || null,
+        position: validatedFields.data.position,
+        role: validatedFields.data.employeeRole,
+      },
+      select: {
+        id: true,
+        position: true,
+        role: true,
+        isActive: true,
+        joinDate: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            dateOfBirth: true,
+          },
+        },
+        company: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        department: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
 
