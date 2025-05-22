@@ -7,15 +7,16 @@ import { formatDate } from "@/lib/utils";
 import { EmployeeColumnProps } from "@/types/admin/employee";
 import { ColumnDef } from "@tanstack/react-table";
 import {
+  Briefcase,
   BriefcaseBusiness,
   Calendar,
   IdCard,
   LetterText,
   Mail,
   Mars,
-  Phone,
 } from "lucide-react";
 import Image from "next/image";
+import ViewEmployeeDialog from "./view-employee-dialog";
 
 export const EmployeeColumns: ColumnDef<EmployeeColumnProps>[] = [
   {
@@ -86,6 +87,15 @@ export const EmployeeColumns: ColumnDef<EmployeeColumnProps>[] = [
     },
   },
   {
+    accessorKey: "employeeRole",
+    enableSorting: true,
+    header: ({ column }) => {
+      return (
+        <DataTableColumnHeader column={column} title="Role" icon={Briefcase} />
+      );
+    },
+  },
+  {
     accessorKey: "isActive",
     header: "Status",
     cell: ({ row }) => {
@@ -100,15 +110,6 @@ export const EmployeeColumns: ColumnDef<EmployeeColumnProps>[] = [
         >
           {company.isActive ? "Active" : "Inactive"}
         </Badge>
-      );
-    },
-  },
-  {
-    accessorKey: "phone",
-    enableSorting: true,
-    header: ({ column }) => {
-      return (
-        <DataTableColumnHeader column={column} title="Phone" icon={Phone} />
       );
     },
   },
@@ -129,8 +130,13 @@ export const EmployeeColumns: ColumnDef<EmployeeColumnProps>[] = [
     accessorKey: "actions",
     header: "Actions",
     id: "actions",
-    cell: () => {
-      return <div className="flex items-center gap-1"></div>;
+    cell: ({ row }) => {
+      const employee = row.original;
+      return (
+        <div className="flex items-center gap-1">
+          <ViewEmployeeDialog employee={employee} />
+        </div>
+      );
     },
   },
 ];

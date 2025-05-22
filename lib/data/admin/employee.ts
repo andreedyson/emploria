@@ -38,7 +38,15 @@ export async function getAllEmployees(
       gender: employee.user.gender,
       isActive: employee.user.isActive,
       dateOfBirth: employee.user.dateOfBirth,
-      department: employee.department?.name,
+      department: {
+        id: employee.department?.id,
+        name: employee.department?.name,
+      },
+      company: {
+        id: employee.company?.id,
+        name: employee.company?.name,
+      },
+      employeeRole: employee.role,
       position: employee.position,
       joinDate: employee.joinDate,
     }));

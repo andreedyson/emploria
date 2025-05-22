@@ -62,7 +62,7 @@ model Employee {
   position     String
   isActive     Boolean      @default(true)
   joinDate     DateTime     @default(now())
-  role         EmployeeRole @default(STAFF)
+  role         EmployeeRole
 
   user       User         @relation(fields: [userId], references: [id])
   company    Company      @relation(fields: [companyId], references: [id])

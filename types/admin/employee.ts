@@ -1,3 +1,5 @@
+import { EmployeeRole } from "@prisma/client";
+
 export type EmployeeColumnProps = {
   id: string;
   name: string;
@@ -9,6 +11,14 @@ export type EmployeeColumnProps = {
   phone: string | null;
   address: string | null;
   dateOfBirth: Date | null;
-  department?: string;
+  department?: {
+    id?: string;
+    name?: string;
+  };
+  company?: {
+    id: string;
+    name: string;
+  };
+  employeeRole: EmployeeRole;
   joinDate: Date;
 };
