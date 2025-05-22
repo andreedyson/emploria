@@ -1,9 +1,21 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import { EmployeeColumns } from "@/components/admin/employee/employee-columns";
 import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
+import { getAllEmployees } from "@/lib/data/admin/employee";
 import { User, Users } from "lucide-react";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
 
 async function SuperAdminCompanyEmployeePage() {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    redirect("/");
+  }
+  const companyId = session.user.companyId;
+  const employees = await getAllEmployees(companyId as string);
   return (
     <section className="space-y-4">
       <div className="bg-background space-y-3 rounded-lg border-2 p-4">
@@ -32,7 +44,9 @@ async function SuperAdminCompanyEmployeePage() {
           </div>
         </div>
         {/* Data Table */}
-        <div></div>
+        <div>
+          <DataTable columns={EmployeeColumns} data={employees} />
+        </div>
       </div>
     </section>
   );
