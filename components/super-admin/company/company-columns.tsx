@@ -10,6 +10,7 @@ import EditCompanyDialog from "./edit-company-dialog";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/supabase";
 import { Badge } from "@/components/ui/badge";
+import ViewCompanyDialog from "./view-company-dialog";
 
 export const CompanyColumns: ColumnDef<AllCompaniesProps>[] = [
   {
@@ -72,6 +73,7 @@ export const CompanyColumns: ColumnDef<AllCompaniesProps>[] = [
       const company = row.original;
       return (
         <div className="flex items-center gap-1">
+          <ViewCompanyDialog company={company} />
           <EditCompanyDialog companyData={company} />
           <DeleteCompanyDialog companyData={company} />
         </div>
