@@ -31,6 +31,7 @@ import {
   BriefcaseBusiness,
   Building2,
   Calendar,
+  ChevronLeft,
   LetterText,
   MapPin,
   Mars,
@@ -41,6 +42,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import Link from "next/link";
 
 function AdminCompanyEmployeeCreatePage() {
   const session = useSession();
@@ -117,6 +119,13 @@ function AdminCompanyEmployeeCreatePage() {
 
   return (
     <div className="space-y-4">
+      <Link
+        href={"/dashboard/admin/employee"}
+        className="flex items-center gap-1 duration-200 hover:underline"
+      >
+        <ChevronLeft size={14} strokeWidth={2} />
+        <p>Back</p>
+      </Link>
       {/* Create Employee Page Header */}
       <div>
         <h2 className="text-lg font-semibold">Create Employee</h2>
