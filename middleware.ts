@@ -5,11 +5,6 @@ import { NextResponse } from "next/server";
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Special case for UploadThing endpoint
-  if (pathname.startsWith("/api/uploadthing")) {
-    return NextResponse.next();
-  }
-
   const roleRoutes: Record<string, string> = {
     SUPER_ADMIN: "/dashboard/super-admin",
     SUPER_ADMIN_COMPANY: "/dashboard/admin",
