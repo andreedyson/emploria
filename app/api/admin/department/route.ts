@@ -147,7 +147,7 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const { departmentId } = await req.json();
+  const { departmentId, companyId } = await req.json();
   try {
     // Check department data
     const department = await prisma.department.findUnique({
@@ -163,9 +163,24 @@ export async function DELETE(req: NextRequest) {
       );
     }
 
+    // Check company data
+    const company = await prisma.company.findUnique({
+      where: {
+        id: companyId,
+      },
+    });
+
+    if (!company) {
+      return NextResponse.json(
+        { message: "Company not found" },
+        { status: 404 },
+      );
+    }
+
     const deletedDepartment = await prisma.department.delete({
       where: {
         id: departmentId,
+        companyId: companyId,
       },
     });
 

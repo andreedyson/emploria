@@ -6,6 +6,7 @@ import { Department } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { Calendar, IdCard, LetterText } from "lucide-react";
 import EditDepartmentDialog from "./edit-department-dialog";
+import DeleteDepartmentDialog from "./delete-department-dialog";
 
 export const DepartmentColumns: ColumnDef<Department>[] = [
   {
@@ -22,6 +23,10 @@ export const DepartmentColumns: ColumnDef<Department>[] = [
       return (
         <DataTableColumnHeader column={column} title="Name" icon={LetterText} />
       );
+    },
+    cell: ({ row }) => {
+      const department = row.original;
+      return <div className="font-semibold">{department.name}</div>;
     },
   },
   {
@@ -50,6 +55,10 @@ export const DepartmentColumns: ColumnDef<Department>[] = [
       return (
         <div className="flex items-center gap-1">
           <EditDepartmentDialog
+            departmentData={department}
+            companyId={department.companyId}
+          />
+          <DeleteDepartmentDialog
             departmentData={department}
             companyId={department.companyId}
           />
