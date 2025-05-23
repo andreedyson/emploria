@@ -50,3 +50,11 @@ export const employeeSchema = z.object({
     invalid_type_error: "Invalid employee role. Must be MANAGER or USER",
   }),
 });
+
+export const departmentSchema = z.object({
+  name: z
+    .string({ required_error: "Department Name is required" })
+    .min(1, { message: "Department should be at least 1 character" })
+    .max(50, { message: "Department should be less than 50 characters" }),
+  companyId: z.string({ required_error: "Company ID is required" }).min(1),
+});
