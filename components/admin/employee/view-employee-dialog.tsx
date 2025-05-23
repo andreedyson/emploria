@@ -12,6 +12,7 @@ import { getImageUrl } from "@/lib/supabase";
 import { formatDate } from "@/lib/utils";
 import { EmployeeColumnProps } from "@/types/admin/employee";
 import {
+  Building2,
   Calendar,
   Calendar1,
   Copy,
@@ -146,7 +147,7 @@ function ViewEmployeeDialog({ employee }: ViewEmployeeDialogProps) {
             </div>
             <div className="text-sm">
               <div className="text-muted-foreground flex items-center gap-1">
-                <IdCard size={14} />
+                <Building2 size={14} />
                 <p>Department ID</p>
               </div>
               <p>{employee.department?.id ?? "-"}</p>
