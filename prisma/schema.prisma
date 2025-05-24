@@ -89,7 +89,7 @@ model Department {
 }
 
 model Salary {
-  id              String   @id @default(cuid())
+  id              String       @id @default(cuid())
   employeeId      String
   month           String
   year            String
@@ -98,9 +98,16 @@ model Salary {
   deduction       Float
   attendanceBonus Float
   total           Float
-  date            DateTime @default(now())
+  date            DateTime     @default(now())
+  status          SalaryStatus @default(UNPAID)
+  paidAt          DateTime?
 
   employee Employee @relation(fields: [employeeId], references: [id])
+}
+
+enum SalaryStatus {
+  PAID
+  UNPAID
 }
 
 model Attendance {
