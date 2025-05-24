@@ -19,6 +19,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import ViewEmployeeDialog from "./view-employee-dialog";
+import DeleteEmployeeDialog from "./delete-employee-dialog";
 
 export const EmployeeColumns: ColumnDef<EmployeeColumnProps>[] = [
   {
@@ -138,6 +139,7 @@ export const EmployeeColumns: ColumnDef<EmployeeColumnProps>[] = [
               <Pencil size={16} />
             </Button>
           </Link>
+          <DeleteEmployeeDialog employeeData={employee} />
         </div>
       );
     },

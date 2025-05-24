@@ -18,6 +18,7 @@ export const employeeSchema = z.object({
   address: z.string().optional(),
   gender: z.enum(["MALE", "FEMALE"]),
   dateOfBirth: z.string().optional(),
+  isActive: z.boolean(),
   image: z
     .any()
     .optional()

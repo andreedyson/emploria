@@ -184,6 +184,7 @@ export async function PUT(req: NextRequest) {
       departmentId,
       position,
       employeeRole,
+      isActive,
     } = await req.json();
 
     const validatedFields = editEmployeeSchema.safeParse({
@@ -198,6 +199,7 @@ export async function PUT(req: NextRequest) {
       departmentId,
       position,
       employeeRole,
+      isActive,
     });
 
     if (!validatedFields.success) {
@@ -252,6 +254,7 @@ export async function PUT(req: NextRequest) {
         address: validatedFields.data.address,
         gender: validatedFields.data.gender,
         dateOfBirth: new Date(dateOfBirth),
+        isActive: validatedFields.data.isActive,
         image: fileName,
       },
       select: {
@@ -270,6 +273,7 @@ export async function PUT(req: NextRequest) {
         departmentId: departmentId || null,
         position: validatedFields.data.position,
         role: employeeRole,
+        isActive: validatedFields.data.isActive,
       },
       select: {
         id: true,
@@ -308,6 +312,41 @@ export async function PUT(req: NextRequest) {
     console.error(error);
     return NextResponse.json(
       { message: "An error occurred updating employee" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  const { userId } = await req.json();
+  try {
+    // Check if user exists
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    // Soft delete
+    await prisma.user.update({
+      where: { id: userId },
+      data: { isActive: false },
+    });
+    await prisma.employee.update({
+      where: { userId },
+      data: { isActive: false },
+    });
+
+    return NextResponse.json(
+      { message: "Employee and user data deleted successfully" },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "Error deleting employee/user data" },
       { status: 500 },
     );
   }

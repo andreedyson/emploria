@@ -41,6 +41,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Checkbox } from "../ui/checkbox";
+import { Label } from "../ui/label";
 
 type EditEmployeeFormProps = {
   employeeData: EmployeeColumnProps;
@@ -74,6 +76,7 @@ function EditEmployeeForm({ employeeData }: EditEmployeeFormProps) {
       companyId: employeeData.company?.id ?? "",
       position: employeeData.position,
       employeeRole: employeeData.employeeRole,
+      isActive: employeeData.isActive,
     },
   });
 
@@ -102,6 +105,7 @@ function EditEmployeeForm({ employeeData }: EditEmployeeFormProps) {
           departmentId: values.departmentId,
           position: values.position,
           employeeRole: values.employeeRole,
+          isActive: values.isActive,
         }),
       });
 
@@ -366,6 +370,25 @@ function EditEmployeeForm({ employeeData }: EditEmployeeFormProps) {
                     <Input type="hidden" {...field} />
                   </FormControl>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="isActive"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      id="isActive"
+                      checked={field.value}
+                      onCheckedChange={(checked) =>
+                        field.onChange(Boolean(checked))
+                      }
+                    />
+                    <Label htmlFor="isActive">Active</Label>
+                  </div>
                 </FormItem>
               )}
             />
