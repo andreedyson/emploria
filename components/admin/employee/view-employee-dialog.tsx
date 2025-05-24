@@ -12,12 +12,12 @@ import { getImageUrl } from "@/lib/supabase";
 import { formatDate } from "@/lib/utils";
 import { EmployeeColumnProps } from "@/types/admin/employee";
 import {
-  Building2,
+  Briefcase,
+  BriefcaseBusiness,
   Calendar,
   Calendar1,
   Copy,
   Eye,
-  IdCard,
   LetterText,
   Mail,
   MapPin,
@@ -51,7 +51,7 @@ function ViewEmployeeDialog({ employee }: ViewEmployeeDialogProps) {
           <Eye size={16} />
         </Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className="overflow-y-scroll">
         <SheetHeader>
           <SheetTitle>Employee Details</SheetTitle>
           <SheetDescription>
@@ -97,6 +97,20 @@ function ViewEmployeeDialog({ employee }: ViewEmployeeDialogProps) {
             </div>
             <div className="flex items-center justify-between">
               <div className="text-muted-foreground flex items-center gap-1">
+                <BriefcaseBusiness size={14} />
+                <p>Position</p>
+              </div>
+              <p>{employee.position ?? "-"}</p>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="text-muted-foreground flex items-center gap-1">
+                <Briefcase size={14} />
+                <p>Role</p>
+              </div>
+              <p>{employee.employeeRole ?? "-"}</p>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="text-muted-foreground flex items-center gap-1">
                 <Phone size={14} />
                 <p>Phone</p>
               </div>
@@ -131,26 +145,13 @@ function ViewEmployeeDialog({ employee }: ViewEmployeeDialogProps) {
 
           <div className="space-y-3">
             <h4 className="font-medium">Company & Department Details</h4>
-            <div className="text-sm">
-              <div className="text-muted-foreground flex items-center gap-1">
-                <IdCard size={14} />
-                <p>Company ID</p>
-              </div>
-              <p>{employee.company?.id ?? "-"}</p>
-            </div>
+
             <div className="text-sm">
               <div className="text-muted-foreground flex items-center gap-1">
                 <LetterText size={14} />
                 <p>Company Name</p>
               </div>
               <p className="font-semibold">{employee.company?.name ?? "-"}</p>
-            </div>
-            <div className="text-sm">
-              <div className="text-muted-foreground flex items-center gap-1">
-                <Building2 size={14} />
-                <p>Department ID</p>
-              </div>
-              <p>{employee.department?.id ?? "-"}</p>
             </div>
             <div className="text-sm">
               <div className="text-muted-foreground flex items-center gap-1">
