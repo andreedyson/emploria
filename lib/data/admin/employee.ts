@@ -38,13 +38,14 @@ export async function getAllEmployees(
       gender: employee.user.gender,
       isActive: employee.user.isActive,
       dateOfBirth: employee.user.dateOfBirth,
-      department: {
-        id: employee.department?.id,
-        name: employee.department?.name,
-      },
+      userId: employee.user.id,
       company: {
         id: employee.company?.id,
         name: employee.company?.name,
+      },
+      department: {
+        id: employee.department?.id,
+        name: employee.department?.name,
       },
       employeeRole: employee.role,
       position: employee.position,
@@ -55,5 +56,65 @@ export async function getAllEmployees(
   } catch (error) {
     console.error(error);
     return [];
+  }
+}
+
+export async function getEmployeeById(
+  employeeId: string,
+): Promise<EmployeeColumnProps | null> {
+  try {
+    const employee = await prisma.employee.findUnique({
+      where: {
+        id: employeeId,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            address: true,
+            dateOfBirth: true,
+            gender: true,
+            isActive: true,
+            image: true,
+          },
+        },
+        company: true,
+        department: true,
+      },
+    });
+
+    if (!employee) return null;
+
+    const data = {
+      id: employee.id,
+      name: employee.user.name,
+      email: employee.user.email,
+      image: employee.user.image,
+      phone: employee.user.phone,
+      address: employee.user.address,
+      gender: employee.user.gender,
+      isActive: employee.user.isActive,
+      dateOfBirth: employee.user.dateOfBirth,
+      userId: employee.user.id,
+      company: {
+        id: employee.company?.id,
+        name: employee.company?.name,
+      },
+      department: {
+        id: employee.department?.id,
+        name: employee.department?.name,
+      },
+      employeeRole: employee.role,
+      position: employee.position,
+      joinDate: employee.joinDate,
+    };
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    return null;
   }
 }

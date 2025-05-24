@@ -25,7 +25,8 @@ import {
 } from "@/components/ui/select";
 import { BASE_URL } from "@/constants";
 import { useDepartments } from "@/hooks/use-department";
-import { employeeSchema } from "@/validations/admin";
+import { EmployeeColumnProps } from "@/types/admin/employee";
+import { editEmployeeSchema } from "@/validations/admin";
 import {
   AtSign,
   BriefcaseBusiness,
@@ -38,55 +39,60 @@ import {
   Phone,
   UserCog,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-function AdminCompanyEmployeeCreatePage() {
-  const session = useSession();
-  const companyId = session.data?.user.companyId as string;
-  const { data: departments } = useDepartments(companyId);
+type EditEmployeeFormProps = {
+  employeeData: EmployeeColumnProps;
+};
+
+function EditEmployeeForm({ employeeData }: EditEmployeeFormProps) {
+  const { data: departments } = useDepartments(
+    employeeData.company?.id as string,
+  );
   const [submitting, setSubmitting] = useState<boolean>(false);
-  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof employeeSchema>>({
-    resolver: zodResolver(employeeSchema),
+  const form = useForm<z.infer<typeof editEmployeeSchema>>({
+    resolver: zodResolver(editEmployeeSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      phone: "",
-      address: "",
-      gender: undefined,
-      dateOfBirth: "",
+      name: employeeData.name,
+      email: employeeData.email,
+      phone: employeeData.phone ?? "",
+      address: employeeData.address ?? "",
+      gender:
+        employeeData.gender === "MALE" || employeeData.gender === "FEMALE"
+          ? employeeData.gender
+          : undefined,
+
+      dateOfBirth: employeeData.dateOfBirth
+        ? employeeData.dateOfBirth.toISOString().split("T")[0]
+        : "",
       image: "",
-      departmentId: "",
-      companyId: companyId ?? "",
-      position: "",
-      employeeRole: undefined,
+      departmentId: employeeData.department?.id,
+      companyId: employeeData.company?.id ?? "",
+      position: employeeData.position,
+      employeeRole: employeeData.employeeRole,
     },
   });
 
   useEffect(() => {
-    if (companyId) {
-      form.setValue("companyId", companyId);
+    if (employeeData.company?.id) {
+      form.setValue("companyId", employeeData.company.id);
     }
-  }, [companyId, form]);
+  }, [employeeData.company?.id, form]);
 
-  async function onSubmit(values: z.infer<typeof employeeSchema>) {
+  async function onSubmit(values: z.infer<typeof editEmployeeSchema>) {
     setSubmitting(true);
 
     try {
       const res = await fetch(`${BASE_URL}/api/admin/employee`, {
-        method: "POST",
+        method: "PUT",
         body: JSON.stringify({
+          userId: employeeData.userId,
           name: values.name,
           email: values.email,
-          password: values.password,
           phone: values.phone,
           address: values.address,
           gender: values.gender,
@@ -126,13 +132,13 @@ function AdminCompanyEmployeeCreatePage() {
       </Link>
       {/* Create Employee Page Header */}
       <div>
-        <h2 className="text-lg font-semibold">Create Employee</h2>
+        <h2 className="text-lg font-semibold">Update Employee</h2>
         <p className="text-muted-foreground text-base">
-          Add a new Employee data to this company.
+          Edit an existing employee data in this company.
         </p>
       </div>
 
-      {/* Create Employee Form */}
+      {/* Edit Employee Form */}
       <div className="max-w-2xl">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -363,44 +369,13 @@ function AdminCompanyEmployeeCreatePage() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="password">Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      id="password"
-                      name="password"
-                      className="w-full"
-                      type={showPassword ? "text" : "password"}
-                      placeholder={showPassword ? "Your Password" : "********"}
-                      autoComplete="current-password"
-                      onChange={(e) => {
-                        field.onChange(e);
-                        form.clearErrors("password");
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                  <div className="flex items-center justify-end gap-2 text-sm">
-                    <Checkbox
-                      id="showPassword"
-                      onCheckedChange={() => setShowPassword((prev) => !prev)}
-                    />
-                    <Label htmlFor="showPassword">Show Password</Label>
-                  </div>
-                </FormItem>
-              )}
-            />
+
             <div className="mt-3 flex justify-end gap-2">
               <SubmitButton
                 isSubmitting={submitting}
-                className="bg-picton-blue-400 hover:bg-picton-blue-500 dark:text-foreground w-full max-w-[150px]"
+                className="dark:text-foreground w-full max-w-[150px] bg-yellow-400 hover:bg-yellow-500"
               >
-                {submitting ? "Creating" : "Create Employee"}
+                {submitting ? "Editing" : "Edit Employee"}
               </SubmitButton>
             </div>
           </form>
@@ -410,4 +385,4 @@ function AdminCompanyEmployeeCreatePage() {
   );
 }
 
-export default AdminCompanyEmployeeCreatePage;
+export default EditEmployeeForm;

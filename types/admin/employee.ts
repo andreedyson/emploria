@@ -11,13 +11,14 @@ export type EmployeeColumnProps = {
   phone: string | null;
   address: string | null;
   dateOfBirth: Date | null;
-  department?: {
-    id?: string;
-    name?: string;
-  };
+  userId: string;
   company?: {
     id: string;
     name: string;
+  };
+  department?: {
+    id?: string;
+    name?: string;
   };
   employeeRole: EmployeeRole;
   joinDate: Date;
