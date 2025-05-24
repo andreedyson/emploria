@@ -27,10 +27,10 @@ import Image from "next/image";
 import toast from "react-hot-toast";
 
 type ViewEmployeeDialogProps = {
-  employee: EmployeeColumnProps;
+  employeeData: EmployeeColumnProps;
 };
 
-function ViewEmployeeDialog({ employee }: ViewEmployeeDialogProps) {
+function ViewEmployeeDialog({ employeeData }: ViewEmployeeDialogProps) {
   const handleCopyClick = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -64,21 +64,21 @@ function ViewEmployeeDialog({ employee }: ViewEmployeeDialogProps) {
           <div className="flex items-center gap-2">
             <Image
               src={
-                getImageUrl(employee.image as string, "users") ||
+                getImageUrl(employeeData.image as string, "users") ||
                 "/assets/image-placeholder.svg"
               }
-              alt={employee.name}
+              alt={employeeData.name}
               width={80}
               height={80}
               className="size-8 rounded-full border-2 object-contain md:size-10"
             />
             <div>
-              <p className="font-semibold">{employee.name}</p>
+              <p className="font-semibold">{employeeData.name}</p>
               <p className="text-muted-foreground flex items-center gap-1 text-sm">
-                {employee.id}
+                {employeeData.id}
                 <span
                   title="Copy ID"
-                  onClick={() => handleCopyClick(employee.id)}
+                  onClick={() => handleCopyClick(employeeData.id)}
                   className="cursor-pointer duration-200 hover:text-gray-600"
                 >
                   <Copy strokeWidth={2} size={16} />
@@ -93,35 +93,35 @@ function ViewEmployeeDialog({ employee }: ViewEmployeeDialogProps) {
                 <Mail size={14} />
                 <p>Email</p>
               </div>
-              <p>{employee.email}</p>
+              <p>{employeeData.email}</p>
             </div>
             <div className="flex items-center justify-between">
               <div className="text-muted-foreground flex items-center gap-1">
                 <BriefcaseBusiness size={14} />
                 <p>Position</p>
               </div>
-              <p>{employee.position ?? "-"}</p>
+              <p>{employeeData.position ?? "-"}</p>
             </div>
             <div className="flex items-center justify-between">
               <div className="text-muted-foreground flex items-center gap-1">
                 <Briefcase size={14} />
                 <p>Role</p>
               </div>
-              <p>{employee.employeeRole ?? "-"}</p>
+              <p>{employeeData.employeeRole ?? "-"}</p>
             </div>
             <div className="flex items-center justify-between">
               <div className="text-muted-foreground flex items-center gap-1">
                 <Phone size={14} />
                 <p>Phone</p>
               </div>
-              <p>{employee.phone ?? "-"}</p>
+              <p>{employeeData.phone ?? "-"}</p>
             </div>
             <div className="flex items-center justify-between">
               <div className="text-muted-foreground flex items-center gap-1">
                 <MapPin size={14} />
                 <p>Address</p>
               </div>
-              <p>{employee.address ?? "-"}</p>
+              <p>{employeeData.address ?? "-"}</p>
             </div>
             <div className="flex items-center justify-between">
               <div className="text-muted-foreground flex items-center gap-1">
@@ -129,7 +129,9 @@ function ViewEmployeeDialog({ employee }: ViewEmployeeDialogProps) {
                 <p>Birthdate</p>
               </div>
               <p>
-                {employee.dateOfBirth ? formatDate(employee.dateOfBirth) : "-"}
+                {employeeData.dateOfBirth
+                  ? formatDate(employeeData.dateOfBirth)
+                  : "-"}
               </p>
             </div>
             <div className="flex items-center justify-between">
@@ -137,7 +139,7 @@ function ViewEmployeeDialog({ employee }: ViewEmployeeDialogProps) {
                 <Calendar size={14} />
                 <p>Joined</p>
               </div>
-              <p>{formatDate(employee.joinDate)}</p>
+              <p>{formatDate(employeeData.joinDate)}</p>
             </div>
           </div>
 
@@ -151,7 +153,9 @@ function ViewEmployeeDialog({ employee }: ViewEmployeeDialogProps) {
                 <LetterText size={14} />
                 <p>Company Name</p>
               </div>
-              <p className="font-semibold">{employee.company?.name ?? "-"}</p>
+              <p className="font-semibold">
+                {employeeData.company?.name ?? "-"}
+              </p>
             </div>
             <div className="text-sm">
               <div className="text-muted-foreground flex items-center gap-1">
@@ -159,7 +163,7 @@ function ViewEmployeeDialog({ employee }: ViewEmployeeDialogProps) {
                 <p>Department Name</p>
               </div>
               <p className="font-semibold">
-                {employee.department?.name ?? "-"}
+                {employeeData.department?.name ?? "-"}
               </p>
             </div>
           </div>

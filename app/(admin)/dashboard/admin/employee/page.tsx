@@ -1,13 +1,11 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import AddEmployeeDialog from "@/components/admin/employee/add-employee-dialog";
 import { EmployeeColumns } from "@/components/admin/employee/employee-columns";
-import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { getAllEmployees } from "@/lib/data/admin/employee";
-import { User, Users } from "lucide-react";
+import { Users } from "lucide-react";
 import { getServerSession } from "next-auth";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import React from "react";
 
 async function SuperAdminCompanyEmployeePage() {
   const session = await getServerSession(authOptions);
@@ -32,15 +30,7 @@ async function SuperAdminCompanyEmployeePage() {
             </p>
           </div>
           <div className="flex w-full justify-end">
-            <Link href={"/dashboard/admin/employee/create"}>
-              <Button
-                size={"sm"}
-                className="bg-picton-blue-400 hover:bg-picton-blue-500 flex h-9 cursor-pointer items-center gap-2 px-3 text-xs text-white duration-200 xl:text-sm"
-              >
-                <User size={16} />
-                Add Employee
-              </Button>
-            </Link>
+            <AddEmployeeDialog />
           </div>
         </div>
         {/* Data Table */}

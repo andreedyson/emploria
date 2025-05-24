@@ -2,7 +2,6 @@
 
 import { DataTableColumnHeader } from "@/components/tables/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { getImageUrl } from "@/lib/supabase";
 import { formatDate } from "@/lib/utils";
 import { EmployeeColumnProps } from "@/types/admin/employee";
@@ -14,12 +13,11 @@ import {
   LetterText,
   Mail,
   Mars,
-  Pencil,
 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
-import ViewEmployeeDialog from "./view-employee-dialog";
 import DeleteEmployeeDialog from "./delete-employee-dialog";
+import EditEmployeeDialog from "./edit-employee-dialog";
+import ViewEmployeeDialog from "./view-employee-dialog";
 
 export const EmployeeColumns: ColumnDef<EmployeeColumnProps>[] = [
   {
@@ -130,15 +128,8 @@ export const EmployeeColumns: ColumnDef<EmployeeColumnProps>[] = [
       const employee = row.original;
       return (
         <div className="flex items-center gap-1">
-          <ViewEmployeeDialog employee={employee} />
-          <Link href={`/dashboard/admin/employee/edit/${employee.id}`}>
-            <Button
-              size={"icon"}
-              className="flex cursor-pointer items-center gap-2 bg-yellow-500 text-white duration-200 hover:bg-yellow-600"
-            >
-              <Pencil size={16} />
-            </Button>
-          </Link>
+          <ViewEmployeeDialog employeeData={employee} />
+          <EditEmployeeDialog employeeData={employee} />
           <DeleteEmployeeDialog employeeData={employee} />
         </div>
       );

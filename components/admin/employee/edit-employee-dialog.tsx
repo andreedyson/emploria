@@ -1,6 +1,14 @@
 "use client";
 
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Form,
   FormControl,
   FormField,
@@ -15,6 +23,7 @@ import { z } from "zod";
 
 import { customToast } from "@/components/custom-toast";
 import { SubmitButton } from "@/components/submit-button";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -25,69 +34,91 @@ import {
 } from "@/components/ui/select";
 import { BASE_URL } from "@/constants";
 import { useDepartments } from "@/hooks/use-department";
-import { employeeSchema } from "@/validations/admin";
+import { EmployeeColumnProps } from "@/types/admin/employee";
+import { editEmployeeSchema } from "@/validations/admin";
 import {
   AtSign,
   BriefcaseBusiness,
   Building2,
   Calendar,
-  ChevronLeft,
   LetterText,
   MapPin,
   Mars,
+  Pencil,
   Phone,
   UserCog,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-function AdminCompanyEmployeeCreatePage() {
+type EditEmployeeDialogProps = {
+  employeeData: EmployeeColumnProps;
+};
+
+function EditEmployeeDialog({ employeeData }: EditEmployeeDialogProps) {
   const session = useSession();
   const companyId = session.data?.user.companyId as string;
   const { data: departments } = useDepartments(companyId);
   const [submitting, setSubmitting] = useState<boolean>(false);
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof employeeSchema>>({
-    resolver: zodResolver(employeeSchema),
+  const form = useForm<z.infer<typeof editEmployeeSchema>>({
+    resolver: zodResolver(editEmployeeSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      phone: "",
-      address: "",
-      gender: undefined,
-      dateOfBirth: "",
+      name: employeeData.name,
+      email: employeeData.email,
+      phone: employeeData.phone ?? "",
+      address: employeeData.address ?? "",
+      gender:
+        employeeData.gender === "MALE" || employeeData.gender === "FEMALE"
+          ? employeeData.gender
+          : undefined,
+      dateOfBirth: employeeData.dateOfBirth
+        ? employeeData.dateOfBirth.toISOString().split("T")[0]
+        : "",
       image: "",
-      departmentId: "",
-      companyId: companyId ?? "",
-      position: "",
-      employeeRole: undefined,
-      isActive: true,
+      departmentId: employeeData.department?.id,
+      companyId: employeeData.company?.id ?? "",
+      position: employeeData.position,
+      employeeRole: employeeData.employeeRole,
+      isActive: employeeData.isActive,
     },
   });
 
   useEffect(() => {
-    if (companyId) {
-      form.setValue("companyId", companyId);
-    }
-  }, [companyId, form]);
+    form.reset({
+      name: employeeData.name,
+      email: employeeData.email,
+      phone: employeeData.phone ?? "",
+      address: employeeData.address ?? "",
+      gender:
+        employeeData.gender === "MALE" || employeeData.gender === "FEMALE"
+          ? employeeData.gender
+          : undefined,
+      dateOfBirth: employeeData.dateOfBirth
+        ? employeeData.dateOfBirth.toISOString().split("T")[0]
+        : "",
+      image: "",
+      departmentId: employeeData.department?.id,
+      companyId: employeeData.company?.id ?? "",
+      position: employeeData.position,
+      employeeRole: employeeData.employeeRole,
+      isActive: employeeData.isActive,
+    });
+  }, [employeeData, form]);
 
-  async function onSubmit(values: z.infer<typeof employeeSchema>) {
+  async function onSubmit(values: z.infer<typeof editEmployeeSchema>) {
     setSubmitting(true);
 
     try {
       const res = await fetch(`${BASE_URL}/api/admin/employee`, {
-        method: "POST",
+        method: "PUT",
         body: JSON.stringify({
+          userId: employeeData.userId,
           name: values.name,
           email: values.email,
-          password: values.password,
           phone: values.phone,
           address: values.address,
           gender: values.gender,
@@ -97,7 +128,7 @@ function AdminCompanyEmployeeCreatePage() {
           departmentId: values.departmentId,
           position: values.position,
           employeeRole: values.employeeRole,
-          isActive: true,
+          isActive: values.isActive,
         }),
       });
 
@@ -105,37 +136,38 @@ function AdminCompanyEmployeeCreatePage() {
 
       if (!res.ok) {
         setSubmitting(false);
+        setOpen(false);
         customToast("error", "Uh oh! Something went wrong 😵", data.message);
       } else {
         setSubmitting(false);
+        setOpen(false);
         customToast("success", "Success 🎉", data.message);
         router.push("/dashboard/admin/employee");
       }
     } catch (error) {
       setSubmitting(false);
+      setOpen(false);
       console.error(error);
     }
   }
 
   return (
-    <div className="space-y-4">
-      <Link
-        href={"/dashboard/admin/employee"}
-        className="flex items-center gap-1 duration-200 hover:underline"
-      >
-        <ChevronLeft size={14} strokeWidth={2} />
-        <p>Back</p>
-      </Link>
-      {/* Create Employee Page Header */}
-      <div>
-        <h2 className="text-lg font-semibold">Create Employee</h2>
-        <p className="text-muted-foreground text-base">
-          Add a new Employee data to this company.
-        </p>
-      </div>
-
-      {/* Create Employee Form */}
-      <div className="max-w-2xl">
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button
+          size={"icon"}
+          className="flex cursor-pointer items-center gap-2 bg-yellow-500 text-white duration-200 hover:bg-yellow-600"
+        >
+          <Pencil size={16} />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-[350px] rounded-md sm:max-w-[700px]">
+        <DialogHeader>
+          <DialogTitle>Update Employee</DialogTitle>
+          <DialogDescription>
+            Edit an existing employee data in this company.
+          </DialogDescription>
+        </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -146,7 +178,10 @@ function AdminCompanyEmployeeCreatePage() {
                   <FormItem>
                     <FormLabel className="flex items-center gap-1">
                       <LetterText size={14} />
-                      Name
+                      <div>
+                        Name
+                        <span className="ml-0.5 text-red-500">*</span>
+                      </div>
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -166,7 +201,10 @@ function AdminCompanyEmployeeCreatePage() {
                   <FormItem>
                     <FormLabel className="flex items-center gap-1">
                       <AtSign size={14} />
-                      Email
+                      <div>
+                        Email
+                        <span className="ml-0.5 text-red-500">*</span>
+                      </div>
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -246,7 +284,10 @@ function AdminCompanyEmployeeCreatePage() {
                   <FormItem>
                     <FormLabel className="flex items-center gap-1">
                       <BriefcaseBusiness size={14} />
-                      Position
+                      <div>
+                        Position
+                        <span className="ml-0.5 text-red-500">*</span>
+                      </div>
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -331,7 +372,10 @@ function AdminCompanyEmployeeCreatePage() {
                   <FormItem>
                     <FormLabel className="flex items-center gap-1">
                       <UserCog size={14} />
-                      Employee Role
+                      <div>
+                        Employee Role
+                        <span className="ml-0.5 text-red-500">*</span>
+                      </div>
                     </FormLabel>
                     <Select
                       onValueChange={field.onChange}
@@ -365,51 +409,20 @@ function AdminCompanyEmployeeCreatePage() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="password">Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      id="password"
-                      name="password"
-                      className="w-full"
-                      type={showPassword ? "text" : "password"}
-                      placeholder={showPassword ? "Your Password" : "********"}
-                      autoComplete="current-password"
-                      onChange={(e) => {
-                        field.onChange(e);
-                        form.clearErrors("password");
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                  <div className="flex items-center justify-end gap-2 text-sm">
-                    <Checkbox
-                      id="showPassword"
-                      onCheckedChange={() => setShowPassword((prev) => !prev)}
-                    />
-                    <Label htmlFor="showPassword">Show Password</Label>
-                  </div>
-                </FormItem>
-              )}
-            />
+
             <div className="mt-3 flex justify-end gap-2">
               <SubmitButton
                 isSubmitting={submitting}
-                className="bg-picton-blue-400 hover:bg-picton-blue-500 dark:text-foreground w-full max-w-[150px]"
+                className="dark:text-foreground w-full max-w-[150px] bg-yellow-400 hover:bg-yellow-500"
               >
-                {submitting ? "Creating" : "Create Employee"}
+                {submitting ? "Editing" : "Edit Employee"}
               </SubmitButton>
             </div>
           </form>
         </Form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
-export default AdminCompanyEmployeeCreatePage;
+export default EditEmployeeDialog;

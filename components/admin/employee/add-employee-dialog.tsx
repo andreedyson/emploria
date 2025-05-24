@@ -1,6 +1,14 @@
 "use client";
 
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Form,
   FormControl,
   FormField,
@@ -15,7 +23,10 @@ import { z } from "zod";
 
 import { customToast } from "@/components/custom-toast";
 import { SubmitButton } from "@/components/submit-button";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -25,77 +36,67 @@ import {
 } from "@/components/ui/select";
 import { BASE_URL } from "@/constants";
 import { useDepartments } from "@/hooks/use-department";
-import { EmployeeColumnProps } from "@/types/admin/employee";
-import { editEmployeeSchema } from "@/validations/admin";
+import { employeeSchema } from "@/validations/admin";
 import {
   AtSign,
   BriefcaseBusiness,
   Building2,
   Calendar,
-  ChevronLeft,
   LetterText,
   MapPin,
   Mars,
   Phone,
   UserCog,
+  Users,
 } from "lucide-react";
-import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Checkbox } from "../ui/checkbox";
-import { Label } from "../ui/label";
 
-type EditEmployeeFormProps = {
-  employeeData: EmployeeColumnProps;
-};
-
-function EditEmployeeForm({ employeeData }: EditEmployeeFormProps) {
-  const { data: departments } = useDepartments(
-    employeeData.company?.id as string,
-  );
+function AddEmployeeDialog() {
+  const session = useSession();
+  const companyId = session.data?.user.companyId as string;
+  const { data: departments } = useDepartments(companyId);
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof editEmployeeSchema>>({
-    resolver: zodResolver(editEmployeeSchema),
+  const form = useForm<z.infer<typeof employeeSchema>>({
+    resolver: zodResolver(employeeSchema),
     defaultValues: {
-      name: employeeData.name,
-      email: employeeData.email,
-      phone: employeeData.phone ?? "",
-      address: employeeData.address ?? "",
-      gender:
-        employeeData.gender === "MALE" || employeeData.gender === "FEMALE"
-          ? employeeData.gender
-          : undefined,
-
-      dateOfBirth: employeeData.dateOfBirth
-        ? employeeData.dateOfBirth.toISOString().split("T")[0]
-        : "",
+      name: "",
+      email: "",
+      password: "",
+      phone: "",
+      address: "",
+      gender: undefined,
+      dateOfBirth: "",
       image: "",
-      departmentId: employeeData.department?.id,
-      companyId: employeeData.company?.id ?? "",
-      position: employeeData.position,
-      employeeRole: employeeData.employeeRole,
-      isActive: employeeData.isActive,
+      departmentId: "",
+      companyId: companyId ?? "",
+      position: "",
+      employeeRole: undefined,
+      isActive: true,
     },
   });
 
   useEffect(() => {
-    if (employeeData.company?.id) {
-      form.setValue("companyId", employeeData.company.id);
+    if (companyId) {
+      form.setValue("companyId", companyId);
     }
-  }, [employeeData.company?.id, form]);
+  }, [companyId, form]);
 
-  async function onSubmit(values: z.infer<typeof editEmployeeSchema>) {
+  async function onSubmit(values: z.infer<typeof employeeSchema>) {
     setSubmitting(true);
 
     try {
       const res = await fetch(`${BASE_URL}/api/admin/employee`, {
-        method: "PUT",
+        method: "POST",
         body: JSON.stringify({
-          userId: employeeData.userId,
           name: values.name,
           email: values.email,
+          password: values.password,
           phone: values.phone,
           address: values.address,
           gender: values.gender,
@@ -105,7 +106,7 @@ function EditEmployeeForm({ employeeData }: EditEmployeeFormProps) {
           departmentId: values.departmentId,
           position: values.position,
           employeeRole: values.employeeRole,
-          isActive: values.isActive,
+          isActive: true,
         }),
       });
 
@@ -113,37 +114,39 @@ function EditEmployeeForm({ employeeData }: EditEmployeeFormProps) {
 
       if (!res.ok) {
         setSubmitting(false);
+        setOpen(false);
         customToast("error", "Uh oh! Something went wrong 😵", data.message);
       } else {
         setSubmitting(false);
+        setOpen(false);
         customToast("success", "Success 🎉", data.message);
         router.push("/dashboard/admin/employee");
       }
     } catch (error) {
       setSubmitting(false);
+      setOpen(false);
       console.error(error);
     }
   }
 
   return (
-    <div className="space-y-4">
-      <Link
-        href={"/dashboard/admin/employee"}
-        className="flex items-center gap-1 duration-200 hover:underline"
-      >
-        <ChevronLeft size={14} strokeWidth={2} />
-        <p>Back</p>
-      </Link>
-      {/* Create Employee Page Header */}
-      <div>
-        <h2 className="text-lg font-semibold">Update Employee</h2>
-        <p className="text-muted-foreground text-base">
-          Edit an existing employee data in this company.
-        </p>
-      </div>
-
-      {/* Edit Employee Form */}
-      <div className="max-w-2xl">
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button
+          size={"sm"}
+          className="bg-picton-blue-400 hover:bg-picton-blue-500 flex h-9 cursor-pointer items-center gap-2 px-3 text-xs text-white duration-200 xl:text-sm"
+        >
+          <Users size={16} />
+          Add Employee
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-[350px] rounded-md sm:max-w-[700px]">
+        <DialogHeader>
+          <DialogTitle>Create Employee</DialogTitle>
+          <DialogDescription>
+            Add a new Employee data to this company.
+          </DialogDescription>
+        </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -154,7 +157,10 @@ function EditEmployeeForm({ employeeData }: EditEmployeeFormProps) {
                   <FormItem>
                     <FormLabel className="flex items-center gap-1">
                       <LetterText size={14} />
-                      Name
+                      <div>
+                        Name
+                        <span className="ml-0.5 text-red-500">*</span>
+                      </div>
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -174,7 +180,10 @@ function EditEmployeeForm({ employeeData }: EditEmployeeFormProps) {
                   <FormItem>
                     <FormLabel className="flex items-center gap-1">
                       <AtSign size={14} />
-                      Email
+                      <div>
+                        Email
+                        <span className="ml-0.5 text-red-500">*</span>
+                      </div>
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -254,7 +263,10 @@ function EditEmployeeForm({ employeeData }: EditEmployeeFormProps) {
                   <FormItem>
                     <FormLabel className="flex items-center gap-1">
                       <BriefcaseBusiness size={14} />
-                      Position
+                      <div>
+                        Position
+                        <span className="ml-0.5 text-red-500">*</span>
+                      </div>
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -339,7 +351,10 @@ function EditEmployeeForm({ employeeData }: EditEmployeeFormProps) {
                   <FormItem>
                     <FormLabel className="flex items-center gap-1">
                       <UserCog size={14} />
-                      Employee Role
+                      <div>
+                        Employee Role
+                        <span className="ml-0.5 text-red-500">*</span>
+                      </div>
                     </FormLabel>
                     <Select
                       onValueChange={field.onChange}
@@ -373,39 +388,56 @@ function EditEmployeeForm({ employeeData }: EditEmployeeFormProps) {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
-              name="isActive"
+              name="password"
               render={({ field }) => (
                 <FormItem>
-                  <div className="flex items-center gap-2">
-                    <Checkbox
-                      id="isActive"
-                      checked={field.value}
-                      onCheckedChange={(checked) =>
-                        field.onChange(Boolean(checked))
-                      }
+                  <FormLabel htmlFor="password">
+                    <div>
+                      Password
+                      <span className="ml-0.5 text-red-500">*</span>
+                    </div>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      id="password"
+                      name="password"
+                      className="w-full"
+                      type={showPassword ? "text" : "password"}
+                      placeholder={showPassword ? "Your Password" : "********"}
+                      autoComplete="current-password"
+                      onChange={(e) => {
+                        field.onChange(e);
+                        form.clearErrors("password");
+                      }}
                     />
-                    <Label htmlFor="isActive">Active</Label>
+                  </FormControl>
+                  <FormMessage />
+                  <div className="flex items-center justify-end gap-2 text-sm">
+                    <Checkbox
+                      id="showPassword"
+                      onCheckedChange={() => setShowPassword((prev) => !prev)}
+                    />
+                    <Label htmlFor="showPassword">Show Password</Label>
                   </div>
                 </FormItem>
               )}
             />
-
             <div className="mt-3 flex justify-end gap-2">
               <SubmitButton
                 isSubmitting={submitting}
-                className="dark:text-foreground w-full max-w-[150px] bg-yellow-400 hover:bg-yellow-500"
+                className="bg-picton-blue-400 hover:bg-picton-blue-500 dark:text-foreground w-full max-w-[150px]"
               >
-                {submitting ? "Editing" : "Edit Employee"}
+                {submitting ? "Creating" : "Create Employee"}
               </SubmitButton>
             </div>
           </form>
         </Form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
-export default EditEmployeeForm;
+export default AddEmployeeDialog;
