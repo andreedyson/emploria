@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import prisma from "@/lib/db";
-import { employeeSchema } from "@/validations/admin";
+import { editEmployeeSchema, employeeSchema } from "@/validations/admin";
 import { NextRequest, NextResponse } from "next/server";
 import { uploadFile } from "@/lib/supabase";
 
@@ -164,6 +164,150 @@ export async function POST(req: NextRequest) {
     console.error(error);
     return NextResponse.json(
       { message: "An error occured creating employee" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function PUT(req: NextRequest) {
+  try {
+    const {
+      userId,
+      name,
+      email,
+      phone,
+      address,
+      gender,
+      dateOfBirth,
+      image,
+      companyId,
+      departmentId,
+      position,
+      employeeRole,
+    } = await req.json();
+
+    const validatedFields = editEmployeeSchema.safeParse({
+      name,
+      email,
+      phone,
+      address,
+      gender,
+      dateOfBirth,
+      image,
+      companyId,
+      departmentId,
+      position,
+      employeeRole,
+    });
+
+    if (!validatedFields.success) {
+      const { errors } = validatedFields.error;
+      return NextResponse.json({ message: errors[0].message }, { status: 400 });
+    }
+
+    // Check if user exists
+    const userExist = await prisma.user.findUnique({
+      where: { id: userId },
+      include: { employee: true },
+    });
+    if (!userExist) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    // Check if company matches (super admin can only edit employees in their company)
+    if (userExist.companyId !== companyId) {
+      return NextResponse.json(
+        { message: "User does not belong to this company" },
+        { status: 403 },
+      );
+    }
+
+    // Handle email update restrictions:
+    if (email && email !== userExist.email) {
+      // Check if new email already exists
+      const emailExists = await prisma.user.findUnique({
+        where: { email },
+      });
+      if (emailExists) {
+        return NextResponse.json(
+          { message: "Email is already registered by another user" },
+          { status: 409 },
+        );
+      }
+    }
+
+    // Handle image upload if image is provided
+    let fileName = userExist.image;
+    if (image && image !== userExist.image) {
+      fileName = await uploadFile(image, "users");
+    }
+
+    // Update User data
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        name: validatedFields.data.name,
+        email: userExist.email,
+        phone: validatedFields.data.phone,
+        address: validatedFields.data.address,
+        gender: validatedFields.data.gender,
+        dateOfBirth: new Date(dateOfBirth),
+        image: fileName,
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        companyId: true,
+      },
+    });
+
+    // Update Employee data
+    const updatedEmployee = await prisma.employee.update({
+      where: { userId: updatedUser.id },
+      data: {
+        departmentId: departmentId || null,
+        position: validatedFields.data.position,
+        role: employeeRole,
+      },
+      select: {
+        id: true,
+        position: true,
+        role: true,
+        isActive: true,
+        joinDate: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            dateOfBirth: true,
+          },
+        },
+        company: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        department: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    return NextResponse.json(
+      { message: "Employee successfully updated", data: updatedEmployee },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "An error occurred updating employee" },
       { status: 500 },
     );
   }

@@ -51,6 +51,8 @@ export const employeeSchema = z.object({
   }),
 });
 
+export const editEmployeeSchema = employeeSchema.omit({ password: true });
+
 export const departmentSchema = z.object({
   name: z
     .string({ required_error: "Department Name is required" })
