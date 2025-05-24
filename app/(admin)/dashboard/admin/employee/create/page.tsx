@@ -68,6 +68,7 @@ function AdminCompanyEmployeeCreatePage() {
       companyId: companyId ?? "",
       position: "",
       employeeRole: undefined,
+      isActive: true,
     },
   });
 
@@ -96,6 +97,7 @@ function AdminCompanyEmployeeCreatePage() {
           departmentId: values.departmentId,
           position: values.position,
           employeeRole: values.employeeRole,
+          isActive: true,
         }),
       });
 

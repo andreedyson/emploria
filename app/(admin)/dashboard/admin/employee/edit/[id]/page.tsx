@@ -10,7 +10,7 @@ async function AdminCompanyEmployeeEditPage({
   const { id } = await params;
   const employee = await getEmployeeById(id);
 
-  if (!employee) return <div>No Employee Found</div>;
+  if (!employee || !employee.isActive) return <div>No Employee Found</div>;
   return (
     <div>
       <EditEmployeeForm employeeData={employee} />

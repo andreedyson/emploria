@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
     departmentId,
     position,
     employeeRole,
+    isActive,
   } = await req.json();
 
   try {
@@ -35,6 +36,7 @@ export async function POST(req: NextRequest) {
       departmentId,
       position,
       employeeRole,
+      isActive,
     });
 
     let fileName;
@@ -45,6 +47,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: errors[0].message }, { status: 400 });
     }
 
+    // Check company data
     const company = await prisma.company.findUnique({
       where: {
         id: companyId,
@@ -55,6 +58,35 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { message: "Company not found" },
         { status: 404 },
+      );
+    }
+
+    // Check if the email is already associated with an inactive user
+    const existingInactiveUser = await prisma.user.findFirst({
+      where: {
+        email: validatedFields.data.email,
+        companyId: validatedFields.data.companyId,
+        isActive: false, // Check if the user exists but is inactive
+      },
+    });
+
+    if (existingInactiveUser) {
+      await prisma.user.update({
+        where: { id: existingInactiveUser.id },
+        data: { isActive: true },
+      });
+
+      await prisma.employee.update({
+        where: { userId: existingInactiveUser.id },
+        data: { isActive: true },
+      });
+
+      return NextResponse.json(
+        {
+          message:
+            "Account reactivated successfully, user and employee data are now active!",
+        },
+        { status: 200 },
       );
     }
 
@@ -205,6 +237,20 @@ export async function PUT(req: NextRequest) {
     if (!validatedFields.success) {
       const { errors } = validatedFields.error;
       return NextResponse.json({ message: errors[0].message }, { status: 400 });
+    }
+
+    // Check company data
+    const company = await prisma.company.findUnique({
+      where: {
+        id: companyId,
+      },
+    });
+
+    if (!company) {
+      return NextResponse.json(
+        { message: "Company not found" },
+        { status: 404 },
+      );
     }
 
     // Check if user exists
