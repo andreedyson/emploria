@@ -119,13 +119,15 @@ model Attendance {
   status     AttendanceStatus
 
   employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@unique([employeeId, date])
 }
 
 enum AttendanceStatus {
   PRESENT
   ABSENT
   LATE
-  HALF_DAY
+  ON_LEAVE
 }
 
 model Leave {

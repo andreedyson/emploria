@@ -50,6 +50,8 @@ import {
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 type EditEmployeeDialogProps = {
   employeeData: EmployeeColumnProps;
@@ -397,6 +399,25 @@ function EditEmployeeDialog({ employeeData }: EditEmployeeDialogProps) {
                 )}
               />
             </div>
+            <FormField
+              control={form.control}
+              name="isActive"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      id="isActive"
+                      checked={field.value}
+                      onCheckedChange={(checked) =>
+                        field.onChange(Boolean(checked))
+                      }
+                    />
+                    <Label htmlFor="isActive">Active</Label>
+                  </div>
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="companyId"
