@@ -1,5 +1,5 @@
 import { ALLOWED_FILE_TYPE } from "@/constants";
-import { EmployeeRole } from "@prisma/client";
+import { AttendanceStatus, EmployeeRole } from "@prisma/client";
 import { z } from "zod";
 
 export const employeeSchema = z.object({
@@ -60,4 +60,16 @@ export const departmentSchema = z.object({
     .min(1, { message: "Department should be at least 1 character" })
     .max(50, { message: "Department should be less than 50 characters" }),
   companyId: z.string({ required_error: "Company ID is required" }).min(1),
+});
+
+export const attendanceSchema = z.object({
+  employeeId: z.string({ required_error: "Employee is required" }),
+  date: z.coerce.date({ required_error: "Date is required" }),
+  status: z.nativeEnum(AttendanceStatus, {
+    required_error: "Attendance Status is required",
+    invalid_type_error:
+      "Invalid employee role. Must be ABSENT, PRESENT, LATE, or ON LEAVE",
+  }),
+  checkIn: z.union([z.string().datetime(), z.null()]).optional(),
+  checkOut: z.union([z.string().datetime(), z.null()]).optional(),
 });
