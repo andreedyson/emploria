@@ -1,6 +1,9 @@
+import { AttendanceStatus } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx";
 import { randomBytes } from "crypto";
 import { twMerge } from "tailwind-merge";
+import { differenceInMinutes, format, parseISO } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -28,6 +31,33 @@ export const formatDate = (date: Date) => {
 
   return formattedDate;
 };
+
+export function convertToGmt7TimeString(date: Date): string {
+  const inputDate = new Date(date);
+  const gmt7TimeZone = "Asia/Jakarta";
+  const zonedDate = toZonedTime(inputDate, gmt7TimeZone);
+  return format(zonedDate, "HH:mm");
+}
+
+export function getDurationCompact(
+  start: string | Date,
+  end: string | Date,
+): string {
+  const startDate =
+    typeof start === "string" ? parseISO(start.replace(" ", "T")) : start;
+  const endDate =
+    typeof end === "string" ? parseISO(end.replace(" ", "T")) : end;
+
+  const diffInMinutes = differenceInMinutes(endDate, startDate);
+  const hours = Math.floor(diffInMinutes / 60);
+  const minutes = diffInMinutes % 60;
+
+  let result = "";
+  if (hours > 0) result += `${hours}h `;
+  if (minutes > 0 || hours === 0) result += `${minutes}m`;
+
+  return result.trim();
+}
 
 // Format how many days ago from a date
 export const formatDaysAgo = (date: Date) => {
@@ -70,3 +100,50 @@ export const generateRandomString = (length: number = 16) => {
 
   return result;
 };
+
+export function getAttendanceBadgeStyle(status: AttendanceStatus) {
+  let badgeStyle = "";
+
+  switch (status) {
+    case "PRESENT":
+      badgeStyle =
+        "bg-green-400/30 text-green-600 border border-green-600 dark:bg-green-600/30 dark:text-green-400 dark:border-green-500";
+      break;
+    case "ABSENT":
+      badgeStyle =
+        "bg-red-400/30 text-red-600 border border-red-600 dark:bg-red-600/30 dark:text-red-400 dark:border-red-500";
+      break;
+    case "ON_LEAVE":
+      badgeStyle =
+        "bg-yellow-400/30 text-yellow-600 border border-yellow-600 dark:bg-yellow-600/30 dark:text-yellow-400 dark:border-yellow-500";
+      break;
+    case "LATE":
+      badgeStyle =
+        "bg-orange-400/30 text-orange-600 border border-orange-600 dark:bg-orange-600/30 dark:text-orange-400 dark:border-orange-500";
+      break;
+    default:
+      // Default style
+      badgeStyle =
+        "bg-gray-400/30 text-gray-600 border border-gray-600 dark:bg-gray-600/30 dark:text-gray-300 dark:border-gray-500";
+      break;
+  }
+
+  return badgeStyle;
+}
+
+export function getTotalHours(
+  checkInTime: Date | string,
+  checkOutTime: Date | string,
+) {
+  const dateCheckIn = new Date(checkInTime);
+  const dateCheckOut = new Date(checkOutTime);
+
+  // Calculate the difference in milliseconds.
+  const differenceInMilliseconds =
+    dateCheckOut.getTime() - dateCheckIn.getTime();
+
+  // Convert milliseconds to hours.
+  const hours = differenceInMilliseconds / (1000 * 60 * 60);
+
+  return hours;
+}
