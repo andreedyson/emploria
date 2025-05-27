@@ -121,7 +121,9 @@ function ViewEmployeeDialog({ employeeData }: ViewEmployeeDialogProps) {
                 <MapPin size={14} />
                 <p>Address</p>
               </div>
-              <p>{employeeData.address ?? "-"}</p>
+              <p className="line-clamp-2 text-right">
+                {employeeData.address ?? "-"}
+              </p>
             </div>
             <div className="flex items-center justify-between">
               <div className="text-muted-foreground flex items-center gap-1">

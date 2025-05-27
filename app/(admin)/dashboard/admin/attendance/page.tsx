@@ -1,4 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import AddAttendanceDialog from "@/components/admin/attendance/add-attendance-dialog";
 import { AttendanceColumns } from "@/components/admin/attendance/attendance-columns";
 import { DataTable } from "@/components/ui/data-table";
 import { getAllAttendances } from "@/lib/data/admin/attendance";
@@ -33,7 +34,9 @@ async function SuperAdminCompanyAttendancePage() {
               department, and status.
             </p>
           </div>
-          <div className="flex w-full justify-end"></div>
+          <div className="flex w-full justify-end">
+            <AddAttendanceDialog companyId={companyId as string} />
+          </div>
         </div>
         {/* Data Table */}
         <div>

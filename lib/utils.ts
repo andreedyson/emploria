@@ -147,3 +147,14 @@ export function getTotalHours(
 
   return hours;
 }
+
+export function combineDateAndTime(
+  date: Date,
+  time?: string | null,
+): Date | null {
+  if (!time) return null;
+  const [hours, minutes] = time.split(":").map(Number);
+  const fullDate = new Date(date);
+  fullDate.setHours(hours, minutes, 0, 0);
+  return fullDate;
+}
