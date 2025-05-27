@@ -20,6 +20,7 @@ import {
   User,
 } from "lucide-react";
 import Image from "next/image";
+import EditAttendanceDialog from "./edit-attendance-dialog";
 
 export const AttendanceColumns: ColumnDef<AttendanceColumnsProps>[] = [
   {
@@ -175,8 +176,16 @@ export const AttendanceColumns: ColumnDef<AttendanceColumnsProps>[] = [
     accessorKey: "actions",
     header: "Actions",
     id: "actions",
-    cell: () => {
-      return <div className="flex items-center gap-1"></div>;
+    cell: ({ row }) => {
+      const attendance = row.original;
+      return (
+        <div className="flex items-center gap-1">
+          <EditAttendanceDialog
+            attendanceData={attendance}
+            companyId={attendance.company.id as string}
+          />
+        </div>
+      );
     },
   },
 ];

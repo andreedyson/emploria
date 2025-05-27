@@ -73,6 +73,32 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ message: errors[0].message }, { status: 400 });
     }
 
+    const { status: validatedStatus } = validatedFields.data;
+
+    const isTimeRequired =
+      validatedStatus === "PRESENT" || validatedStatus === "LATE";
+    const isTimeProvided = checkIn && checkOut;
+
+    if (isTimeRequired && !isTimeProvided) {
+      return NextResponse.json(
+        {
+          message:
+            "Check In and Check Out times are required for PRESENT or LATE status.",
+        },
+        { status: 400 },
+      );
+    }
+
+    if (!isTimeRequired && (checkIn || checkOut)) {
+      return NextResponse.json(
+        {
+          message:
+            "Check In and Check Out times must be empty for ABSENT or ON_LEAVE status.",
+        },
+        { status: 400 },
+      );
+    }
+
     const existing = await prisma.attendance.findUnique({
       where: { id: attendanceId },
     });
@@ -101,6 +127,9 @@ export async function PUT(req: NextRequest) {
     );
   } catch (error) {
     console.error("[UPDATE_ATTENDANCE_ERROR]", error);
-    return NextResponse.json({ message: "Server error" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 },
+    );
   }
 }

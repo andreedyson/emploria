@@ -70,6 +70,6 @@ export const attendanceSchema = z.object({
     invalid_type_error:
       "Invalid employee role. Must be ABSENT, PRESENT, LATE, or ON LEAVE",
   }),
-  checkIn: z.string().optional(),
-  checkOut: z.string().optional(),
+  checkIn: z.string().nullable().optional(),
+  checkOut: z.string().nullable().optional(),
 });

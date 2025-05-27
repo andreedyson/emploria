@@ -39,6 +39,7 @@ export async function getAllAttendances(
     });
 
     const data = attendances.map((attendance) => ({
+      id: attendance.id,
       employee: {
         id: attendance.employeeId,
         name: attendance.employee.user.name,

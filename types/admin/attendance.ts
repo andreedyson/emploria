@@ -1,6 +1,7 @@
 import { AttendanceStatus } from "@prisma/client";
 
 export type AttendanceColumnsProps = {
+  id: string;
   employee: {
     id: string;
     name: string;

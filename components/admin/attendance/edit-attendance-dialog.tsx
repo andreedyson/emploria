@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -42,16 +42,21 @@ import {
 } from "@/components/ui/select";
 import { BASE_URL } from "@/constants";
 import { useEmployee } from "@/hooks/use-employee";
-import { cn, combineDateAndTime } from "@/lib/utils";
+import { cn, combineDateAndTime, formatToTimeString } from "@/lib/utils";
+import { AttendanceColumnsProps } from "@/types/admin/attendance";
 import { attendanceSchema } from "@/validations/admin";
-import { CalendarIcon, Loader } from "lucide-react";
+import { CalendarIcon, Loader, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-type AddAttendanceDialogProps = {
+type EditAttendanceDialogProps = {
+  attendanceData: AttendanceColumnsProps;
   companyId: string;
 };
 
-function AddAttendanceDialog({ companyId }: AddAttendanceDialogProps) {
+function EditAttendanceDialog({
+  attendanceData,
+  companyId,
+}: EditAttendanceDialogProps) {
   const { data: employees } = useEmployee(companyId);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
@@ -61,24 +66,51 @@ function AddAttendanceDialog({ companyId }: AddAttendanceDialogProps) {
   const form = useForm<z.infer<typeof attendanceSchema>>({
     resolver: zodResolver(attendanceSchema),
     defaultValues: {
-      employeeId: "",
-      date: undefined,
-      status: undefined,
-      checkIn: undefined,
-      checkOut: undefined,
+      employeeId: attendanceData.employee.id,
+      date: attendanceData.date,
+      status: attendanceData.status,
+      checkIn: formatToTimeString(attendanceData.checkIn),
+      checkOut: formatToTimeString(attendanceData.checkOut),
     },
   });
+
+  const status = form.watch("status");
+  const disableTimeFields = status === "ABSENT" || status === "ON_LEAVE";
+
+  useEffect(() => {
+    if (disableTimeFields) {
+      form.setValue("checkIn", "");
+      form.setValue("checkOut", "");
+    }
+  }, [disableTimeFields, form]);
+
+  useEffect(() => {
+    if (open) {
+      form.reset({
+        employeeId: attendanceData.employee.id,
+        date: attendanceData.date,
+        status: attendanceData.status,
+        checkIn: formatToTimeString(attendanceData.checkIn),
+        checkOut: formatToTimeString(attendanceData.checkOut),
+      });
+    }
+  }, [open, form, attendanceData]);
 
   async function onSubmit(values: z.infer<typeof attendanceSchema>) {
     setSubmitting(true);
 
     try {
-      const checkIn = combineDateAndTime(values.date, values.checkIn);
-      const checkOut = combineDateAndTime(values.date, values.checkOut);
+      const checkIn = values.checkIn
+        ? combineDateAndTime(values.date, values.checkIn)
+        : null;
+      const checkOut = values.checkOut
+        ? combineDateAndTime(values.date, values.checkOut)
+        : null;
 
       const res = await fetch(`${BASE_URL}/api/admin/attendance`, {
-        method: "POST",
+        method: "PUT",
         body: JSON.stringify({
+          attendanceId: attendanceData.id,
           employeeId: values.employeeId,
           date: values.date,
           checkIn: checkIn,
@@ -110,18 +142,17 @@ function AddAttendanceDialog({ companyId }: AddAttendanceDialogProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          size={"sm"}
-          className="bg-picton-blue-400 hover:bg-picton-blue-500 flex h-9 cursor-pointer items-center gap-2 px-3 text-xs text-white duration-200 xl:text-sm"
+          size={"icon"}
+          className="flex cursor-pointer items-center gap-2 bg-yellow-500 text-white duration-200 hover:bg-yellow-600"
         >
-          <CalendarIcon size={16} />
-          Add Attendance
+          <Pencil size={16} />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-[350px] rounded-md sm:max-w-[400px]">
         <DialogHeader>
-          <DialogTitle>Create Attendance</DialogTitle>
+          <DialogTitle>Update Attendance</DialogTitle>
           <DialogDescription>
-            Add a new attendance data manually.
+            Edit an existing employee attendance data.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -136,6 +167,7 @@ function AddAttendanceDialog({ companyId }: AddAttendanceDialogProps) {
                     onValueChange={field.onChange}
                     value={field.value}
                     defaultValue={field.value}
+                    disabled
                   >
                     <FormControl>
                       <SelectTrigger className="w-full">
@@ -216,7 +248,8 @@ function AddAttendanceDialog({ companyId }: AddAttendanceDialogProps) {
                         type="time"
                         autoComplete="off"
                         {...field}
-                        value={field.value ?? ""}
+                        disabled={disableTimeFields}
+                        value={disableTimeFields ? "" : (field.value ?? "")}
                       />
                     </FormControl>
                     <FormMessage />
@@ -234,7 +267,8 @@ function AddAttendanceDialog({ companyId }: AddAttendanceDialogProps) {
                         type="time"
                         autoComplete="off"
                         {...field}
-                        value={field.value ?? ""}
+                        disabled={disableTimeFields}
+                        value={disableTimeFields ? "" : (field.value ?? "")}
                       />
                     </FormControl>
                     <FormMessage />
@@ -285,9 +319,9 @@ function AddAttendanceDialog({ companyId }: AddAttendanceDialogProps) {
             <DialogFooter className="flex gap-2">
               <SubmitButton
                 isSubmitting={submitting}
-                className="bg-picton-blue-400 hover:bg-picton-blue-500 dark:text-foreground w-full"
+                className="dark:text-foreground w-full bg-yellow-400 hover:bg-yellow-500"
               >
-                {submitting ? "Adding" : "Add Attendance"}
+                {submitting ? "Editing" : "Edit Attendance"}
               </SubmitButton>
             </DialogFooter>
           </form>
@@ -297,4 +331,4 @@ function AddAttendanceDialog({ companyId }: AddAttendanceDialogProps) {
   );
 }
 
-export default AddAttendanceDialog;
+export default EditAttendanceDialog;
