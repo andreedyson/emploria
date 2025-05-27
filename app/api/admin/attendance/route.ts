@@ -54,3 +54,53 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }
+
+export async function PUT(req: NextRequest) {
+  const { attendanceId, employeeId, date, status, checkIn, checkOut } =
+    await req.json();
+  try {
+    const validatedFields = attendanceSchema.safeParse({
+      employeeId,
+      date,
+      status,
+      checkIn,
+      checkOut,
+    });
+
+    if (!validatedFields.success) {
+      const { errors } = validatedFields.error;
+
+      return NextResponse.json({ message: errors[0].message }, { status: 400 });
+    }
+
+    const existing = await prisma.attendance.findUnique({
+      where: { id: attendanceId },
+    });
+
+    if (!existing) {
+      return NextResponse.json(
+        { message: "Attendance not found." },
+        { status: 404 },
+      );
+    }
+
+    const updatedAttendance = await prisma.attendance.update({
+      where: { id: attendanceId },
+      data: {
+        employeeId,
+        date,
+        checkIn: checkIn ? new Date(checkIn) : null,
+        checkOut: checkOut ? new Date(checkOut) : null,
+        status,
+      },
+    });
+
+    return NextResponse.json(
+      { message: "Attendance updated successfully", data: updatedAttendance },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error("[UPDATE_ATTENDANCE_ERROR]", error);
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
+  }
+}
