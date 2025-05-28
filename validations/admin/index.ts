@@ -1,5 +1,10 @@
 import { ALLOWED_FILE_TYPE } from "@/constants";
-import { AttendanceStatus, EmployeeRole } from "@prisma/client";
+import {
+  AttendanceStatus,
+  EmployeeRole,
+  LeaveStatus,
+  LeaveType,
+} from "@prisma/client";
 import { z } from "zod";
 
 export const employeeSchema = z.object({
@@ -72,4 +77,21 @@ export const attendanceSchema = z.object({
   }),
   checkIn: z.string().nullable().optional(),
   checkOut: z.string().nullable().optional(),
+});
+
+export const leaveSchema = z.object({
+  employeeId: z.string({ required_error: "Employee is required" }),
+  startDate: z.coerce.date({ required_error: "Start Date is required" }),
+  endDate: z.coerce.date({ required_error: "End Date is required" }),
+  reason: z.string().optional(),
+  status: z.nativeEnum(LeaveStatus, {
+    required_error: "Leave Status is required",
+    invalid_type_error:
+      "Invalid leave status. Must be PENDING, REJECTED, or APPROVED",
+  }),
+  leaveType: z.nativeEnum(LeaveType, {
+    required_error: "Leave Type is required",
+    invalid_type_error:
+      "Invalid leave type. Must be ANNUAL, SICK, MATERNITY, or UNPAID",
+  }),
 });
