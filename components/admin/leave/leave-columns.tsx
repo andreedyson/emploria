@@ -9,6 +9,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Calendar, Layers, User } from "lucide-react";
 import Image from "next/image";
 import EditLeaveDialog from "./edit-leave-dialog";
+import DeleteLeaveDialog from "./delete-leave-dialog";
 
 export const LeaveColumns: ColumnDef<LeaveColumnProps>[] = [
   {
@@ -127,6 +128,7 @@ export const LeaveColumns: ColumnDef<LeaveColumnProps>[] = [
       return (
         <div className="flex items-center gap-1">
           <EditLeaveDialog companyId={leave.company.id} leaveData={leave} />
+          <DeleteLeaveDialog leaveData={leave} />
         </div>
       );
     },
