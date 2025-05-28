@@ -83,7 +83,10 @@ export const leaveSchema = z.object({
   employeeId: z.string({ required_error: "Employee is required" }),
   startDate: z.coerce.date({ required_error: "Start Date is required" }),
   endDate: z.coerce.date({ required_error: "End Date is required" }),
-  reason: z.string().optional(),
+  reason: z
+    .string()
+    .min(1, { message: "Reason should be at least 1 character" })
+    .max(250, { message: "Reason should be less than 250 characters" }),
   status: z.nativeEnum(LeaveStatus, {
     required_error: "Leave Status is required",
     invalid_type_error:
