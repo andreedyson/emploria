@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import EditAttendanceDialog from "./edit-attendance-dialog";
+import DeleteAttendanceDialog from "./delete-attendance-dialog";
 
 export const AttendanceColumns: ColumnDef<AttendanceColumnsProps>[] = [
   {
@@ -184,6 +185,7 @@ export const AttendanceColumns: ColumnDef<AttendanceColumnsProps>[] = [
             attendanceData={attendance}
             companyId={attendance.company.id as string}
           />
+          <DeleteAttendanceDialog attendanceData={attendance} />
         </div>
       );
     },
