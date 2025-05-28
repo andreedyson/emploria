@@ -51,7 +51,7 @@ export const LeaveColumns: ColumnDef<LeaveColumnProps>[] = [
     cell: ({ row }) => {
       const leave = row.original;
 
-      return <div className="font-semibold">{leave.status ?? "-"}</div>;
+      return <div className="font-semibold">{leave.leaveType ?? "-"}</div>;
     },
   },
   {
