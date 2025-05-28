@@ -131,15 +131,23 @@ enum AttendanceStatus {
 }
 
 model Leave {
-  id          String      @id @default(cuid())
-  employeeId  String
-  startDate   DateTime
-  endDate     DateTime
-  reason      String
-  status      LeaveStatus
-  requestDate DateTime    @default(now())
+  id         String      @id @default(cuid())
+  employeeId String
+  startDate  DateTime
+  endDate    DateTime
+  reason     String
+  leaveType  LeaveType
+  status     LeaveStatus
+  createdAt  DateTime    @default(now())
 
   employee Employee @relation(fields: [employeeId], references: [id])
+}
+
+enum LeaveType {
+  ANNUAL
+  SICK
+  UNPAID
+  MATERNITY
 }
 
 enum LeaveStatus {

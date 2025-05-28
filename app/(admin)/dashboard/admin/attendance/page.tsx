@@ -30,7 +30,7 @@ async function SuperAdminCompanyAttendancePage() {
               <CalendarDays className="size-6 md:size-8" />
               Attendances
             </h2>
-            <p className="text-muted-foreground max-w-sm text-sm leading-none md:text-base">
+            <p className="text-muted-foreground max-w-sm text-sm leading-5 md:text-base">
               View and manage attendance records for your employees by date,
               department, and status.
             </p>
