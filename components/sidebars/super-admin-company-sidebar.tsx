@@ -95,12 +95,17 @@ export function SuperAdminCompanySidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <Link
-                      href={item.url}
-                      className={`hover:text-picton-blue-500 duration-200 ${pathnameSplit === item.url ? "text-picton-blue-700 font-semibold" : ""}`}
-                    >
+                    <Link href={item.url} className="flex items-center gap-2">
                       <item.icon />
-                      <span>{item.title}</span>
+                      <span
+                        className={`duration-200 ${
+                          pathnameSplit === item.url
+                            ? "text-picton-blue-700 font-semibold"
+                            : "hover:text-picton-blue-500"
+                        }`}
+                      >
+                        {item.title}
+                      </span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
