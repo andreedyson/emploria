@@ -8,6 +8,7 @@ import { LeaveColumnProps } from "@/types/admin/leave";
 import { ColumnDef } from "@tanstack/react-table";
 import { Calendar, Layers, User } from "lucide-react";
 import Image from "next/image";
+import EditLeaveDialog from "./edit-leave-dialog";
 
 export const LeaveColumns: ColumnDef<LeaveColumnProps>[] = [
   {
@@ -121,8 +122,13 @@ export const LeaveColumns: ColumnDef<LeaveColumnProps>[] = [
     accessorKey: "actions",
     header: "Actions",
     id: "actions",
-    cell: () => {
-      return <div className="flex items-center gap-1"></div>;
+    cell: ({ row }) => {
+      const leave = row.original;
+      return (
+        <div className="flex items-center gap-1">
+          <EditLeaveDialog companyId={leave.company.id} leaveData={leave} />
+        </div>
+      );
     },
   },
 ];

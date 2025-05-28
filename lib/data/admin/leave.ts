@@ -23,22 +23,29 @@ export async function getAllLeaves(
                 gender: true,
               },
             },
+            company: true,
           },
         },
       },
     });
 
     const data = leaves.map((leave) => ({
+      id: leave.id,
       employee: {
         id: leave.employee.id,
         name: leave.employee.user.name,
         image: leave.employee.user.image,
         gender: leave.employee.user.gender,
       },
+      company: {
+        id: leave.employee.company.id,
+        name: leave.employee.company.name,
+      },
       leaveType: leave.leaveType,
       startDate: leave.startDate,
       endDate: leave.endDate,
       status: leave.status,
+      reason: leave.reason,
     }));
 
     return data;
