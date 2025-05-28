@@ -1,4 +1,8 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import AddLeaveDialog from "@/components/admin/leave/add-leave-dialog";
+import { LeaveColumns } from "@/components/admin/leave/leave-columns";
+import { DataTable } from "@/components/ui/data-table";
+import { getAllLeaves } from "@/lib/data/admin/leave";
 import { CalendarX } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -8,7 +12,8 @@ async function SuperAdminCompanyLeavePage() {
   if (!session) {
     redirect("/");
   }
-  // const companyId = session.user.companyId;
+  const companyId = session.user.companyId;
+  const leaves = await getAllLeaves(companyId as string);
   return (
     <section className="space-y-4">
       <div className="bg-background space-y-3 rounded-lg border-2 p-4">
@@ -24,15 +29,17 @@ async function SuperAdminCompanyLeavePage() {
               department, and status.
             </p>
           </div>
-          <div className="flex w-full justify-end gap-2"></div>
+          <div className="flex w-full justify-end gap-2">
+            <AddLeaveDialog companyId={companyId as string} />
+          </div>
         </div>
         {/* Data Table */}
         <div>
-          {/* <DataTable
-            columns={AttendanceColumns}
-            data={attendances}
+          <DataTable
+            columns={LeaveColumns}
+            data={leaves}
             columnFilter="employee"
-          /> */}
+          />
         </div>
       </div>
     </section>
