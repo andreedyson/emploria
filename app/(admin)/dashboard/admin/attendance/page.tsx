@@ -1,6 +1,7 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import AddAttendanceDialog from "@/components/admin/attendance/add-attendance-dialog";
 import { AttendanceColumns } from "@/components/admin/attendance/attendance-columns";
+import EvaluateAttendanceDayDialog from "@/components/admin/attendance/evaluate-day-dialog";
 import { DataTable } from "@/components/ui/data-table";
 import { getAllAttendances } from "@/lib/data/admin/attendance";
 import { CalendarDays } from "lucide-react";
@@ -34,7 +35,8 @@ async function SuperAdminCompanyAttendancePage() {
               department, and status.
             </p>
           </div>
-          <div className="flex w-full justify-end">
+          <div className="flex w-full justify-end gap-2">
+            <EvaluateAttendanceDayDialog companyId={companyId as string} />
             <AddAttendanceDialog companyId={companyId as string} />
           </div>
         </div>

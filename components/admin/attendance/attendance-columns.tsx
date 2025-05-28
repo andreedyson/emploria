@@ -86,9 +86,7 @@ export const AttendanceColumns: ColumnDef<AttendanceColumnsProps>[] = [
     },
     cell: ({ row }) => {
       const attendance = row.original;
-      return (
-        <div>{attendance.checkIn ? formatDate(attendance.date) : "-"}</div>
-      );
+      return <div>{attendance.date ? formatDate(attendance.date) : "-"}</div>;
     },
   },
   {
