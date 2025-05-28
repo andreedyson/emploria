@@ -192,3 +192,36 @@ export async function PUT(req: NextRequest) {
     );
   }
 }
+
+export async function DELETE(req: NextRequest) {
+  const { leaveId } = await req.json();
+  try {
+    // Check leave data
+    const leave = await prisma.leave.findUnique({
+      where: {
+        id: leaveId,
+      },
+    });
+
+    if (!leave) {
+      return NextResponse.json({ message: "Leave not found" }, { status: 404 });
+    }
+
+    const deletedLeave = await prisma.leave.delete({
+      where: {
+        id: leaveId,
+      },
+    });
+
+    return NextResponse.json(
+      { message: "Leave deleted successfully", data: deletedLeave },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error("[DELETE_LEAVE_ERROR]", error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 },
+    );
+  }
+}
