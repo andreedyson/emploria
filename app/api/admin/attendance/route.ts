@@ -133,3 +133,39 @@ export async function PUT(req: NextRequest) {
     );
   }
 }
+
+export async function DELETE(req: NextRequest) {
+  const { attendanceId } = await req.json();
+  try {
+    // Check attendance data
+    const attendance = await prisma.attendance.findUnique({
+      where: {
+        id: attendanceId,
+      },
+    });
+
+    if (!attendance) {
+      return NextResponse.json(
+        { message: "Attendance data not found" },
+        { status: 404 },
+      );
+    }
+
+    const deletedAttendance = await prisma.attendance.delete({
+      where: {
+        id: attendanceId,
+      },
+    });
+
+    return NextResponse.json(
+      { message: "Attendance deleted successfully", data: deletedAttendance },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error("[DELETE_ATTENDANCE_ERROR]", error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 },
+    );
+  }
+}
