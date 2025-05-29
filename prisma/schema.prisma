@@ -60,6 +60,7 @@ model Employee {
   companyId    String
   departmentId String?
   position     String
+  baseSalary   Float        @default(0)
   isActive     Boolean      @default(true)
   joinDate     DateTime     @default(now())
   role         EmployeeRole
@@ -103,6 +104,8 @@ model Salary {
   paidAt          DateTime?
 
   employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@unique([employeeId, month, year])
 }
 
 enum SalaryStatus {
