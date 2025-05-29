@@ -135,9 +135,4 @@ export const salarySchema = z.object({
       required_error: "Attendance bonus is required",
     })
     .nonnegative("Attendance bonus must be non-negative"),
-  total: z
-    .number({
-      required_error: "Total salary is required",
-    })
-    .nonnegative("Total salary must be non-negative"),
 });
