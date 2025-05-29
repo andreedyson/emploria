@@ -100,3 +100,44 @@ export const leaveSchema = z.object({
 });
 
 export const editLeaveSchema = leaveSchema.pick({ status: true });
+
+export const salarySchema = z.object({
+  employeeId: z.string({
+    required_error: "Employee is required",
+  }),
+  month: z
+    .string({
+      required_error: "Month is required",
+    })
+    .min(1, "Month is required"),
+  year: z
+    .string({
+      required_error: "Year is required",
+    })
+    .regex(/^\d{4}$/, "Year must be in YYYY format"),
+  baseSalary: z
+    .number({
+      required_error: "Base salary is required",
+    })
+    .nonnegative("Base salary must be non-negative"),
+  bonus: z
+    .number({
+      required_error: "Bonus is required",
+    })
+    .nonnegative("Bonus must be non-negative"),
+  deduction: z
+    .number({
+      required_error: "Deduction is required",
+    })
+    .nonnegative("Deduction must be non-negative"),
+  attendanceBonus: z
+    .number({
+      required_error: "Attendance bonus is required",
+    })
+    .nonnegative("Attendance bonus must be non-negative"),
+  total: z
+    .number({
+      required_error: "Total salary is required",
+    })
+    .nonnegative("Total salary must be non-negative"),
+});
