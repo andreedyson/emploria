@@ -44,11 +44,6 @@ const items = [
     icon: Building2,
   },
   {
-    title: "Salary",
-    url: "/dashboard/admin/salary",
-    icon: Banknote,
-  },
-  {
     title: "Attendance",
     url: "/dashboard/admin/attendance",
     icon: CalendarDays,
@@ -57,6 +52,11 @@ const items = [
     title: "Leave",
     url: "/dashboard/admin/leave",
     icon: CalendarX,
+  },
+  {
+    title: "Salary",
+    url: "/dashboard/admin/salary",
+    icon: Banknote,
   },
 ];
 
