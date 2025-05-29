@@ -90,7 +90,7 @@ export const leaveSchema = z.object({
   status: z.nativeEnum(LeaveStatus, {
     required_error: "Leave Status is required",
     invalid_type_error:
-      "Invalid leave status. Must be PENDING, REJECTED, or APPROVED",
+      "Invalid leave status. Must be PENDING, REJECTED, CANCELLED, or APPROVED",
   }),
   leaveType: z.nativeEnum(LeaveType, {
     required_error: "Leave Type is required",
@@ -98,3 +98,5 @@ export const leaveSchema = z.object({
       "Invalid leave type. Must be ANNUAL, SICK, MATERNITY, or UNPAID",
   }),
 });
+
+export const editLeaveSchema = leaveSchema.pick({ status: true });
