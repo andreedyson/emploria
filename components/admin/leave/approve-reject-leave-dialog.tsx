@@ -120,7 +120,10 @@ function ApproveRejectLeaveDialog({
           </div>
 
           <DialogFooter>
-            <SubmitButton isSubmitting={submitting} className="w-full">
+            <SubmitButton
+              isSubmitting={submitting}
+              className="bg-picton-blue-500 hover:bg-picton-blue-600 w-full duration-200"
+            >
               {submitting ? "Submitting..." : "Submit Decision"}
             </SubmitButton>
           </DialogFooter>
