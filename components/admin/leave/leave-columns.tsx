@@ -1,15 +1,16 @@
 "use client";
 
+import LeaveStatusBadge from "@/components/badges/leave-status-badge";
 import { DataTableColumnHeader } from "@/components/tables/data-table-column-header";
-import { Badge } from "@/components/ui/badge";
 import { getImageUrl } from "@/lib/supabase";
 import { formatDate } from "@/lib/utils";
 import { LeaveColumnProps } from "@/types/admin/leave";
 import { ColumnDef } from "@tanstack/react-table";
 import { Calendar, Layers, User } from "lucide-react";
 import Image from "next/image";
-import EditLeaveDialog from "./edit-leave-dialog";
 import DeleteLeaveDialog from "./delete-leave-dialog";
+import EditLeaveDialog from "./edit-leave-dialog";
+import ViewLeaveDialog from "./view-leave-dialog";
 
 export const LeaveColumns: ColumnDef<LeaveColumnProps>[] = [
   {
@@ -96,27 +97,8 @@ export const LeaveColumns: ColumnDef<LeaveColumnProps>[] = [
     cell: ({ row }) => {
       const leave = row.original;
       const status = leave.status;
-      const badgeStyle =
-        status === "PENDING"
-          ? "text-orange-600 bg-orange-300/30 border-orange-400"
-          : status === "APPROVED"
-            ? "text-green-600 bg-green-300/30 border-green-400"
-            : status === "REJECTED"
-              ? "text-red-600 bg-red-300/30 border-red-400"
-              : "text-gray-500 bg-gray-300/30 border-gray-400";
 
-      return (
-        <Badge
-          className={`${badgeStyle} rounded-full border-2 px-3 font-semibold`}
-        >
-          {status.replace(
-            /^([A-Z])([A-Z]*)$/,
-            (match, firstLetter, restOfWord) => {
-              return firstLetter + restOfWord.toLowerCase();
-            },
-          )}
-        </Badge>
-      );
+      return <LeaveStatusBadge status={status} />;
     },
   },
   {
@@ -127,6 +109,7 @@ export const LeaveColumns: ColumnDef<LeaveColumnProps>[] = [
       const leave = row.original;
       return (
         <div className="flex items-center gap-1">
+          <ViewLeaveDialog leaveData={leave} />
           <EditLeaveDialog companyId={leave.company.id} leaveData={leave} />
           <DeleteLeaveDialog leaveData={leave} />
         </div>

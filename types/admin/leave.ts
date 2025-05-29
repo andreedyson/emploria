@@ -17,4 +17,5 @@ export type LeaveColumnProps = {
   endDate: Date;
   status: LeaveStatus;
   reason: string;
+  createdAt: Date;
 };

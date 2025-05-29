@@ -46,6 +46,7 @@ export async function getAllLeaves(
       endDate: leave.endDate,
       status: leave.status,
       reason: leave.reason,
+      createdAt: leave.createdAt,
     }));
 
     return data;
