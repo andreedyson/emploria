@@ -4,8 +4,7 @@ import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const { employeeId, month, year, bonus, deduction, attendanceBonus } =
-    await req.json();
+  const { employeeId, month, year, bonus, deduction } = await req.json();
   try {
     const validatedFields = salarySchema.safeParse({
       employeeId,
@@ -13,7 +12,6 @@ export async function POST(req: NextRequest) {
       year,
       bonus,
       deduction,
-      attendanceBonus,
     });
 
     if (!validatedFields.success) {
@@ -48,6 +46,7 @@ export async function POST(req: NextRequest) {
       },
       include: {
         salary: true,
+        attendance: true,
       },
     });
 
@@ -58,10 +57,45 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Check company data
+    const company = await prisma.company.findUnique({
+      where: { id: employee.companyId },
+    });
+
+    if (!company) {
+      return NextResponse.json(
+        { message: "Company not found" },
+        { status: 404 },
+      );
+    }
+
+    // Count employee salary
     const baseSalary = employee.baseSalary;
+    const attendanceThisMonth = employee.attendance.filter((att) => {
+      return (
+        att.date.getFullYear() === Number(year) &&
+        att.date.getMonth() + 1 === Number(month)
+      );
+    });
+
+    const presentAttendace = attendanceThisMonth.filter(
+      (att) => att.status === "PRESENT",
+    );
+    const attendanceBonus =
+      presentAttendace.length * (company?.attendanceBonusRate ?? 0);
+
+    const lateAttendanceThisMonth = attendanceThisMonth.filter(
+      (att) => att.status === "LATE",
+    );
+    const lateDeduction =
+      lateAttendanceThisMonth.length *
+      (company?.lateAttendancePenaltyRate ?? 0);
 
     // Calculate total salary
-    const total = baseSalary + bonus + attendanceBonus - deduction;
+    const total = Math.max(
+      0,
+      baseSalary + bonus + attendanceBonus - deduction - lateDeduction,
+    );
 
     const salary = await prisma.salary.create({
       data: {
@@ -70,8 +104,8 @@ export async function POST(req: NextRequest) {
         year: validatedFields.data.year,
         baseSalary: baseSalary,
         bonus: validatedFields.data.bonus,
-        deduction: validatedFields.data.deduction,
-        attendanceBonus: validatedFields.data.attendanceBonus,
+        deduction: validatedFields.data.deduction ?? 0,
+        attendanceBonus: attendanceBonus,
         total: total,
       },
     });

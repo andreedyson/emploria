@@ -121,13 +121,7 @@ export const salarySchema = z.object({
     })
     .nonnegative("Bonus must be non-negative"),
   deduction: z
-    .number({
-      required_error: "Deduction is required",
-    })
-    .nonnegative("Deduction must be non-negative"),
-  attendanceBonus: z
-    .number({
-      required_error: "Attendance bonus is required",
-    })
-    .nonnegative("Attendance bonus must be non-negative"),
+    .number()
+    .nonnegative("Deduction must be non-negative")
+    .optional(),
 });
