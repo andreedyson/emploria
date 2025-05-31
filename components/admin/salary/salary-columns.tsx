@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import EditSalaryDialog from "./edit-salary-dialog";
+import { ConfirmPaidDialog } from "./confirm-paid-dialog";
 
 export const SalaryColumns: ColumnDef<SalaryColumnsProps>[] = [
   {
@@ -154,6 +155,10 @@ export const SalaryColumns: ColumnDef<SalaryColumnsProps>[] = [
       return (
         <div className="flex items-center gap-1">
           <EditSalaryDialog salaryData={salary} companyId={salary.companyId} />
+          <ConfirmPaidDialog
+            salaryId={salary.id}
+            salaryStatus={salary.status}
+          />
         </div>
       );
     },
