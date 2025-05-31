@@ -53,6 +53,7 @@ export async function getAllEmployees(
       employeeRole: employee.role,
       position: employee.position,
       joinDate: employee.joinDate,
+      baseSalary: employee.baseSalary,
     }));
 
     return data;
@@ -113,6 +114,7 @@ export async function getEmployeeById(
       employeeRole: employee.role,
       position: employee.position,
       joinDate: employee.joinDate,
+      baseSalary: employee.baseSalary,
     };
 
     return data;

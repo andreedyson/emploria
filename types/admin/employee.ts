@@ -22,4 +22,5 @@ export type EmployeeColumnProps = {
   };
   employeeRole: EmployeeRole;
   joinDate: Date;
+  baseSalary?: number;
 };

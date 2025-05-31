@@ -1,4 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import AddSalaryDialog from "@/components/admin/salary/add-salary-dialog";
 import { SalaryColumns } from "@/components/admin/salary/salary-columns";
 import { DataTable } from "@/components/ui/data-table";
 import { getAllSalaries } from "@/lib/data/admin/salary";
@@ -29,7 +30,9 @@ async function SuperAdminCompanySalaryPage() {
               View and manage all employee salaries monthly data.
             </p>
           </div>
-          <div className="flex w-full justify-end gap-2"></div>
+          <div className="flex w-full justify-end gap-2">
+            <AddSalaryDialog companyId={companyId as string} />
+          </div>
         </div>
         {/* Data Table */}
         <div>

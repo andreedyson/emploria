@@ -115,12 +115,12 @@ export const salarySchema = z.object({
       required_error: "Year is required",
     })
     .regex(/^\d{4}$/, "Year must be in YYYY format"),
-  bonus: z
+  bonus: z.coerce
     .number({
       required_error: "Bonus is required",
     })
     .nonnegative("Bonus must be non-negative"),
-  deduction: z
+  deduction: z.coerce
     .number()
     .nonnegative("Deduction must be non-negative")
     .optional(),

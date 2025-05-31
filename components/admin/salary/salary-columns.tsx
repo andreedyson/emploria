@@ -2,6 +2,7 @@
 
 import { DataTableColumnHeader } from "@/components/tables/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
+import { months } from "@/constants";
 import { getImageUrl } from "@/lib/supabase";
 import { convertRupiah } from "@/lib/utils";
 import { SalaryColumnsProps } from "@/types/admin/salary";
@@ -62,8 +63,11 @@ export const SalaryColumns: ColumnDef<SalaryColumnsProps>[] = [
     },
     cell: ({ row }) => {
       const salary = row.original;
+      const monthLabel = months.find(
+        (month) => salary.month === month.value,
+      )?.label;
 
-      return <div className="font-semibold">{salary.month ?? "-"}</div>;
+      return <div className="font-semibold">{monthLabel ?? "-"}</div>;
     },
   },
   {
