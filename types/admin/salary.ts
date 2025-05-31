@@ -16,5 +16,5 @@ export type SalaryColumnsProps = {
   total: number;
   date: Date;
   status: SalaryStatus;
-  paidAt?: Date;
+  paidAt: Date | null;
 };

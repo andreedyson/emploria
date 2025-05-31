@@ -8,13 +8,10 @@ import { SalaryColumnsProps } from "@/types/admin/salary";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   Banknote,
-  BanknoteX,
   Calendar1,
   CalendarArrowUp,
-  CalendarCheck,
   CheckCircle,
   DollarSign,
-  HandCoins,
   Loader,
   User,
 } from "lucide-react";
@@ -99,59 +96,6 @@ export const SalaryColumns: ColumnDef<SalaryColumnsProps>[] = [
       const Salary = row.original;
       return (
         <div>{Salary.baseSalary ? convertRupiah(Salary.baseSalary) : "-"}</div>
-      );
-    },
-  },
-  {
-    accessorKey: "bonus",
-    enableSorting: true,
-    header: ({ column }) => {
-      return (
-        <DataTableColumnHeader column={column} title="Bonus" icon={HandCoins} />
-      );
-    },
-    cell: ({ row }) => {
-      const Salary = row.original;
-      return <div>{Salary.bonus ? convertRupiah(Salary.bonus) : "-"}</div>;
-    },
-  },
-  {
-    accessorKey: "deduction",
-    enableSorting: true,
-    header: ({ column }) => {
-      return (
-        <DataTableColumnHeader
-          column={column}
-          title="deduction"
-          icon={BanknoteX}
-        />
-      );
-    },
-    cell: ({ row }) => {
-      const Salary = row.original;
-      return (
-        <div>{Salary.deduction ? convertRupiah(Salary.deduction) : "-"}</div>
-      );
-    },
-  },
-  {
-    accessorKey: "attendanceBonus",
-    enableSorting: true,
-    header: ({ column }) => {
-      return (
-        <DataTableColumnHeader
-          column={column}
-          title="Attendance Bonus"
-          icon={CalendarCheck}
-        />
-      );
-    },
-    cell: ({ row }) => {
-      const Salary = row.original;
-      return (
-        <div>
-          {Salary.attendanceBonus ? convertRupiah(Salary.attendanceBonus) : "-"}
-        </div>
       );
     },
   },

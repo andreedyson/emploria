@@ -17,7 +17,7 @@ async function SuperAdminCompanyLeavePage() {
   return (
     <section className="space-y-4">
       <div className="bg-background space-y-3 rounded-lg border-2 p-4">
-        {/* Attendance Page Header */}
+        {/* Leave Page Header */}
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
           <div className="w-full space-y-2">
             <h2 className="flex items-center gap-2 text-2xl leading-none font-bold md:text-3xl">
