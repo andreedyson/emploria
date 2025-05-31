@@ -22,6 +22,8 @@ export async function getAllSalaries(
                 image: true,
               },
             },
+            attendance: true,
+            company: true,
           },
         },
       },
@@ -29,6 +31,7 @@ export async function getAllSalaries(
 
     const data = salaries.map((salary) => ({
       id: salary.id,
+      companyId: companyId,
       employee: {
         id: salary.employee.id,
         name: salary.employee.user.name,
@@ -41,6 +44,15 @@ export async function getAllSalaries(
       deduction: salary.deduction,
       attendanceBonus: salary.attendanceBonus,
       total: salary.total,
+      totalPresentAttendance: salary.employee.attendance.filter(
+        (att) => att.status === "PRESENT",
+      ).length,
+      totalLateAttendance: salary.employee.attendance.filter(
+        (att) => att.status === "LATE",
+      ).length,
+      attendanceBonusRate: salary.employee.company.attendanceBonusRate,
+      lateAttendancePenaltyRate:
+        salary.employee.company.lateAttendancePenaltyRate,
       date: salary.date,
       status: salary.status,
       paidAt: salary.paidAt,

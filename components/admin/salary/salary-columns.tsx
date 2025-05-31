@@ -17,6 +17,7 @@ import {
   User,
 } from "lucide-react";
 import Image from "next/image";
+import EditSalaryDialog from "./edit-salary-dialog";
 
 export const SalaryColumns: ColumnDef<SalaryColumnsProps>[] = [
   {
@@ -123,19 +124,19 @@ export const SalaryColumns: ColumnDef<SalaryColumnsProps>[] = [
       const salary = row.original;
       const badgeStyle =
         salary.status === "UNPAID"
-          ? "bg-orange-300/40 text-orange-500 border-orange-200"
+          ? "bg-orange-300/40 text-orange-500 border-orange-500"
           : salary.status === "PAID"
-            ? "bg-green-300/40 text-green-500 border-green-200"
-            : "bg-gray-300/40 text-gray-500 border-gray-200";
+            ? "bg-green-300/40 text-green-500 border-green-500"
+            : "bg-gray-300/40 text-gray-500 border-gray-500";
 
       return (
         <Badge
           className={`${badgeStyle} rounded-full border-2 px-3 font-semibold`}
         >
           {salary.status === "UNPAID" ? (
-            <Loader size={12} />
+            <Loader size={12} strokeWidth={3} />
           ) : salary.status === "PAID" ? (
-            <CheckCircle size={12} />
+            <CheckCircle size={12} strokeWidth={3} />
           ) : (
             ""
           )}
@@ -148,9 +149,13 @@ export const SalaryColumns: ColumnDef<SalaryColumnsProps>[] = [
     accessorKey: "actions",
     header: "Actions",
     id: "actions",
-    cell: () => {
-      // const attendance = row.original;
-      return <div className="flex items-center gap-1"></div>;
+    cell: ({ row }) => {
+      const salary = row.original;
+      return (
+        <div className="flex items-center gap-1">
+          <EditSalaryDialog salaryData={salary} companyId={salary.companyId} />
+        </div>
+      );
     },
   },
 ];

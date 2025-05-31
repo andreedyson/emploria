@@ -2,6 +2,7 @@ import { SalaryStatus } from "@prisma/client";
 
 export type SalaryColumnsProps = {
   id: string;
+  companyId: string;
   employee: {
     id: string;
     name: string;
@@ -14,6 +15,10 @@ export type SalaryColumnsProps = {
   deduction: number;
   attendanceBonus: number;
   total: number;
+  totalPresentAttendance: number;
+  totalLateAttendance: number;
+  attendanceBonusRate: number | null;
+  lateAttendancePenaltyRate: number | null;
   date: Date;
   status: SalaryStatus;
   paidAt: Date | null;

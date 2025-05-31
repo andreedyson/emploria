@@ -134,3 +134,142 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function PUT(req: NextRequest) {
+  const { salaryId, employeeId, month, year, bonus, deduction } =
+    await req.json();
+  try {
+    const validatedFields = salarySchema.safeParse({
+      employeeId,
+      month,
+      year,
+      bonus,
+      deduction,
+    });
+
+    if (!validatedFields.success) {
+      const { errors } = validatedFields.error;
+
+      return NextResponse.json({ message: errors[0].message }, { status: 400 });
+    }
+
+    // Check salary data
+    const salary = await prisma.salary.findUnique({
+      where: {
+        id: salaryId,
+      },
+    });
+
+    if (!salary) {
+      return NextResponse.json(
+        { message: "Salary not found" },
+        { status: 404 },
+      );
+    }
+
+    // Check for salary status, don't allow edit on 'PAID' salary
+    if (salary.status === "PAID") {
+      return NextResponse.json(
+        { message: "Cannot edit a payslip that has been marked as PAID" },
+        { status: 400 },
+      );
+    }
+
+    // Check employee data
+    const employee = await prisma.employee.findUnique({
+      where: {
+        id: employeeId,
+      },
+      include: {
+        salary: true,
+        attendance: true,
+      },
+    });
+
+    if (!employee) {
+      return NextResponse.json(
+        { message: "Employee not found" },
+        { status: 404 },
+      );
+    }
+
+    // Check company data
+    const company = await prisma.company.findUnique({
+      where: { id: employee.companyId },
+    });
+
+    if (!company) {
+      return NextResponse.json(
+        { message: "Company not found" },
+        { status: 404 },
+      );
+    }
+
+    // Count employee salary
+    const baseSalary = employee.baseSalary;
+    const attendanceThisMonth = employee.attendance.filter((att) => {
+      return (
+        att.date.getFullYear() === Number(year) &&
+        att.date.getMonth() + 1 === Number(month)
+      );
+    });
+
+    const presentAttendace = attendanceThisMonth.filter(
+      (att) => att.status === "PRESENT",
+    );
+    const attendanceBonus =
+      presentAttendace.length * (company?.attendanceBonusRate ?? 0);
+
+    const lateAttendanceThisMonth = attendanceThisMonth.filter(
+      (att) => att.status === "LATE",
+    );
+    const lateDeduction =
+      lateAttendanceThisMonth.length *
+      (company?.lateAttendancePenaltyRate ?? 0);
+
+    // Calculate total salary
+    const total = Math.max(
+      0,
+      baseSalary + bonus + attendanceBonus - deduction - lateDeduction,
+    );
+
+    const updatedSalary = await prisma.salary.update({
+      where: {
+        id: salaryId,
+      },
+      data: {
+        employeeId: validatedFields.data.employeeId,
+        month: validatedFields.data.month,
+        year: validatedFields.data.year,
+        baseSalary: baseSalary,
+        bonus: validatedFields.data.bonus,
+        deduction: validatedFields.data.deduction ?? 0,
+        attendanceBonus: attendanceBonus,
+        total: total,
+      },
+    });
+
+    return NextResponse.json(
+      { message: "Salary edited successfully", data: updatedSalary },
+      { status: 201 },
+    );
+  } catch (error) {
+    console.error("[UPDATE_SALARY_ERROR]", error);
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        return NextResponse.json(
+          {
+            message:
+              "A salary record for this employee and period already exists.",
+          },
+          { status: 409 },
+        );
+      }
+    }
+
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 },
+    );
+  }
+}
