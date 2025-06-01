@@ -1,3 +1,4 @@
+import SalaryStatusBadge from "@/components/badges/salary-status-badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -18,7 +19,7 @@ import {
   Copy,
   DollarSign,
   Eye,
-  IdCard,
+  HandCoins,
 } from "lucide-react";
 import Image from "next/image";
 import toast from "react-hot-toast";
@@ -58,6 +59,23 @@ function ViewSalaryDialog({ salaryData }: ViewSalaryDialogProps) {
 
         {/* Salary Details Content */}
         <div className="space-y-6 p-4">
+          <div className="space-y-1">
+            <div className="flex items-center justify-between text-sm">
+              <p className="text-muted-foreground">Payslip ID</p>
+              <p
+                title="Copy ID"
+                onClick={() => handleCopyClick(salaryData.id)}
+                className="flex cursor-pointer items-center gap-1 duration-200 hover:text-gray-600"
+              >
+                {salaryData.id}
+                <Copy strokeWidth={2} size={16} />
+              </p>
+            </div>
+            <p className="font-semibold">
+              {months.find((month) => month.value === salaryData.month)?.label}{" "}
+              {salaryData.year}
+            </p>
+          </div>
           <div className="flex items-center gap-2">
             <Image
               src={
@@ -81,72 +99,71 @@ function ViewSalaryDialog({ salaryData }: ViewSalaryDialogProps) {
           <div className="space-y-3 text-sm">
             <div className="flex items-center justify-between">
               <div className="text-muted-foreground flex items-center gap-1">
-                📅 Salary For
-              </div>
-              <p className="font-semibold">
-                {
-                  months.find((month) => month.value === salaryData.month)
-                    ?.label
-                }{" "}
-                {salaryData.year}
-              </p>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="text-muted-foreground flex items-center gap-1">
                 🕛 Generated On
               </div>
               <p className="font-semibold">{formatDate(salaryData.date)}</p>
             </div>
-          </div>
-
-          <div className="grid grid-cols-1 gap-3 text-sm md:grid-cols-3">
-            <div className="grid gap-1">
+            <div className="flex items-center justify-between">
               <div className="text-muted-foreground flex items-center gap-1">
-                <DollarSign size={14} />
-                <p>Base Salary</p>
+                🔃 Status
+              </div>
+              <SalaryStatusBadge status={salaryData.status} />
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="text-muted-foreground flex items-center gap-1">
+                📆 Paid At
               </div>
               <p className="font-semibold">
-                {convertRupiah(salaryData.baseSalary ?? 0)}
-              </p>
-            </div>
-            <div className="grid gap-1">
-              <div className="text-muted-foreground flex items-center gap-1">
-                <BanknoteArrowUp size={14} />
-                <p>Bonus</p>
-              </div>
-              <p className="font-semibold text-green-500">
-                {convertRupiah(salaryData.bonus ?? 0)}
-              </p>
-            </div>
-            <div className="grid gap-1">
-              <div className="text-muted-foreground flex items-center gap-1">
-                <BanknoteArrowDown size={14} />
-                <p>Deduction</p>
-              </div>
-              <p className="font-semibold text-red-500">
-                {convertRupiah(salaryData.deduction ?? 0)}
+                {salaryData.paidAt ? formatDate(salaryData.paidAt) : "-"}
               </p>
             </div>
           </div>
 
           <Separator />
 
-          <div className="space-y-3">
-            <div className="text-sm">
-              <div className="text-muted-foreground flex items-center gap-1.5">
-                <IdCard size={14} />
-                <p>Payslip ID</p>
+          <div className="space-y-2">
+            <p className="font-medium">💰 Salary Breakdown</p>
+            <div className="grid grid-cols-1 gap-3 text-sm md:grid-cols-2">
+              <div className="grid gap-1">
+                <div className="text-muted-foreground flex items-center gap-1">
+                  <DollarSign size={14} />
+                  <p>Base Salary</p>
+                </div>
+                <p className="font-semibold">
+                  {convertRupiah(salaryData.baseSalary ?? 0)}
+                </p>
               </div>
-              <p
-                title="Copy ID"
-                onClick={() => handleCopyClick(salaryData.id)}
-                className="flex cursor-pointer items-center gap-1 duration-200 hover:text-gray-600"
-              >
-                {salaryData.id}
-                <Copy strokeWidth={2} size={16} />
-              </p>
+              <div className="grid gap-1">
+                <div className="text-muted-foreground flex items-center gap-1">
+                  <HandCoins size={14} />
+                  <p>Bonus</p>
+                </div>
+                <p className="font-semibold text-green-500">
+                  {convertRupiah(salaryData.bonus ?? 0)}
+                </p>
+              </div>
+              <div className="grid gap-1">
+                <div className="text-muted-foreground flex items-center gap-1">
+                  <BanknoteArrowDown size={14} />
+                  <p>Deduction</p>
+                </div>
+                <p className="font-semibold text-red-500">
+                  {convertRupiah(salaryData.deduction ?? 0)}
+                </p>
+              </div>
+              <div className="grid gap-1">
+                <div className="text-muted-foreground flex items-center gap-1">
+                  <BanknoteArrowUp size={14} />
+                  <p title="Attendance Bonus">Att. Bonus</p>
+                </div>
+                <p className="font-semibold text-orange-500">
+                  {convertRupiah(salaryData.attendanceBonus ?? 0)}
+                </p>
+              </div>
             </div>
           </div>
+
+          <Separator />
         </div>
       </SheetContent>
     </Sheet>
