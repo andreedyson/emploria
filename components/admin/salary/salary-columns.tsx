@@ -1,7 +1,7 @@
 "use client";
 
+import SalaryStatusBadge from "@/components/badges/salary-status-badge";
 import { DataTableColumnHeader } from "@/components/tables/data-table-column-header";
-import { Badge } from "@/components/ui/badge";
 import { months } from "@/constants";
 import { getImageUrl } from "@/lib/supabase";
 import { convertRupiah } from "@/lib/utils";
@@ -11,14 +11,13 @@ import {
   Banknote,
   Calendar1,
   CalendarArrowUp,
-  CheckCircle,
   DollarSign,
-  Loader,
   User,
 } from "lucide-react";
 import Image from "next/image";
-import EditSalaryDialog from "./edit-salary-dialog";
 import { ConfirmPaidDialog } from "./confirm-paid-dialog";
+import EditSalaryDialog from "./edit-salary-dialog";
+import ViewSalaryDialog from "./view-salary-dialog";
 
 export const SalaryColumns: ColumnDef<SalaryColumnsProps>[] = [
   {
@@ -123,27 +122,8 @@ export const SalaryColumns: ColumnDef<SalaryColumnsProps>[] = [
     header: "Status",
     cell: ({ row }) => {
       const salary = row.original;
-      const badgeStyle =
-        salary.status === "UNPAID"
-          ? "bg-orange-300/40 text-orange-500 border-orange-500"
-          : salary.status === "PAID"
-            ? "bg-green-300/40 text-green-500 border-green-500"
-            : "bg-gray-300/40 text-gray-500 border-gray-500";
 
-      return (
-        <Badge
-          className={`${badgeStyle} rounded-full border-2 px-3 font-semibold`}
-        >
-          {salary.status === "UNPAID" ? (
-            <Loader size={12} strokeWidth={3} />
-          ) : salary.status === "PAID" ? (
-            <CheckCircle size={12} strokeWidth={3} />
-          ) : (
-            ""
-          )}
-          {salary.status}
-        </Badge>
-      );
+      return <SalaryStatusBadge status={salary.status} />;
     },
   },
   {
@@ -154,6 +134,7 @@ export const SalaryColumns: ColumnDef<SalaryColumnsProps>[] = [
       const salary = row.original;
       return (
         <div className="flex items-center gap-1">
+          <ViewSalaryDialog salaryData={salary} />
           <EditSalaryDialog salaryData={salary} companyId={salary.companyId} />
           <ConfirmPaidDialog
             salaryId={salary.id}
