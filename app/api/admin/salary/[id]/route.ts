@@ -18,7 +18,7 @@ export async function PATCH(
 
     const updatedSalary = await prisma.salary.update({
       where: { id: params.id },
-      data: { status },
+      data: { status: status, paidAt: new Date() },
     });
 
     return NextResponse.json(
