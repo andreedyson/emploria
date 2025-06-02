@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
       { status: 201 },
     );
   } catch (error) {
-    console.error(error);
+    console.error("[CREATE_DEPARTMENT_ERROR]", error);
     return NextResponse.json(
       { message: "An error occured creating department" },
       { status: 500 },
@@ -138,7 +138,7 @@ export async function PUT(req: NextRequest) {
       { status: 200 },
     );
   } catch (error) {
-    console.error(error);
+    console.error("[UPDATE_DEPARTMENT_ERROR]", error);
     return NextResponse.json(
       { message: "An error occured editing department" },
       { status: 500 },
@@ -189,7 +189,7 @@ export async function DELETE(req: NextRequest) {
       { status: 200 },
     );
   } catch (error) {
-    console.error(error);
+    console.error("[DELETE_DEPARTMENT_ERROR]", error);
     return NextResponse.json(
       { message: "An error occured deleting department" },
       { status: 500 },

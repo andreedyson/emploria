@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
       { status: 200 },
     );
   } catch (error) {
-    console.error("Check-in error:", error);
+    console.error("[CHECK_IN_ATTENDANCE_ERROR]", error);
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 },

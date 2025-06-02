@@ -193,7 +193,7 @@ export async function POST(req: NextRequest) {
       { status: 201 },
     );
   } catch (error) {
-    console.error(error);
+    console.error("[CREATE_EMPLOYEE_ERROR]", error);
     return NextResponse.json(
       { message: "An error occured creating employee" },
       { status: 500 },
@@ -355,7 +355,7 @@ export async function PUT(req: NextRequest) {
       { status: 200 },
     );
   } catch (error) {
-    console.error(error);
+    console.error("[UPDATE_EMPLOYEE_ERROR]", error);
     return NextResponse.json(
       { message: "An error occurred updating employee" },
       { status: 500 },
@@ -390,7 +390,7 @@ export async function DELETE(req: NextRequest) {
       { status: 200 },
     );
   } catch (error) {
-    console.error(error);
+    console.error("[DELETE_EMPLOYEE_ERROR]", error);
     return NextResponse.json(
       { message: "Error deleting employee/user data" },
       { status: 500 },

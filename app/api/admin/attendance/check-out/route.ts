@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
       { status: 200 },
     );
   } catch (error) {
-    console.error("Check-out error:", error);
+    console.error("[CHECK_OUT_ATTENDANCE_ERROR]", error);
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 },

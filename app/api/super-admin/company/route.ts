@@ -44,8 +44,8 @@ export async function POST(req: NextRequest) {
       { message: "Company created successfully", data: company },
       { status: 201 },
     );
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error("[CREATE_COMPANY_ERROR]", error);
     return NextResponse.json(
       { message: "Error creating company" },
       { status: 500 },
@@ -123,8 +123,8 @@ export async function PUT(req: NextRequest) {
       { message: "Company edited successfully", data: editedCompany },
       { status: 200 },
     );
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error("[UPDATE_COMPANY_ERROR]", error);
     return NextResponse.json(
       { message: "Error updating company" },
       { status: 500 },
@@ -161,8 +161,8 @@ export async function DELETE(req: NextRequest) {
       { message: "Company deleted successfully", data: deletedCompany },
       { status: 200 },
     );
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error("[DELETE_COMPANY_ERROR]", error);
     return NextResponse.json(
       { message: "Error creating company" },
       { status: 500 },

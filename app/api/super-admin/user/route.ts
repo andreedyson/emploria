@@ -67,8 +67,8 @@ export async function POST(req: NextRequest) {
       { message: "Super Admin Company successfully created", data: newUser },
       { status: 201 },
     );
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error("[CREATE_SUPER_ADMIN_USER_ERROR]", error);
     return NextResponse.json(
       { message: "Error creating user" },
       { status: 500 },

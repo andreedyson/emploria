@@ -46,7 +46,7 @@ export async function PUT(
       { status: 200 },
     );
   } catch (error) {
-    console.error("Edit user error:", error);
+    console.error("[UPDATE_SUPER_ADMIN_USER_ERROR]", error);
     return NextResponse.json({ message: "Server error." }, { status: 500 });
   }
 }
