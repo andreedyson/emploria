@@ -16,7 +16,8 @@ import { SalaryColumnsProps } from "@/types/admin/salary";
 import {
   BanknoteArrowDown,
   BanknoteArrowUp,
-  CalendarClock,
+  CalendarCheck,
+  CalendarX,
   Copy,
   DollarSign,
   Eye,
@@ -50,7 +51,7 @@ function ViewSalaryDialog({ salaryData }: ViewSalaryDialogProps) {
           <Eye size={16} />
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-full max-w-[600px] overflow-y-scroll">
+      <SheetContent className="overflow-y-scroll md:w-[600px]">
         <SheetHeader>
           <SheetTitle>Salary Details</SheetTitle>
           <SheetDescription>
@@ -171,41 +172,32 @@ function ViewSalaryDialog({ salaryData }: ViewSalaryDialogProps) {
             <div className="grid grid-cols-1 gap-3 text-sm md:grid-cols-2">
               <div className="grid gap-1">
                 <div className="text-muted-foreground flex items-center gap-1">
-                  <CalendarClock size={14} />
-                  <p>Attendance Bonus</p>
-                </div>
-                <p className="font-semibold">
-                  {convertRupiah(salaryData.attendanceBonus ?? 0)}
-                </p>
-              </div>
-              <div className="grid gap-1">
-                <div className="text-muted-foreground flex items-center gap-1">
-                  <HandCoins size={14} />
-                  <p>Bonus</p>
+                  <CalendarCheck size={14} />
+                  <p>Present</p>
                 </div>
                 <p className="font-semibold text-green-500">
-                  {convertRupiah(salaryData.bonus ?? 0)}
+                  {`${salaryData.totalPresentAttendance} days`}
                 </p>
               </div>
               <div className="grid gap-1">
                 <div className="text-muted-foreground flex items-center gap-1">
-                  <BanknoteArrowDown size={14} />
-                  <p>Deduction</p>
-                </div>
-                <p className="font-semibold text-red-500">
-                  {convertRupiah(salaryData.deduction ?? 0)}
-                </p>
-              </div>
-              <div className="grid gap-1">
-                <div className="text-muted-foreground flex items-center gap-1">
-                  <BanknoteArrowUp size={14} />
-                  <p title="Attendance Bonus">Att. Bonus</p>
+                  <CalendarX size={14} />
+                  <p>Late</p>
                 </div>
                 <p className="font-semibold text-orange-500">
-                  {convertRupiah(salaryData.attendanceBonus ?? 0)}
+                  {`${salaryData.totalLateAttendance} days`}
                 </p>
               </div>
             </div>
+          </div>
+
+          <Separator />
+
+          <div className="flex items-center justify-between text-lg">
+            <p className="font-medium">Total</p>
+            <p className="font-bold text-green-600 underline">
+              {convertRupiah(salaryData.total ?? 0)}
+            </p>
           </div>
         </div>
       </SheetContent>
