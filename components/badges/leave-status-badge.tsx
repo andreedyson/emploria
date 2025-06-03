@@ -1,6 +1,7 @@
 import React from "react";
 import { Badge } from "../ui/badge";
 import { LeaveStatus } from "@prisma/client";
+import { CheckCircle, CircleX, Loader } from "lucide-react";
 
 type LeaveStatusBadgeProps = {
   status: LeaveStatus;
@@ -16,7 +17,16 @@ function LeaveStatusBadge({ status }: LeaveStatusBadgeProps) {
           ? "text-red-600 bg-red-300/30 border-red-400"
           : "text-gray-500 bg-gray-300/30 border-gray-400";
   return (
-    <Badge className={`${badgeStyle} rounded-full border-2 px-3 font-semibold`}>
+    <Badge className={`${badgeStyle} rounded-full border font-semibold`}>
+      {status === "PENDING" ? (
+        <Loader size={12} strokeWidth={3} />
+      ) : status === "APPROVED" ? (
+        <CheckCircle size={12} strokeWidth={3} />
+      ) : status === "REJECTED" ? (
+        <CircleX size={12} strokeWidth={3} />
+      ) : (
+        ""
+      )}
       {status.replace(/^([A-Z])([A-Z]*)$/, (match, firstLetter, restOfWord) => {
         return firstLetter + restOfWord.toLowerCase();
       })}

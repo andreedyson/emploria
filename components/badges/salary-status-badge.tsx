@@ -15,7 +15,7 @@ function SalaryStatusBadge({ status }: SalaryStatusBadgeProps) {
         ? "bg-green-300/40 text-green-500 border-green-500"
         : "bg-gray-300/40 text-gray-500 border-gray-500";
   return (
-    <Badge className={`${badgeStyle} rounded-full border-2 px-3 font-semibold`}>
+    <Badge className={`${badgeStyle} rounded-full border font-semibold`}>
       {status === "UNPAID" ? (
         <Loader size={12} strokeWidth={3} />
       ) : status === "PAID" ? (
@@ -23,7 +23,9 @@ function SalaryStatusBadge({ status }: SalaryStatusBadgeProps) {
       ) : (
         ""
       )}
-      {status}
+      {status.replace(/^([A-Z])([A-Z]*)$/, (match, firstLetter, restOfWord) => {
+        return firstLetter + restOfWord.toLowerCase();
+      })}
     </Badge>
   );
 }

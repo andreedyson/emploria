@@ -1,12 +1,11 @@
 "use client";
 
+import AttendanceStatusBadge from "@/components/badges/attendance-status-badge";
 import { DataTableColumnHeader } from "@/components/tables/data-table-column-header";
-import { Badge } from "@/components/ui/badge";
 import { getImageUrl } from "@/lib/supabase";
 import {
   convertToGmt7TimeString,
   formatDate,
-  getAttendanceBadgeStyle,
   getDurationCompact,
 } from "@/lib/utils";
 import { AttendanceColumnsProps } from "@/types/admin/attendance";
@@ -20,8 +19,8 @@ import {
   User,
 } from "lucide-react";
 import Image from "next/image";
-import EditAttendanceDialog from "./edit-attendance-dialog";
 import DeleteAttendanceDialog from "./delete-attendance-dialog";
+import EditAttendanceDialog from "./edit-attendance-dialog";
 
 export const AttendanceColumns: ColumnDef<AttendanceColumnsProps>[] = [
   {
@@ -159,16 +158,8 @@ export const AttendanceColumns: ColumnDef<AttendanceColumnsProps>[] = [
     header: "Status",
     cell: ({ row }) => {
       const attendance = row.original;
-      const attendanceText = attendance.status.split("_");
-      const badgeStyle = getAttendanceBadgeStyle(attendance.status);
 
-      return (
-        <Badge
-          className={`${badgeStyle} rounded-full border-2 px-3 font-semibold`}
-        >
-          {attendanceText}
-        </Badge>
-      );
+      return <AttendanceStatusBadge status={attendance.status} />;
     },
   },
   {
