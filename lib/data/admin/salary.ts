@@ -29,34 +29,53 @@ export async function getAllSalaries(
       },
     });
 
-    const data = salaries.map((salary) => ({
-      id: salary.id,
-      companyId: companyId,
-      employee: {
-        id: salary.employee.id,
-        name: salary.employee.user.name,
-        image: salary.employee.user.image,
-      },
-      month: salary.month,
-      year: salary.year,
-      baseSalary: salary.baseSalary,
-      bonus: salary.bonus,
-      deduction: salary.deduction,
-      attendanceBonus: salary.attendanceBonus,
-      total: salary.total,
-      totalPresentAttendance: salary.employee.attendance.filter(
-        (att) => att.status === "PRESENT",
-      ).length,
-      totalLateAttendance: salary.employee.attendance.filter(
-        (att) => att.status === "LATE",
-      ).length,
-      attendanceBonusRate: salary.employee.company.attendanceBonusRate,
-      lateAttendancePenaltyRate:
-        salary.employee.company.lateAttendancePenaltyRate,
-      date: salary.date,
-      status: salary.status,
-      paidAt: salary.paidAt,
-    }));
+    const data = salaries.map((salary) => {
+      const salaryMonth = salary.month;
+      const salaryYear = salary.year;
+
+      const presentThisMonth = salary.employee.attendance.filter((att) => {
+        const attDate = new Date(att.date);
+        return (
+          att.status === "PRESENT" &&
+          attDate.getMonth() + 1 === parseInt(salaryMonth) &&
+          attDate.getFullYear() === parseInt(salaryYear)
+        );
+      });
+
+      const lateThisMonth = salary.employee.attendance.filter((att) => {
+        const attDate = new Date(att.date);
+        return (
+          att.status === "LATE" &&
+          attDate.getMonth() + 1 === parseInt(salaryMonth) &&
+          attDate.getFullYear() === parseInt(salaryYear)
+        );
+      });
+
+      return {
+        id: salary.id,
+        companyId: companyId,
+        employee: {
+          id: salary.employee.id,
+          name: salary.employee.user.name,
+          image: salary.employee.user.image,
+        },
+        month: salary.month,
+        year: salary.year,
+        baseSalary: salary.baseSalary,
+        bonus: salary.bonus,
+        deduction: salary.deduction,
+        attendanceBonus: salary.attendanceBonus,
+        total: salary.total,
+        totalPresentAttendance: presentThisMonth.length,
+        totalLateAttendance: lateThisMonth.length,
+        attendanceBonusRate: salary.employee.company.attendanceBonusRate,
+        lateAttendancePenaltyRate:
+          salary.employee.company.lateAttendancePenaltyRate,
+        date: salary.date,
+        status: salary.status,
+        paidAt: salary.paidAt,
+      };
+    });
 
     return data;
   } catch (error) {

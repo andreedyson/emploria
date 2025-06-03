@@ -16,6 +16,7 @@ import { SalaryColumnsProps } from "@/types/admin/salary";
 import {
   BanknoteArrowDown,
   BanknoteArrowUp,
+  CalendarClock,
   Copy,
   DollarSign,
   Eye,
@@ -164,6 +165,48 @@ function ViewSalaryDialog({ salaryData }: ViewSalaryDialogProps) {
           </div>
 
           <Separator />
+
+          <div className="space-y-2">
+            <p className="font-medium">📊 Attendance</p>
+            <div className="grid grid-cols-1 gap-3 text-sm md:grid-cols-2">
+              <div className="grid gap-1">
+                <div className="text-muted-foreground flex items-center gap-1">
+                  <CalendarClock size={14} />
+                  <p>Attendance Bonus</p>
+                </div>
+                <p className="font-semibold">
+                  {convertRupiah(salaryData.attendanceBonus ?? 0)}
+                </p>
+              </div>
+              <div className="grid gap-1">
+                <div className="text-muted-foreground flex items-center gap-1">
+                  <HandCoins size={14} />
+                  <p>Bonus</p>
+                </div>
+                <p className="font-semibold text-green-500">
+                  {convertRupiah(salaryData.bonus ?? 0)}
+                </p>
+              </div>
+              <div className="grid gap-1">
+                <div className="text-muted-foreground flex items-center gap-1">
+                  <BanknoteArrowDown size={14} />
+                  <p>Deduction</p>
+                </div>
+                <p className="font-semibold text-red-500">
+                  {convertRupiah(salaryData.deduction ?? 0)}
+                </p>
+              </div>
+              <div className="grid gap-1">
+                <div className="text-muted-foreground flex items-center gap-1">
+                  <BanknoteArrowUp size={14} />
+                  <p title="Attendance Bonus">Att. Bonus</p>
+                </div>
+                <p className="font-semibold text-orange-500">
+                  {convertRupiah(salaryData.attendanceBonus ?? 0)}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </SheetContent>
     </Sheet>
