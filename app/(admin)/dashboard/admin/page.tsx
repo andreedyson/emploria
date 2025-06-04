@@ -3,6 +3,7 @@ import SuperAdminCompanyStatsCard from "@/components/admin/stats-card";
 import {
   getEmployeesPerDepartments,
   getSuperAdminCompanyStatsCardData,
+  getTopEmployeesList,
 } from "@/lib/data/admin/dashboard";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -15,6 +16,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { User } from "lucide-react";
+import TopEmployeeListItem from "@/components/admin/dashboard/top-employee-list";
 
 async function SuperAdminCompanyPage() {
   const session = await getServerSession(authOptions);
@@ -28,6 +30,7 @@ async function SuperAdminCompanyPage() {
   );
   const departments = await getEmployeesPerDepartments(companyId as string);
   const total = departments.reduce((sum, d) => sum + d.count, 0);
+  const topEmployees = await getTopEmployeesList(companyId as string);
 
   return (
     <section className="space-y-4">
@@ -124,8 +127,29 @@ async function SuperAdminCompanyPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Top Employees List */}
+        <Card className="col-span-1 w-full lg:col-span-2">
+          <CardHeader>
+            <CardTitle className="text-sm font-semibold">
+              Top Employees
+            </CardTitle>
+            <CardDescription>
+              Employees with the most attendances this month
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="space-y-4">
+            {topEmployees.map((employee, index) => (
+              <TopEmployeeListItem
+                key={employee.id}
+                number={index + 1}
+                employee={employee}
+              />
+            ))}
+          </CardContent>
+        </Card>
       </div>
-      {/* Top Employees List */}
       {/* Gender Diversity Chart */}
       {/* Salaries Paid per Month Chart */}
       {/* Employee Activity */}

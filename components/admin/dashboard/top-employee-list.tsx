@@ -1,0 +1,42 @@
+import { TopEmployeeListProps } from "@/types/admin/dashboard";
+import Image from "next/image";
+import React from "react";
+
+type TopEmployeeListItemProps = {
+  number: number;
+  employee: TopEmployeeListProps;
+};
+
+function TopEmployeeListItem({ number, employee }: TopEmployeeListItemProps) {
+  return (
+    <div className="flex items-center gap-4">
+      <div>
+        <p className="text-2xl font-bold md:text-3xl lg:text-4xl">{number}</p>
+      </div>
+      <div className="flex w-full items-center justify-between text-xs sm:text-sm">
+        <div className="flex items-center gap-3">
+          <div>
+            <Image
+              src={employee.image || "/assets/image-placeholder.svg"}
+              width={80}
+              height={80}
+              alt={employee.name}
+              className="size-12 rounded-lg"
+            />
+          </div>
+          <div>
+            <p className="line-clamp-1 font-medium">{employee.name}</p>
+            <p className="text-muted-foreground line-clamp-1">
+              {employee.department}
+            </p>
+          </div>
+        </div>
+        <p className="line-clamp-1 font-semibold">
+          {employee.attendance} Attendance
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export default TopEmployeeListItem;
