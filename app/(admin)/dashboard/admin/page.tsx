@@ -15,8 +15,9 @@ import {
   CardContent,
   CardDescription,
 } from "@/components/ui/card";
-import { User } from "lucide-react";
+import { ChevronRight, User } from "lucide-react";
 import TopEmployeeListItem from "@/components/admin/dashboard/top-employee-list";
+import Link from "next/link";
 
 async function SuperAdminCompanyPage() {
   const session = await getServerSession(authOptions);
@@ -60,11 +61,21 @@ async function SuperAdminCompanyPage() {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
         {/* Department Overview */}
         <Card className="col-span-1 w-full lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="text-sm font-semibold">
-              Employee Allocation
-            </CardTitle>
-            <CardDescription>Total employees per department</CardDescription>
+          <CardHeader className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-sm font-semibold">
+                Employee Allocation
+              </CardTitle>
+
+              <CardDescription>Total employees per department</CardDescription>
+            </div>
+            <Link
+              href={"/dashboard/admin/department"}
+              className="hover:text-picton-blue-500 flex items-center gap-1 text-sm duration-200"
+            >
+              See All
+              <ChevronRight size={12} />
+            </Link>
           </CardHeader>
 
           <CardContent className="space-y-4">
@@ -130,13 +141,22 @@ async function SuperAdminCompanyPage() {
 
         {/* Top Employees List */}
         <Card className="col-span-1 w-full lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="text-sm font-semibold">
-              Top Employees
-            </CardTitle>
-            <CardDescription>
-              Employees with the most attendances this month
-            </CardDescription>
+          <CardHeader className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-sm font-semibold">
+                Top Employees
+              </CardTitle>
+              <CardDescription>
+                Employees with the most attendances this month
+              </CardDescription>
+            </div>
+            <Link
+              href={"/dashboard/admin/employee"}
+              className="hover:text-picton-blue-500 flex items-center gap-1 text-sm duration-200"
+            >
+              See All
+              <ChevronRight size={12} />
+            </Link>
           </CardHeader>
 
           <CardContent className="space-y-4">
