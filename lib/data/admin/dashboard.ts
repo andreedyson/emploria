@@ -1,9 +1,11 @@
 import prisma from "@/lib/db";
 import {
   EmployeePerDepartmentProps,
+  GenderDiversityProps,
   TopEmployeeListProps,
 } from "@/types/admin/dashboard";
 import { StatsCardProps } from "@/types/super-admin/dashboard";
+import { Gender } from "@prisma/client";
 import { CalendarX, Receipt, Users, UserX } from "lucide-react";
 
 export async function getSuperAdminCompanyStatsCardData(
@@ -159,6 +161,40 @@ export async function getTopEmployeesList(
       .filter((emp) => emp != null);
 
     return topEmployees;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
+export async function getGenderDiversityTotal(
+  companyId: string,
+): Promise<GenderDiversityProps[]> {
+  try {
+    const maleCount = await prisma.employee.count({
+      where: {
+        companyId,
+        user: {
+          gender: "MALE",
+        },
+      },
+    });
+
+    const femaleCount = await prisma.employee.count({
+      where: {
+        companyId,
+        user: {
+          gender: "FEMALE",
+        },
+      },
+    });
+
+    const data = [
+      { gender: Gender.MALE, total: maleCount },
+      { gender: Gender.FEMALE, total: femaleCount },
+    ];
+
+    return data;
   } catch (error) {
     console.error(error);
     return [];

@@ -1,3 +1,5 @@
+import { Gender } from "@prisma/client";
+
 export type EmployeePerDepartmentProps = {
   name: string;
   count: number;
@@ -10,4 +12,9 @@ export type TopEmployeeListProps = {
   image: string | null;
   department: string | null;
   attendance: number;
+};
+
+export type GenderDiversityProps = {
+  gender: Gender;
+  total: number;
 };
