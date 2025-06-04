@@ -74,3 +74,27 @@ export async function getSuperAdminCompanyStatsCardData(
     return [];
   }
 }
+
+export async function getEmployeesPerDepartments(companyId: string) {
+  const departments = await prisma.department.findMany({
+    where: {
+      companyId,
+    },
+    include: {
+      employees: {
+        where: {
+          isActive: true,
+        },
+        select: {
+          id: true,
+        },
+      },
+    },
+  });
+
+  return departments.map((dept) => ({
+    name: dept.name,
+    count: dept.employees.length,
+    color: dept,
+  }));
+}
