@@ -1,4 +1,5 @@
 import prisma from "@/lib/db";
+import { EmployeePerDepartmentProps } from "@/types/admin/dashboard";
 import { StatsCardProps } from "@/types/super-admin/dashboard";
 import { CalendarX, Receipt, Users, UserX } from "lucide-react";
 
@@ -75,26 +76,35 @@ export async function getSuperAdminCompanyStatsCardData(
   }
 }
 
-export async function getEmployeesPerDepartments(companyId: string) {
-  const departments = await prisma.department.findMany({
-    where: {
-      companyId,
-    },
-    include: {
-      employees: {
-        where: {
-          isActive: true,
-        },
-        select: {
-          id: true,
+export async function getEmployeesPerDepartments(
+  companyId: string,
+): Promise<EmployeePerDepartmentProps[]> {
+  try {
+    const departments = await prisma.department.findMany({
+      where: {
+        companyId,
+      },
+      include: {
+        employees: {
+          where: {
+            isActive: true,
+          },
+          select: {
+            id: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  return departments.map((dept) => ({
-    name: dept.name,
-    count: dept.employees.length,
-    color: dept,
-  }));
+    const data = departments.map((dept) => ({
+      name: dept.name,
+      count: dept.employees.length,
+      color: dept.color,
+    }));
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
 }
