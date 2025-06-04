@@ -3,6 +3,7 @@ import { LucideIcon } from "lucide-react";
 
 export type StatsCardProps = {
   name: string;
+  title?: string;
   total: number;
   icon: LucideIcon;
   textColor: string;
