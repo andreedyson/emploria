@@ -47,13 +47,15 @@ model Company {
   isActive                  Boolean @default(true)
   attendanceBonusRate       Float?
   lateAttendancePenaltyRate Float?
+  color                     String?
 
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  users      User[]
-  employee   Employee[]
-  department Department[]
-  activity   Activity[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  users       User[]
+  employee    Employee[]
+  department  Department[]
+  activity    Activity[]
+  LeavePolicy LeavePolicy[]
 }
 
 model Employee {
@@ -160,6 +162,26 @@ enum LeaveStatus {
   APPROVED
   REJECTED
   CANCELLED
+}
+
+model LeavePolicy {
+  id          String         @id @default(cuid())
+  companyId   String
+  leaveType   LeaveType
+  frequency   LeaveFrequency
+  allowedDays Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id])
+
+  @@unique([companyId, leaveType])
+}
+
+enum LeaveFrequency {
+  MONTHLY
+  YEARLY
 }
 
 model Activity {
