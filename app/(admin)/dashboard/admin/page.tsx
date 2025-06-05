@@ -18,6 +18,7 @@ import {
 import { ChevronRight, User } from "lucide-react";
 import TopEmployeeListItem from "@/components/admin/dashboard/top-employee-list";
 import Link from "next/link";
+import { GenderDiversityCharts } from "@/components/charts/gender-diversity-charts";
 
 async function SuperAdminCompanyPage() {
   const session = await getServerSession(authOptions);
@@ -71,7 +72,7 @@ async function SuperAdminCompanyPage() {
             </div>
             <Link
               href={"/dashboard/admin/department"}
-              className="hover:text-picton-blue-500 flex items-center gap-1 text-sm duration-200"
+              className="hover:text-picton-blue-500 flex items-center gap-1 text-xs duration-200 md:text-sm"
             >
               See All
               <ChevronRight size={12} />
@@ -105,7 +106,7 @@ async function SuperAdminCompanyPage() {
               })}
             </div>
 
-            {/* Two-column legend */}
+            {/* Legend */}
             <div className="grid grid-cols-1 gap-y-2 md:grid-cols-2 md:gap-x-6">
               {departments.map((dept) => {
                 const percentage =
@@ -152,7 +153,7 @@ async function SuperAdminCompanyPage() {
             </div>
             <Link
               href={"/dashboard/admin/employee"}
-              className="hover:text-picton-blue-500 flex items-center gap-1 text-sm duration-200"
+              className="hover:text-picton-blue-500 flex items-center gap-1 text-xs duration-200 md:text-sm"
             >
               See All
               <ChevronRight size={12} />
@@ -169,8 +170,21 @@ async function SuperAdminCompanyPage() {
             ))}
           </CardContent>
         </Card>
+
+        {/* Gender Diversity Chart */}
+        <Card className="col-span-1 w-full">
+          <CardHeader>
+            <CardTitle className="text-sm font-semibold">
+              Gender Diversity
+            </CardTitle>
+            <CardDescription>Total employees by gender</CardDescription>
+          </CardHeader>
+
+          <CardContent className="space-y-4">
+            <GenderDiversityCharts companyId={companyId as string} />
+          </CardContent>
+        </Card>
       </div>
-      {/* Gender Diversity Chart */}
       {/* Salaries Paid per Month Chart */}
       {/* Employee Activity */}
     </section>

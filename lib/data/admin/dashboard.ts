@@ -1,3 +1,5 @@
+"use server";
+
 import prisma from "@/lib/db";
 import {
   EmployeePerDepartmentProps,
@@ -190,8 +192,8 @@ export async function getGenderDiversityTotal(
     });
 
     const data = [
-      { gender: Gender.MALE, total: maleCount },
-      { gender: Gender.FEMALE, total: femaleCount },
+      { gender: Gender.MALE, total: maleCount, fill: "#4056c3" },
+      { gender: Gender.FEMALE, total: femaleCount, fill: "#e110e4" },
     ];
 
     return data;

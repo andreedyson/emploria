@@ -17,4 +17,5 @@ export type TopEmployeeListProps = {
 export type GenderDiversityProps = {
   gender: Gender;
   total: number;
+  fill?: string;
 };
