@@ -236,7 +236,7 @@ function ChartTooltipContent({
                     {item.value && (
                       <span className="text-foreground font-mono font-medium tabular-nums">
                         {currency
-                          ? `Rp${item.value.toLocaleString("id-ID")} M`
+                          ? `Rp${item.value.toLocaleString("id-ID")}M`
                           : item.value.toLocaleString()}
                       </span>
                     )}
