@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/card";
 import { ChevronRight, User } from "lucide-react";
 import Link from "next/link";
+import { SalariesPaidPerMonthCharts } from "@/components/charts/salaries-paid-per-month-charts";
 
 async function SuperAdminCompanyPage() {
   const session = await getServerSession(authOptions);
@@ -198,7 +199,9 @@ async function SuperAdminCompanyPage() {
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="space-y-4"></CardContent>
+          <CardContent className="space-y-4">
+            <SalariesPaidPerMonthCharts companyId={companyId} />
+          </CardContent>
         </Card>
 
         {/* Employee Activity */}

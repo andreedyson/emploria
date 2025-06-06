@@ -1,5 +1,6 @@
 "use server";
 
+import { months } from "@/constants";
 import prisma from "@/lib/db";
 import {
   EmployeePerDepartmentProps,
@@ -216,12 +217,12 @@ export async function getSalariesPaidPerMonth(companyId: string) {
       _sum: {
         total: true,
       },
-      orderBy: [{ year: "desc" }, { month: "desc" }],
+      orderBy: { month: "asc" },
       take: 6,
     });
 
     const data = salaries.map((item) => ({
-      month: item.month,
+      month: months.find((month) => month.value === item.month)?.label,
       year: item.year,
       totalPaidInMillions: item._sum.total
         ? +(item._sum.total / 1_000_000).toFixed(1)
