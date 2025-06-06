@@ -13,6 +13,12 @@ import DepartmentOverviewCard from "@/components/admin/dashboard/department-over
 import GenderDiversityCard from "@/components/admin/dashboard/gender-diversity-card";
 import SalariesPaidPerMonthCard from "@/components/admin/dashboard/salaries-paid-per-month-card";
 import TopEmployeesCard from "@/components/admin/dashboard/top-employees-card";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Home",
+  description: "Home page view for Emploria Super Admin Company Dashboard",
+};
 
 async function SuperAdminCompanyPage() {
   const session = await getServerSession(authOptions);

@@ -4,9 +4,15 @@ import { SalaryColumns } from "@/components/admin/salary/salary-columns";
 import { DataTable } from "@/components/ui/data-table";
 import { getAllSalaries } from "@/lib/data/admin/salary";
 import { Banknote } from "lucide-react";
+import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "Salary",
+  description: "Salary page view for Emploria Super Admin Company Dashboard",
+};
 
 async function SuperAdminCompanySalaryPage() {
   const session = await getServerSession(authOptions);

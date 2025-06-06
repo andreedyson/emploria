@@ -11,6 +11,8 @@ import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Attendance",
+  description:
+    "Employee attendance page view for Emploria Super Admin Company Dashboard",
 };
 
 async function SuperAdminCompanyAttendancePage() {

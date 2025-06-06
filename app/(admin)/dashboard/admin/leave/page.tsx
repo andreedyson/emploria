@@ -4,8 +4,15 @@ import { LeaveColumns } from "@/components/admin/leave/leave-columns";
 import { DataTable } from "@/components/ui/data-table";
 import { getAllLeaves } from "@/lib/data/admin/leave";
 import { CalendarX } from "lucide-react";
+import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Leave",
+  description:
+    "Employee Leave page view for Emploria Super Admin Company Dashboard",
+};
 
 async function SuperAdminCompanyLeavePage() {
   const session = await getServerSession(authOptions);

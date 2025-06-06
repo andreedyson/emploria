@@ -4,8 +4,14 @@ import { EmployeeColumns } from "@/components/admin/employee/employee-columns";
 import { DataTable } from "@/components/ui/data-table";
 import { getAllEmployees } from "@/lib/data/admin/employee";
 import { Users } from "lucide-react";
+import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Employee",
+  description: "Employee page view for Emploria Super Admin Company Dashboard",
+};
 
 async function SuperAdminCompanyEmployeePage() {
   const session = await getServerSession(authOptions);

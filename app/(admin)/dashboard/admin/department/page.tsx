@@ -4,8 +4,15 @@ import { DepartmentColumns } from "@/components/admin/department/department-colu
 import { DataTable } from "@/components/ui/data-table";
 import { getAllDepartments } from "@/lib/data/admin/department";
 import { Building2 } from "lucide-react";
+import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Department",
+  description:
+    "Department page view for Emploria Super Admin Company Dashboard",
+};
 
 async function SuperAdminCompanyDepartmentPage() {
   const session = await getServerSession(authOptions);
