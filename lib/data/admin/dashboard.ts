@@ -202,3 +202,35 @@ export async function getGenderDiversityTotal(
     return [];
   }
 }
+
+export async function getSalariesPaidPerMonth(companyId: string) {
+  try {
+    const salaries = await prisma.salary.groupBy({
+      by: ["month", "year"],
+      where: {
+        status: "PAID",
+        employee: {
+          companyId: companyId,
+        },
+      },
+      _sum: {
+        total: true,
+      },
+      orderBy: [{ year: "desc" }, { month: "desc" }],
+      take: 6,
+    });
+
+    const data = salaries.map((item) => ({
+      month: item.month,
+      year: item.year,
+      totalPaidInMillions: item._sum.total
+        ? +(item._sum.total / 1_000_000).toFixed(1)
+        : 0,
+    }));
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}

@@ -8,31 +8,31 @@ import {
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
+import TopEmployeeListItem from "@/components/admin/dashboard/top-employee-list";
+import { GenderDiversityCharts } from "@/components/charts/gender-diversity-charts";
 import {
   Card,
-  CardHeader,
-  CardTitle,
   CardContent,
   CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import { ChevronRight, User } from "lucide-react";
-import TopEmployeeListItem from "@/components/admin/dashboard/top-employee-list";
 import Link from "next/link";
-import { GenderDiversityCharts } from "@/components/charts/gender-diversity-charts";
 
 async function SuperAdminCompanyPage() {
   const session = await getServerSession(authOptions);
   if (!session) {
     redirect("/");
   }
-  const companyId = session.user.companyId;
+  const companyId = session.user.companyId ?? "";
 
   const statsCardData = await getSuperAdminCompanyStatsCardData(
     companyId as string,
   );
-  const departments = await getEmployeesPerDepartments(companyId as string);
+  const departments = await getEmployeesPerDepartments(companyId);
   const total = departments.reduce((sum, d) => sum + d.count, 0);
-  const topEmployees = await getTopEmployeesList(companyId as string);
+  const topEmployees = await getTopEmployeesList(companyId);
 
   return (
     <section className="space-y-4">
@@ -185,8 +185,34 @@ async function SuperAdminCompanyPage() {
           </CardContent>
         </Card>
       </div>
-      {/* Salaries Paid per Month Chart */}
-      {/* Employee Activity */}
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {/* Salaries Paid per Month Chart */}
+        <Card className="col-span-1 w-full">
+          <CardHeader>
+            <CardTitle className="text-sm font-semibold">
+              Salaries Paid
+            </CardTitle>
+            <CardDescription>
+              Total salaries paid per month for the past 6 months (in million)
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="space-y-4"></CardContent>
+        </Card>
+
+        {/* Employee Activity */}
+        <Card className="col-span-1 w-full">
+          <CardHeader>
+            <CardTitle className="text-sm font-semibold">Activities</CardTitle>
+            <CardDescription>
+              Latest activities by users of this company
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="space-y-4"></CardContent>
+        </Card>
+      </div>
     </section>
   );
 }
