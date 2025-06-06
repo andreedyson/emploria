@@ -50,8 +50,8 @@ export function SalariesPaidPerMonthCharts({
         data={chartData}
         margin={{
           top: 20,
-          left: 12,
-          right: 12,
+          left: 20,
+          right: 20,
         }}
       >
         <CartesianGrid vertical={false} />

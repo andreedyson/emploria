@@ -195,7 +195,8 @@ async function SuperAdminCompanyPage() {
               Salaries Paid
             </CardTitle>
             <CardDescription>
-              Total salaries paid per month for the past 6 months (in million)
+              Total salaries paid per month for the past 6 months (in Millions
+              IDR)
             </CardDescription>
           </CardHeader>
 
