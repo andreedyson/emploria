@@ -1,6 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
-import AddDepartmentDialog from "@/components/admin/department/add-department-dialog";
-import { DepartmentColumns } from "@/components/admin/department/department-columns";
+import AddDepartmentDialog from "@/components/dashboard/admin/department/add-department-dialog";
+import { DepartmentColumns } from "@/components/dashboard/admin/department/department-columns";
 import { DataTable } from "@/components/ui/data-table";
 import { getAllDepartments } from "@/lib/data/admin/department";
 import { Building2 } from "lucide-react";

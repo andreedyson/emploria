@@ -1,6 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { UserPerCompaniesCharts } from "@/components/charts/user-per-companies-charts";
-import StatsCard from "@/components/super-admin/stats-card";
+import StatsCard from "@/components/dashboard/super-admin/stats-card";
 import { Button } from "@/components/ui/button";
 import {
   Card,

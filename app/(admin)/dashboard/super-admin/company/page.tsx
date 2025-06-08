@@ -1,5 +1,5 @@
-import AddCompanyDialog from "@/components/super-admin/company/add-company-dialog";
-import { CompanyColumns } from "@/components/super-admin/company/company-columns";
+import AddCompanyDialog from "@/components/dashboard/super-admin/company/add-company-dialog";
+import { CompanyColumns } from "@/components/dashboard/super-admin/company/company-columns";
 import { DataTable } from "@/components/ui/data-table";
 import { getAllCompanies } from "@/lib/data/super-admin/company";
 import { Building } from "lucide-react";

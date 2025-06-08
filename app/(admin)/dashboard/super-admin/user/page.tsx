@@ -1,5 +1,5 @@
-import AddSuperAdminUserDialog from "@/components/super-admin/user/add-super-admin-user-dialog";
-import { SuperAdminUserColumns } from "@/components/super-admin/user/user-columns";
+import AddSuperAdminUserDialog from "@/components/dashboard/super-admin/user/add-super-admin-user-dialog";
+import { SuperAdminUserColumns } from "@/components/dashboard/super-admin/user/user-columns";
 import { DataTable } from "@/components/ui/data-table";
 import { getAllSuperAdminCompanyUsers } from "@/lib/data/super-admin/user";
 import { Users } from "lucide-react";

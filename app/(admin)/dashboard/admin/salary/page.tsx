@@ -1,6 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
-import AddSalaryDialog from "@/components/admin/salary/add-salary-dialog";
-import { SalaryColumns } from "@/components/admin/salary/salary-columns";
+import AddSalaryDialog from "@/components/dashboard/admin/salary/add-salary-dialog";
+import { SalaryColumns } from "@/components/dashboard/admin/salary/salary-columns";
 import { DataTable } from "@/components/ui/data-table";
 import { getAllSalaries } from "@/lib/data/admin/salary";
 import { Banknote } from "lucide-react";

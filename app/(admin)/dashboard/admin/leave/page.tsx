@@ -1,6 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
-import AddLeaveDialog from "@/components/admin/leave/add-leave-dialog";
-import { LeaveColumns } from "@/components/admin/leave/leave-columns";
+import AddLeaveDialog from "@/components/dashboard/admin/leave/add-leave-dialog";
+import { LeaveColumns } from "@/components/dashboard/admin/leave/leave-columns";
 import { DataTable } from "@/components/ui/data-table";
 import { getAllLeaves } from "@/lib/data/admin/leave";
 import { CalendarX } from "lucide-react";

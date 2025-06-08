@@ -1,5 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
-import SuperAdminCompanyStatsCard from "@/components/admin/stats-card";
+import SuperAdminCompanyStatsCard from "@/components/dashboard/admin/stats-card";
 import {
   getEmployeesPerDepartments,
   getSuperAdminCompanyStatsCardData,
@@ -8,11 +8,11 @@ import {
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
-import CompanyAdminActivityCard from "@/components/admin/dashboard/company-admin-activity-card";
-import DepartmentOverviewCard from "@/components/admin/dashboard/department-overview-card";
-import GenderDiversityCard from "@/components/admin/dashboard/gender-diversity-card";
-import SalariesPaidPerMonthCard from "@/components/admin/dashboard/salaries-paid-per-month-card";
-import TopEmployeesCard from "@/components/admin/dashboard/top-employees-card";
+import CompanyAdminActivityCard from "@/components/dashboard/admin/dashboard/company-admin-activity-card";
+import DepartmentOverviewCard from "@/components/dashboard/admin/dashboard/department-overview-card";
+import GenderDiversityCard from "@/components/dashboard/admin/dashboard/gender-diversity-card";
+import SalariesPaidPerMonthCard from "@/components/dashboard/admin/dashboard/salaries-paid-per-month-card";
+import TopEmployeesCard from "@/components/dashboard/admin/dashboard/top-employees-card";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

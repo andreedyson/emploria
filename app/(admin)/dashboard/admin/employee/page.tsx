@@ -1,6 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
-import AddEmployeeDialog from "@/components/admin/employee/add-employee-dialog";
-import { EmployeeColumns } from "@/components/admin/employee/employee-columns";
+import AddEmployeeDialog from "@/components/dashboard/admin/employee/add-employee-dialog";
+import { EmployeeColumns } from "@/components/dashboard/admin/employee/employee-columns";
 import { DataTable } from "@/components/ui/data-table";
 import { getAllEmployees } from "@/lib/data/admin/employee";
 import { Users } from "lucide-react";
