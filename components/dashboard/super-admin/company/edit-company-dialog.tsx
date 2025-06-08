@@ -27,14 +27,14 @@ import { customToast } from "@/components/custom-toast";
 import { SubmitButton } from "@/components/submit-button";
 import { Input } from "@/components/ui/input";
 import { BASE_URL } from "@/constants";
+import { AllCompaniesProps } from "@/types/super-admin/company";
 import { companySchema } from "@/validations/super-admin";
-import { Company } from "@prisma/client";
 import { Pencil } from "lucide-react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 type EditCompanyDialogProps = {
-  companyData: Company;
+  companyData: AllCompaniesProps;
 };
 
 function EditCompanyDialog({ companyData }: EditCompanyDialogProps) {

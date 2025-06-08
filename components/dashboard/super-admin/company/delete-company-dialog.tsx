@@ -12,13 +12,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { BASE_URL } from "@/constants";
-import { Company } from "@prisma/client";
+import { AllCompaniesProps } from "@/types/super-admin/company";
 import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type DeleteCompanyProps = {
-  companyData: Company;
+  companyData: AllCompaniesProps;
 };
 
 function DeleteCompanyDialog({ companyData }: DeleteCompanyProps) {
