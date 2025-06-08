@@ -1,4 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import UserStatsCard from "@/components/dashboard/user/dashboard/user-stats-card";
+import { getUserStatsCardData } from "@/lib/data/user/dashboard";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
@@ -8,6 +10,8 @@ async function UserDashboardPage() {
   if (!session) {
     redirect("/");
   }
+
+  const statsCardData = await getUserStatsCardData(session.user.id);
 
   return (
     <section className="space-y-4">
@@ -20,6 +24,8 @@ async function UserDashboardPage() {
           Manage your data and analyze your performance from one place.
         </p>
       </div>
+
+      <UserStatsCard stats={statsCardData} />
     </section>
   );
 }

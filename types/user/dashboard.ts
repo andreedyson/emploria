@@ -6,7 +6,7 @@ type BaseProps = {
   textColor: string;
 };
 
-export type UserStatsCardProps =
+export type UserStatsCardDataProps =
   | (BaseProps & { text: string; data?: never })
   | (BaseProps & {
       data: { month: string; year: string; total: number } | null;

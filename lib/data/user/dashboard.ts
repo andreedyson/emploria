@@ -1,11 +1,11 @@
 import prisma from "@/lib/db";
-import { UserStatsCardProps } from "@/types/user/dashboard";
+import { UserStatsCardDataProps } from "@/types/user/dashboard";
 import { endOfMonth, startOfMonth } from "date-fns";
 import { Banknote, Calendar1, CalendarCog, CalendarX } from "lucide-react";
 
 export async function getUserStatsCardData(
   userId: string,
-): Promise<UserStatsCardProps[]> {
+): Promise<UserStatsCardDataProps[]> {
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -101,15 +101,15 @@ export async function getUserStatsCardData(
     const data = [
       {
         title: "Att. This Month",
-        text: `${attendanceCount.length} Attendance`,
+        text: `${attendanceCount.length} Attendances`,
         icon: Calendar1,
         textColor: "text-yellow-500",
       },
       {
-        title: "Current Leave Request",
+        title: "Recent Leaves",
         text: `${currentLeaves} Leaves`,
         icon: CalendarX,
-        textColor: "text-purple-500",
+        textColor: "text-red-500",
       },
       {
         title: "Latest Salary",
@@ -124,7 +124,7 @@ export async function getUserStatsCardData(
         textColor: "text-green-500",
       },
       {
-        title: "Remaining Annual Leave",
+        title: "Annual Leave Left",
         text: `${remainingAnnualLeave} Leaves`,
         icon: CalendarCog,
         textColor: "text-orange-500",
