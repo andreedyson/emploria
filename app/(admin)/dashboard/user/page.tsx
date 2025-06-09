@@ -1,17 +1,22 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import AttendanceButton from "@/components/dashboard/user/attendance/attendance-button";
 import UserStatsCard from "@/components/dashboard/user/dashboard/user-stats-card";
-import { getUserStatsCardData } from "@/lib/data/user/dashboard";
+import {
+  getTodayAttendanceStatus,
+  getUserStatsCardData,
+} from "@/lib/data/user/dashboard";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
 async function UserDashboardPage() {
   const session = await getServerSession(authOptions);
-
   if (!session) {
     redirect("/");
   }
-
-  const statsCardData = await getUserStatsCardData(session.user.id);
+  const userId = session.user.id;
+  const statsCardData = await getUserStatsCardData(userId);
+  const { alreadyCheckedIn, alreadyCheckedOut } =
+    await getTodayAttendanceStatus(userId);
 
   return (
     <section className="space-y-4">
@@ -23,6 +28,15 @@ async function UserDashboardPage() {
         <p className="text-muted-foreground">
           Manage your data and analyze your performance from one place.
         </p>
+      </div>
+
+      {/* Emplotee Today's Attendance */}
+      <div>
+        <AttendanceButton
+          userId={userId}
+          alreadyCheckedIn={alreadyCheckedIn}
+          alreadyCheckedOut={alreadyCheckedOut}
+        />
       </div>
 
       <UserStatsCard stats={statsCardData} />

@@ -1,6 +1,6 @@
 import prisma from "@/lib/db";
 import { UserStatsCardDataProps } from "@/types/user/dashboard";
-import { endOfMonth, startOfMonth } from "date-fns";
+import { endOfDay, endOfMonth, startOfDay, startOfMonth } from "date-fns";
 import { Banknote, Calendar1, CalendarCog, CalendarX } from "lucide-react";
 
 export async function getUserStatsCardData(
@@ -136,4 +136,22 @@ export async function getUserStatsCardData(
     console.error(error);
     return [];
   }
+}
+
+export async function getTodayAttendanceStatus(userId: string) {
+  const today = new Date();
+  const start = startOfDay(today);
+  const end = endOfDay(today);
+
+  const attendance = await prisma.attendance.findFirst({
+    where: {
+      employee: { userId },
+      date: { gte: start, lte: end },
+    },
+  });
+
+  return {
+    alreadyCheckedIn: Boolean(attendance?.checkIn),
+    alreadyCheckedOut: Boolean(attendance?.checkOut),
+  };
 }
