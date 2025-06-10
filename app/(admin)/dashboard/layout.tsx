@@ -48,11 +48,13 @@ export default async function AdminLayout({
           <UserSidebar />
         )}
         <main className={`w-full antialiased ${geist.className}`}>
-          <AdminHeader
-            name={session.user.name as string}
-            email={session.user.email as string}
-            role={session.user.role}
-          />
+          <div className="sticky top-0 z-50">
+            <AdminHeader
+              name={session.user.name as string}
+              email={session.user.email as string}
+              role={session.user.role}
+            />
+          </div>
           <div className="m-4">{children}</div>
         </main>
         <Toaster position="bottom-right" />

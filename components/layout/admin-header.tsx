@@ -19,7 +19,7 @@ function AdminHeader({ name, email, role }: AdminHeaderProps) {
       : pathname.split("/")[1];
 
   return (
-    <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b px-4">
+    <header className="bg-background flex h-16 shrink-0 items-center justify-between gap-2 border-b px-4">
       <div className="flex items-center gap-2">
         <SidebarTrigger />
         <h2 className="font-bold capitalize">{pageName}</h2>
