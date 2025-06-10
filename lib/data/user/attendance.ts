@@ -1,5 +1,6 @@
 import prisma from "@/lib/db";
 import { AttendanceStatsCardProps } from "@/types/user/attendance";
+import { Attendance } from "@prisma/client";
 import {
   CalendarX,
   CheckCircle2,
@@ -38,6 +39,28 @@ export async function getEmployeeAttendanceSummary(
     );
 
     return data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
+export async function getEmployeeAttendanceHistory(
+  userId: string,
+): Promise<Attendance[]> {
+  try {
+    const attendances = await prisma.attendance.findMany({
+      where: {
+        employee: {
+          userId,
+        },
+      },
+      orderBy: {
+        date: "desc",
+      },
+    });
+
+    return attendances;
   } catch (error) {
     console.error(error);
     return [];

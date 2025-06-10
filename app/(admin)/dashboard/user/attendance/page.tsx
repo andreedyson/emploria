@@ -1,10 +1,14 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import AttendanceButton from "@/components/dashboard/user/attendance/attendance-button";
+import AttendanceHistoryCard from "@/components/dashboard/user/attendance/attendance-history-card";
 import AttendanceStatsCard from "@/components/dashboard/user/attendance/attendance-stats-card";
-import { getEmployeeAttendanceSummary } from "@/lib/data/user/attendance";
+import { Separator } from "@/components/ui/separator";
+import {
+  getEmployeeAttendanceHistory,
+  getEmployeeAttendanceSummary,
+} from "@/lib/data/user/attendance";
 import { getTodayAttendanceStatus } from "@/lib/data/user/dashboard";
 import { convertToGmt7TimeString } from "@/lib/utils";
-import { Separator } from "@radix-ui/react-separator";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
@@ -16,6 +20,7 @@ async function UserAttendancePage() {
   const userId = session.user.id;
   const attendanceSummary = await getEmployeeAttendanceSummary(userId);
   const todaysAttendance = await getTodayAttendanceStatus(userId);
+  const attendanceHistory = await getEmployeeAttendanceHistory(userId);
   return (
     <section className="space-y-4">
       {/* Attendance Stats Card */}
@@ -54,6 +59,11 @@ async function UserAttendancePage() {
           </div>
           <AttendanceButton userId={userId} attendance={todaysAttendance} />
         </div>
+      </div>
+
+      {/* Employee Attendance History */}
+      <div>
+        <AttendanceHistoryCard attendance={attendanceHistory} />
       </div>
     </section>
   );

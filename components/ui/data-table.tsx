@@ -38,6 +38,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   pageSize?: number;
   columnFilter?: string;
+  searchEnabled?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -45,6 +46,7 @@ export function DataTable<TData, TValue>({
   data,
   pageSize,
   columnFilter,
+  searchEnabled = true,
 }: DataTableProps<TData, TValue>) {
   const columFiltered = columnFilter || "name";
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -79,23 +81,28 @@ export function DataTable<TData, TValue>({
   return (
     <div className="space-y-2">
       <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-        <div className="relative flex items-center pt-4">
-          <Label htmlFor="search" className="absolute left-2">
-            <Search strokeWidth={3} />
-          </Label>
-          <Input
-            id="search"
-            autoComplete="off"
-            placeholder={`Search by ${columFiltered == "id" ? "ID" : columFiltered}`}
-            value={
-              (table.getColumn(columFiltered)?.getFilterValue() as string) ?? ""
-            }
-            onChange={(event) =>
-              table.getColumn(columFiltered)?.setFilterValue(event.target.value)
-            }
-            className="border-input w-full border-2 pl-10 placeholder:capitalize max-md:placeholder:text-sm md:max-w-sm"
-          />
-        </div>
+        {searchEnabled && (
+          <div className="relative flex items-center pt-4">
+            <Label htmlFor="search" className="absolute left-2">
+              <Search strokeWidth={3} />
+            </Label>
+            <Input
+              id="search"
+              autoComplete="off"
+              placeholder={`Search by ${columFiltered == "id" ? "ID" : columFiltered}`}
+              value={
+                (table.getColumn(columFiltered)?.getFilterValue() as string) ??
+                ""
+              }
+              onChange={(event) =>
+                table
+                  .getColumn(columFiltered)
+                  ?.setFilterValue(event.target.value)
+              }
+              className="border-input w-full border-2 pl-10 placeholder:capitalize max-md:placeholder:text-sm md:max-w-sm"
+            />
+          </div>
+        )}
         <div className="flex flex-col gap-3 sm:flex-row md:items-center">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
