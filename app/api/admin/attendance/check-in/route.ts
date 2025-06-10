@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     // Check if the check in is late or not
     const now = new Date();
     const scheduledCheckIn = new Date();
-    scheduledCheckIn.setHours(9, 0, 0, 0); // 9:00 AM check-in standard
+    scheduledCheckIn.setHours(9, 15, 0, 0); // 9:00 AM check-in standard
 
     const status = now > scheduledCheckIn ? "LATE" : "PRESENT";
 
