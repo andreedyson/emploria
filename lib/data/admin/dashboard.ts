@@ -5,6 +5,7 @@ import prisma from "@/lib/db";
 import {
   EmployeePerDepartmentProps,
   GenderDiversityProps,
+  SalariesPaidPerMonthProps,
   TopEmployeeListProps,
 } from "@/types/admin/dashboard";
 import { StatsCardProps } from "@/types/super-admin/dashboard";
@@ -204,7 +205,9 @@ export async function getGenderDiversityTotal(
   }
 }
 
-export async function getSalariesPaidPerMonth(companyId: string) {
+export async function getSalariesPaidPerMonth(
+  companyId: string,
+): Promise<SalariesPaidPerMonthProps[]> {
   try {
     const salaries = await prisma.salary.groupBy({
       by: ["month", "year"],

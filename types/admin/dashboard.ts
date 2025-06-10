@@ -21,7 +21,7 @@ export type GenderDiversityProps = {
 };
 
 export type SalariesPaidPerMonthProps = {
-  month: string;
-  year: string;
+  month?: string;
+  year?: string;
   totalPaidInMillions: number;
 };

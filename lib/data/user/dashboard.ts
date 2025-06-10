@@ -1,4 +1,8 @@
+"use server";
+
+import { months } from "@/constants";
 import prisma from "@/lib/db";
+import { SalariesPaidPerMonthProps } from "@/types/admin/dashboard";
 import { UserStatsCardDataProps } from "@/types/user/dashboard";
 import { endOfDay, endOfMonth, startOfDay, startOfMonth } from "date-fns";
 import { Banknote, Calendar1, CalendarCog, CalendarX } from "lucide-react";
@@ -151,4 +155,38 @@ export async function getTodayAttendanceStatus(userId: string) {
   });
 
   return attendance;
+}
+
+export async function getEmployeeSalariesGrowth(
+  userId: string,
+): Promise<SalariesPaidPerMonthProps[]> {
+  try {
+    const salaries = await prisma.salary.groupBy({
+      by: ["month", "year"],
+      where: {
+        status: "PAID",
+        employee: {
+          userId,
+        },
+      },
+      _sum: {
+        total: true,
+      },
+      orderBy: { month: "asc" },
+      take: 6,
+    });
+
+    const data = salaries.map((item) => ({
+      month: months.find((month) => month.value === item.month)?.label,
+      year: item.year,
+      totalPaidInMillions: item._sum.total
+        ? +(item._sum.total / 1_000_000).toFixed(1)
+        : 0,
+    }));
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
 }

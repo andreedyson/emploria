@@ -1,5 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import AttendanceButton from "@/components/dashboard/user/attendance/attendance-button";
+import SalariesGrowthCard from "@/components/dashboard/user/dashboard/salaries-growth-card";
 import UserStatsCard from "@/components/dashboard/user/dashboard/user-stats-card";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -50,6 +51,10 @@ async function UserDashboardPage() {
       </div>
 
       <UserStatsCard stats={statsCardData} />
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <SalariesGrowthCard userId={userId} />
+      </div>
     </section>
   );
 }
