@@ -1,6 +1,7 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import AttendanceButton from "@/components/dashboard/user/attendance/attendance-button";
 import SalariesGrowthCard from "@/components/dashboard/user/dashboard/salaries-growth-card";
+import UserActivityCard from "@/components/dashboard/user/dashboard/user-activity-card";
 import UserStatsCard from "@/components/dashboard/user/dashboard/user-stats-card";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -33,8 +34,8 @@ async function UserDashboardPage() {
       </div>
 
       {/* Employee Today's Attendance */}
-      <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-col gap-3 text-xs font-semibold md:h-5 md:flex-row md:items-center md:text-sm">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-1.5 text-xs font-semibold md:h-5 md:flex-row md:items-center md:text-sm">
           <p aria-label="Check in for today" title="Check in for today">
             {todaysAttendance?.checkIn
               ? `✅ You checked-in at ${convertToGmt7TimeString(todaysAttendance.checkIn)}`
@@ -44,7 +45,7 @@ async function UserDashboardPage() {
           <p aria-label="Check out for today" title="Check out for today">
             {todaysAttendance?.checkOut
               ? `✅ You checked-out at ${convertToGmt7TimeString(todaysAttendance.checkOut)}`
-              : "🕘 You haven't checked out yet"}
+              : "🕔 You haven't checked out yet"}
           </p>
         </div>
         <AttendanceButton userId={userId} attendance={todaysAttendance} />
@@ -54,6 +55,7 @@ async function UserDashboardPage() {
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <SalariesGrowthCard userId={userId} />
+        <UserActivityCard />
       </div>
     </section>
   );
