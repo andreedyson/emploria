@@ -1,10 +1,12 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import AttendanceButton from "@/components/dashboard/user/attendance/attendance-button";
 import UserStatsCard from "@/components/dashboard/user/dashboard/user-stats-card";
+import { Separator } from "@/components/ui/separator";
 import {
   getTodayAttendanceStatus,
   getUserStatsCardData,
 } from "@/lib/data/user/dashboard";
+import { convertToGmt7TimeString } from "@/lib/utils";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
@@ -29,8 +31,21 @@ async function UserDashboardPage() {
         </p>
       </div>
 
-      {/* Emplotee Today's Attendance */}
-      <div>
+      {/* Employee Today's Attendance */}
+      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+        <div className="flex items-center space-x-3 text-xs font-semibold md:h-5 md:text-sm">
+          <p aria-label="Check in for today" title="Check in for today">
+            {todaysAttendance?.checkIn
+              ? `✅ You checked-in at ${convertToGmt7TimeString(todaysAttendance.checkIn)}`
+              : "🕘 You haven't check in today"}
+          </p>
+          <Separator orientation="vertical" />
+          <p aria-label="Check out for today" title="Check out for today">
+            {todaysAttendance?.checkOut
+              ? `✅ You checked-out at ${convertToGmt7TimeString(todaysAttendance.checkOut)}`
+              : "🕘 You haven't checked out yet"}
+          </p>
+        </div>
         <AttendanceButton userId={userId} attendance={todaysAttendance} />
       </div>
 
