@@ -32,14 +32,14 @@ async function UserDashboardPage() {
       </div>
 
       {/* Employee Today's Attendance */}
-      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-        <div className="flex items-center space-x-3 text-xs font-semibold md:h-5 md:text-sm">
+      <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-col gap-3 text-xs font-semibold md:h-5 md:flex-row md:items-center md:text-sm">
           <p aria-label="Check in for today" title="Check in for today">
             {todaysAttendance?.checkIn
               ? `✅ You checked-in at ${convertToGmt7TimeString(todaysAttendance.checkIn)}`
               : "🕘 You haven't check in today"}
           </p>
-          <Separator orientation="vertical" />
+          <Separator orientation="vertical" className="max-md:hidden" />
           <p aria-label="Check out for today" title="Check out for today">
             {todaysAttendance?.checkOut
               ? `✅ You checked-out at ${convertToGmt7TimeString(todaysAttendance.checkOut)}`
