@@ -150,8 +150,5 @@ export async function getTodayAttendanceStatus(userId: string) {
     },
   });
 
-  return {
-    alreadyCheckedIn: Boolean(attendance?.checkIn),
-    alreadyCheckedOut: Boolean(attendance?.checkOut),
-  };
+  return attendance;
 }

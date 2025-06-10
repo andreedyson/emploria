@@ -15,8 +15,7 @@ async function UserDashboardPage() {
   }
   const userId = session.user.id;
   const statsCardData = await getUserStatsCardData(userId);
-  const { alreadyCheckedIn, alreadyCheckedOut } =
-    await getTodayAttendanceStatus(userId);
+  const todaysAttendance = await getTodayAttendanceStatus(userId);
 
   return (
     <section className="space-y-4">
@@ -32,11 +31,7 @@ async function UserDashboardPage() {
 
       {/* Emplotee Today's Attendance */}
       <div>
-        <AttendanceButton
-          userId={userId}
-          alreadyCheckedIn={alreadyCheckedIn}
-          alreadyCheckedOut={alreadyCheckedOut}
-        />
+        <AttendanceButton userId={userId} attendance={todaysAttendance} />
       </div>
 
       <UserStatsCard stats={statsCardData} />

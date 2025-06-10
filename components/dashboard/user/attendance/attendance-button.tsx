@@ -22,18 +22,23 @@ import { formatDate } from "@/lib/utils";
 
 type AttendanceButtonProps = {
   userId: string;
-  alreadyCheckedIn: boolean;
-  alreadyCheckedOut: boolean;
+  attendance: {
+    id: string;
+    checkIn: Date | null;
+    checkOut: Date | null;
+  } | null;
 };
 
 export default function AttendanceButton({
   userId,
-  alreadyCheckedIn,
-  alreadyCheckedOut,
+  attendance,
 }: AttendanceButtonProps) {
   const [submitting, setSubmitting] = useState(false);
   const [open, setOpen] = useState(false);
   const router = useRouter();
+
+  const alreadyCheckedIn = !!attendance?.checkIn;
+  const alreadyCheckedOut = !!attendance?.checkOut;
 
   const handleAttendance = async () => {
     setSubmitting(true);
