@@ -1,5 +1,6 @@
 import prisma from "@/lib/db";
 import { LeaveStatsCardProps } from "@/types/user/leave";
+import { Leave } from "@prisma/client";
 import { Baby, BanknoteX, Calendar, LucideIcon, Pill } from "lucide-react";
 
 export async function getEmployeeLeaveSummary(
@@ -32,6 +33,28 @@ export async function getEmployeeLeaveSummary(
     );
 
     return data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
+export async function getEmployeeLeaveHistory(
+  userId: string,
+): Promise<Leave[]> {
+  try {
+    const leaves = await prisma.leave.findMany({
+      where: {
+        employee: {
+          userId,
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return leaves;
   } catch (error) {
     console.error(error);
     return [];

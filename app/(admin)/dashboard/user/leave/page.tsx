@@ -1,7 +1,11 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import ApplyLeaveDialog from "@/components/dashboard/user/leave/apply-leave-dialog";
+import LeaveHistoryCard from "@/components/dashboard/user/leave/leave-history-card";
 import LeaveStatsCard from "@/components/dashboard/user/leave/leave-stats-card";
-import { getEmployeeLeaveSummary } from "@/lib/data/user/leave";
+import {
+  getEmployeeLeaveHistory,
+  getEmployeeLeaveSummary,
+} from "@/lib/data/user/leave";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
@@ -12,6 +16,7 @@ async function UserLeavePage() {
   }
   const userId = session.user.id;
   const leaveSummary = await getEmployeeLeaveSummary(userId);
+  const leaveHistory = await getEmployeeLeaveHistory(userId);
 
   return (
     <section className="space-y-4">
@@ -28,8 +33,13 @@ async function UserLeavePage() {
         ))}
       </div>
 
+      {/* Apply for Leave Dialog */}
       <div className="flex items-end justify-end">
         <ApplyLeaveDialog userId={userId} />
+      </div>
+
+      <div>
+        <LeaveHistoryCard leave={leaveHistory} />
       </div>
     </section>
   );
