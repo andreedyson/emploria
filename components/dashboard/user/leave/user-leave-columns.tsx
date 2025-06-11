@@ -6,8 +6,7 @@ import { formatDate } from "@/lib/utils";
 import { Leave } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { Calendar, Layers, Text } from "lucide-react";
-import UserViewLeaveDialog from "../salary/user-view-leave-dialog";
-
+import UserViewLeaveDialog from "./user-view-leave-dialog";
 export const UserLeaveColumns: ColumnDef<Leave>[] = [
   {
     accessorKey: "status",
