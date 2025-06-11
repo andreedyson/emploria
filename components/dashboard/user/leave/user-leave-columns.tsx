@@ -6,6 +6,7 @@ import { formatDate } from "@/lib/utils";
 import { Leave } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { Calendar, Layers, Text } from "lucide-react";
+import UserViewLeaveDialog from "../salary/user-view-leave-dialog";
 
 export const UserLeaveColumns: ColumnDef<Leave>[] = [
   {
@@ -68,11 +69,13 @@ export const UserLeaveColumns: ColumnDef<Leave>[] = [
   },
   {
     accessorKey: "reason",
-    enableSorting: true,
     size: 200,
-    header: ({ column }) => {
+    header: () => {
       return (
-        <DataTableColumnHeader column={column} title="Reason" icon={Text} />
+        <div className="flex items-center gap-1">
+          <Text className="text-muted-foreground h-4 w-4" />
+          <span>Reason</span>
+        </div>
       );
     },
     cell: ({ row }) => {
@@ -82,6 +85,18 @@ export const UserLeaveColumns: ColumnDef<Leave>[] = [
         <div className="max-w-[300px] truncate" title={leave.reason ?? "-"}>
           {leave.reason ?? "-"}
         </div>
+      );
+    },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const leave = row.original;
+
+      return (
+        <>
+          <UserViewLeaveDialog leave={leave} />
+        </>
       );
     },
   },

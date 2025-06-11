@@ -10,7 +10,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { getImageUrl } from "@/lib/supabase";
-import { formatDate } from "@/lib/utils";
+import { formatDate, handleCopyClick } from "@/lib/utils";
 import { LeaveColumnProps } from "@/types/admin/leave";
 import {
   Calendar,
@@ -24,23 +24,12 @@ import {
   Loader,
 } from "lucide-react";
 import Image from "next/image";
-import toast from "react-hot-toast";
 
 type ViewLeaveDialogProps = {
   leaveData: LeaveColumnProps;
 };
 
 function ViewLeaveDialog({ leaveData }: ViewLeaveDialogProps) {
-  const handleCopyClick = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      toast.success("Copied to clipboard!", {
-        id: "clipboard",
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <Sheet>
       <SheetTrigger asChild>

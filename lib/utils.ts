@@ -4,6 +4,7 @@ import { randomBytes } from "crypto";
 import { twMerge } from "tailwind-merge";
 import { differenceInMinutes, format, parseISO } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
+import toast from "react-hot-toast";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -30,6 +31,17 @@ export const formatDate = (date: Date) => {
   });
 
   return formattedDate;
+};
+
+export const handleCopyClick = async (text: string) => {
+  try {
+    await navigator.clipboard.writeText(text);
+    toast.success("Copied to clipboard!", {
+      id: "clipboard",
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export function convertToGmt7TimeString(date: Date): string {
