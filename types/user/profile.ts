@@ -9,8 +9,13 @@ export type UserProfileProps = {
   address: string | null;
   dateOfBirth: Date;
   joinedDate: Date;
+  phone: string;
   companyName: string;
+  isActive: boolean;
   departmentName: string;
-  employeePosition: string;
-  employeeRole: EmployeeRole;
+  employee: {
+    id?: string;
+    position: string;
+    role: EmployeeRole;
+  };
 };

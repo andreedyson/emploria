@@ -18,21 +18,17 @@ export async function getUserProfileData(
         dateOfBirth: true,
         gender: true,
         address: true,
+        phone: true,
         createdAt: true,
+        isActive: true,
         company: {
           select: {
             name: true,
           },
         },
         employee: {
-          select: {
-            role: true,
-            position: true,
-            department: {
-              select: {
-                name: true,
-              },
-            },
+          include: {
+            department: true,
           },
         },
       },
@@ -48,11 +44,16 @@ export async function getUserProfileData(
       gender: user.gender,
       address: user.address,
       dateOfBirth: user.dateOfBirth ?? new Date(),
+      phone: user.phone ?? "",
       joinedDate: user.createdAt,
+      isActive: user.isActive,
       companyName: user.company?.name ?? "",
       departmentName: user.employee?.department?.name ?? "",
-      employeePosition: user.employee?.position ?? "",
-      employeeRole: user.employee?.role ?? EmployeeRole.STAFF,
+      employee: {
+        id: user.employee?.id,
+        position: user.employee?.position ?? "",
+        role: user.employee?.role ?? EmployeeRole.STAFF,
+      },
     };
 
     return data;
