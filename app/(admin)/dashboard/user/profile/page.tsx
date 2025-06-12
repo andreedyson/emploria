@@ -9,7 +9,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { getUserProfileData } from "@/lib/data/user/profile";
 import { getImageUrl } from "@/lib/supabase";
-import { formatDate } from "@/lib/utils";
+import { calculateAge, formatDate } from "@/lib/utils";
 import {
   Briefcase,
   Building,
@@ -17,6 +17,7 @@ import {
   Calendar1,
   CalendarCheck,
   Contact,
+  Hash,
   IdCard,
   MapPinHouse,
   MarsStroke,
@@ -34,6 +35,7 @@ async function UserProfilePage() {
   }
   const userId = session.user.id;
   const userProfile = await getUserProfileData(userId);
+  const userAge = calculateAge(userProfile?.dateOfBirth as Date);
   return (
     <section className="w-full space-y-4">
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
@@ -71,7 +73,7 @@ async function UserProfilePage() {
             </div>
             <div className="mt-3">
               <p className="font-semibold">User Information</p>
-              <div className="mt-4 space-y-4 lg:space-y-3">
+              <div className="mt-2 space-y-4 lg:space-y-3">
                 <div className="text-muted-foreground flex items-center gap-2 text-sm">
                   <IdCard size={20} />
                   <div>
@@ -182,6 +184,15 @@ async function UserProfilePage() {
                   {userProfile?.dateOfBirth
                     ? formatDate(userProfile?.dateOfBirth)
                     : "-"}
+                </p>
+              </div>
+              <div className="text-muted-foreground flex items-center justify-between text-sm">
+                <div className="flex items-center gap-1">
+                  <Hash size={20} />
+                  <p className="font-medium">Age</p>
+                </div>
+                <p className="text-foreground line-clamp-1 font-semibold">
+                  {userAge} years old
                 </p>
               </div>
               <div className="text-muted-foreground flex items-center justify-between text-sm">

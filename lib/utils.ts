@@ -33,6 +33,22 @@ export const formatDate = (date: Date) => {
   return formattedDate;
 };
 
+export function calculateAge(birthDate: Date): number {
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+
+  const hasHadBirthdayThisYear =
+    today.getMonth() > birthDate.getMonth() ||
+    (today.getMonth() === birthDate.getMonth() &&
+      today.getDate() >= birthDate.getDate());
+
+  if (!hasHadBirthdayThisYear) {
+    age--;
+  }
+
+  return age;
+}
+
 export const handleCopyClick = async (text: string) => {
   try {
     await navigator.clipboard.writeText(text);
