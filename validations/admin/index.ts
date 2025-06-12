@@ -2,6 +2,7 @@ import { ALLOWED_FILE_TYPE } from "@/constants";
 import {
   AttendanceStatus,
   EmployeeRole,
+  LeaveFrequency,
   LeaveStatus,
   LeaveType,
 } from "@prisma/client";
@@ -124,4 +125,22 @@ export const salarySchema = z.object({
     .number()
     .nonnegative("Deduction must be non-negative")
     .optional(),
+});
+
+export const leavePolicySchema = z.object({
+  companyId: z.string({
+    required_error: "Company is required",
+  }),
+  leaveType: z.nativeEnum(LeaveType, {
+    required_error: "Leave Type is required",
+    invalid_type_error:
+      "Invalid leave type. Must be ANNUAL, SICK, MATERNITY, or UNPAID",
+  }),
+  frequency: z.nativeEnum(LeaveFrequency, {
+    required_error: "Leave Frequency is required",
+    invalid_type_error: "Invalid leave frequency. Must be MONTHLY or YEARLY",
+  }),
+  allowedDays: z
+    .number({ required_error: "Total allowed days is required" })
+    .min(1, { message: "Allowed Days must be at least 1 day" }),
 });
