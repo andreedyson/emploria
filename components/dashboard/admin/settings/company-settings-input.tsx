@@ -47,16 +47,18 @@ export function CompanySettingInput({
 
   async function handleSave() {
     setLoading(true);
-    const res = await fetch(`${BASE_URL}/api/admin/company/settings`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
+    const res = await fetch(
+      `${BASE_URL}/api/admin/company/${companyId}/settings`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          [field]: parseFloat(value as string),
+        }),
       },
-      body: JSON.stringify({
-        companyId,
-        [field]: parseFloat(value as string),
-      }),
-    });
+    );
 
     setLoading(false);
     if (res.ok) {

@@ -3,10 +3,14 @@
 import prisma from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PATCH(req: NextRequest) {
-  const { companyId, ...updates } = await req.json();
+export async function PATCH(
+  req: NextRequest,
+  props: { params: Promise<{ companyId: string }> },
+) {
+  const params = await props.params;
+  const { ...updates } = await req.json();
 
-  if (!companyId) {
+  if (!params.companyId) {
     return NextResponse.json(
       { message: "Missing company ID" },
       { status: 400 },
@@ -33,7 +37,7 @@ export async function PATCH(req: NextRequest) {
 
   try {
     const updatedCompany = await prisma.company.update({
-      where: { id: companyId },
+      where: { id: params.companyId },
       data: updates,
     });
 
