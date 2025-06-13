@@ -4,6 +4,7 @@ import { customToast } from "@/components/custom-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { BASE_URL } from "@/constants";
 import { convertRupiah } from "@/lib/utils";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -46,7 +47,7 @@ export function CompanySettingInput({
 
   async function handleSave() {
     setLoading(true);
-    const res = await fetch("/api/admin/company/settings", {
+    const res = await fetch(`${BASE_URL}/api/admin/company/settings`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

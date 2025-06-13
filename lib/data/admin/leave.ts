@@ -55,3 +55,18 @@ export async function getAllLeaves(
     return [];
   }
 }
+
+export async function getCompanyLeavePolicies(companyId: string) {
+  try {
+    const policies = await prisma.leavePolicy.findMany({
+      where: {
+        companyId,
+      },
+    });
+
+    return policies;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
