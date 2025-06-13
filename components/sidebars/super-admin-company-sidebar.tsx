@@ -7,6 +7,7 @@ import {
   CalendarX,
   LayoutDashboard,
   LogOut,
+  Settings,
   Users,
 } from "lucide-react";
 
@@ -57,6 +58,11 @@ const items = [
     title: "Salary",
     url: "/dashboard/admin/salary",
     icon: Banknote,
+  },
+  {
+    title: "Settings",
+    url: "/dashboard/admin/settings",
+    icon: Settings,
   },
 ];
 
