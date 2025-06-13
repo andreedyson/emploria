@@ -1,6 +1,7 @@
 import prisma from "@/lib/db";
 import { leaveSchema } from "@/validations/admin";
-import { LeaveType } from "@prisma/client";
+import { LeaveFrequency, LeaveType } from "@prisma/client";
+import { startOfMonth, startOfYear } from "date-fns";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -67,14 +68,75 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // UNPAID Leave Type to not have any limit
+    if (leaveType !== "UNPAID") {
+      const policy = await prisma.leavePolicy.findUnique({
+        where: {
+          companyId_leaveType: {
+            companyId: employee.companyId,
+            leaveType: leaveType,
+          },
+        },
+      });
+
+      if (!policy) {
+        return NextResponse.json(
+          { message: "No leave policy set for this type." },
+          { status: 400 },
+        );
+      }
+
+      const requestedDays =
+        Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) +
+        1;
+
+      const now = new Date();
+      const periodStart =
+        policy.frequency === LeaveFrequency.MONTHLY
+          ? startOfMonth(now)
+          : startOfYear(now);
+
+      // Fetch approved leaves for same type in same period
+      const usedLeaves = await prisma.leave.findMany({
+        where: {
+          employeeId: employee.id,
+          leaveType: leaveType,
+          status: "APPROVED",
+          startDate: {
+            gte: periodStart,
+          },
+        },
+      });
+
+      const usedDays = usedLeaves.reduce((total, leave) => {
+        const leaveStart = new Date(leave.startDate);
+        const leaveEnd = new Date(leave.endDate);
+        const diff =
+          Math.ceil(
+            (leaveEnd.getTime() - leaveStart.getTime()) / (1000 * 60 * 60 * 24),
+          ) + 1;
+        return total + diff;
+      }, 0);
+
+      if (usedDays + requestedDays > policy.allowedDays) {
+        return NextResponse.json(
+          {
+            message: `You have exceeded your ${policy.frequency.toLowerCase()} quota for ${leaveType}. Used: ${usedDays}, Requested: ${requestedDays}, Limit: ${policy.allowedDays}`,
+          },
+          { status: 400 },
+        );
+      }
+    }
+
+    // Create leave
     const leave = await prisma.leave.create({
       data: {
-        employeeId: validatedFields.data.employeeId,
-        leaveType: validatedFields.data.leaveType,
+        employeeId,
+        leaveType,
         startDate: start,
         endDate: end,
-        reason: validatedFields.data.reason,
-        status: validatedFields.data.status,
+        reason,
+        status,
       },
     });
 
