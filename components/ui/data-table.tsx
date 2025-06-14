@@ -84,7 +84,7 @@ export function DataTable<TData, TValue>({
     <div className="space-y-2">
       <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
         {searchEnabled && (
-          <div className="relative flex items-center pt-4">
+          <div className="relative flex items-center">
             <Label htmlFor="search" className="absolute left-2">
               <Search strokeWidth={3} />
             </Label>
@@ -106,7 +106,7 @@ export function DataTable<TData, TValue>({
           </div>
         )}
         <div className="flex w-full flex-col gap-3 sm:flex-row md:items-center md:justify-end">
-          <div className="flex flex-wrap gap-2">{filters?.(table)}</div>
+          <div className="flex flex-wrap gap-3">{filters?.(table)}</div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size={"sm"}>

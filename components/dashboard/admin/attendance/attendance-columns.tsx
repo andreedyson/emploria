@@ -27,6 +27,7 @@ export const AttendanceColumns: ColumnDef<AttendanceColumnsProps>[] = [
     id: "employee",
     accessorKey: "employee.name",
     enableSorting: true,
+    filterFn: (row, id, value) => value.includes(row.getValue(id)),
     header: ({ column }) => {
       return (
         <DataTableColumnHeader title="Employee" column={column} icon={User} />
@@ -56,6 +57,7 @@ export const AttendanceColumns: ColumnDef<AttendanceColumnsProps>[] = [
   {
     accessorKey: "department",
     enableSorting: true,
+    filterFn: (row, id, value) => value.includes(row.getValue(id)),
     header: () => {
       return (
         <div className="flex items-center gap-1">
@@ -155,6 +157,7 @@ export const AttendanceColumns: ColumnDef<AttendanceColumnsProps>[] = [
   {
     accessorKey: "status",
     header: "Status",
+    filterFn: (row, id, value) => value.includes(row.getValue(id)),
     cell: ({ row }) => {
       const attendance = row.original;
 

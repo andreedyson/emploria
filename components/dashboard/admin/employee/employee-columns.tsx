@@ -61,6 +61,7 @@ export const EmployeeColumns: ColumnDef<EmployeeColumnProps>[] = [
   {
     accessorKey: "gender",
     enableSorting: true,
+    filterFn: (row, id, value) => value.includes(row.getValue(id)),
     header: ({ column }) => {
       return (
         <DataTableColumnHeader column={column} title="Gender" icon={Mars} />
@@ -83,6 +84,7 @@ export const EmployeeColumns: ColumnDef<EmployeeColumnProps>[] = [
   {
     accessorKey: "employeeRole",
     enableSorting: true,
+    filterFn: (row, id, value) => value.includes(row.getValue(id)),
     header: ({ column }) => {
       return (
         <DataTableColumnHeader column={column} title="Role" icon={Briefcase} />

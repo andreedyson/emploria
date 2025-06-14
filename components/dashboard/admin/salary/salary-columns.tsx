@@ -24,6 +24,7 @@ export const SalaryColumns: ColumnDef<SalaryColumnsProps>[] = [
     id: "employee",
     accessorKey: "employee.name",
     enableSorting: true,
+    filterFn: (row, id, value) => value.includes(row.getValue(id)),
     header: ({ column }) => {
       return (
         <DataTableColumnHeader title="Employee" column={column} icon={User} />
@@ -120,6 +121,7 @@ export const SalaryColumns: ColumnDef<SalaryColumnsProps>[] = [
   {
     accessorKey: "status",
     header: "Status",
+    filterFn: (row, id, value) => value.includes(row.getValue(id)),
     cell: ({ row }) => {
       const salary = row.original;
 
