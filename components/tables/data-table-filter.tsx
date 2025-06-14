@@ -1,5 +1,5 @@
 import { Column } from "@tanstack/react-table";
-import { Check, SlidersHorizontal } from "lucide-react";
+import { Check, LucideIcon, SlidersHorizontal } from "lucide-react";
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
@@ -20,6 +20,7 @@ import { Separator } from "../ui/separator";
 interface DataTableFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
   title?: string;
+  toggleIcon?: LucideIcon;
   options: {
     label: string;
     value: string;
@@ -31,6 +32,7 @@ export function DataTableFilter<TData, TValue>({
   column,
   title,
   options,
+  toggleIcon: ToggleIcon,
 }: DataTableFilterProps<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues();
   const selectedValues = new Set(column?.getFilterValue() as string[]);
@@ -39,7 +41,12 @@ export function DataTableFilter<TData, TValue>({
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="outline" size="sm" className="h-8 border-dashed">
-          <SlidersHorizontal />
+          {ToggleIcon ? (
+            <ToggleIcon className="mr-2 h-4 w-4" />
+          ) : (
+            <SlidersHorizontal className="mr-2 h-4 w-4" />
+          )}
+
           {title}
           {selectedValues?.size > 0 && (
             <>

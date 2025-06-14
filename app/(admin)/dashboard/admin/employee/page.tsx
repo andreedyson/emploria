@@ -1,7 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import AddEmployeeDialog from "@/components/dashboard/admin/employee/add-employee-dialog";
-import { EmployeeColumns } from "@/components/dashboard/admin/employee/employee-columns";
-import { DataTable } from "@/components/ui/data-table";
+import EmployeeTable from "@/components/dashboard/admin/employee/employee-table";
 import { getAllEmployees } from "@/lib/data/admin/employee";
 import { Users } from "lucide-react";
 import { Metadata } from "next";
@@ -20,6 +19,7 @@ async function SuperAdminCompanyEmployeePage() {
   }
   const companyId = session.user.companyId;
   const employees = await getAllEmployees(companyId as string);
+
   return (
     <section className="space-y-4">
       <div className="bg-background space-y-3 rounded-lg border-2 p-4">
@@ -40,9 +40,7 @@ async function SuperAdminCompanyEmployeePage() {
           </div>
         </div>
         {/* Data Table */}
-        <div>
-          <DataTable columns={EmployeeColumns} data={employees} />
-        </div>
+        <EmployeeTable employees={employees} />
       </div>
     </section>
   );
