@@ -11,7 +11,7 @@ import {
 import { AttendanceColumnsProps } from "@/types/admin/attendance";
 import { ColumnDef } from "@tanstack/react-table";
 import {
-  Building2,
+  Building,
   Calendar,
   Clock5,
   Clock9,
@@ -56,13 +56,12 @@ export const AttendanceColumns: ColumnDef<AttendanceColumnsProps>[] = [
   {
     accessorKey: "department",
     enableSorting: true,
-    header: ({ column }) => {
+    header: () => {
       return (
-        <DataTableColumnHeader
-          column={column}
-          title="Department"
-          icon={Building2}
-        />
+        <div className="flex items-center gap-1">
+          <Building className="text-muted-foreground size-4" />
+          <p>Department</p>
+        </div>
       );
     },
     cell: ({ row }) => {

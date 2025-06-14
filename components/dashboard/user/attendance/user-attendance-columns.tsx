@@ -93,6 +93,7 @@ export const UserAttendanceColumns: ColumnDef<Attendance>[] = [
   {
     accessorKey: "status",
     header: "Status",
+    filterFn: (row, id, value) => value.includes(row.getValue(id)),
     cell: ({ row }) => {
       const attendance = row.original;
 

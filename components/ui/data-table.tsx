@@ -39,6 +39,7 @@ interface DataTableProps<TData, TValue> {
   pageSize?: number;
   columnFilter?: string;
   searchEnabled?: boolean;
+  filters?: (table: ReturnType<typeof useReactTable<TData>>) => React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
@@ -47,6 +48,7 @@ export function DataTable<TData, TValue>({
   pageSize,
   columnFilter,
   searchEnabled = true,
+  filters,
 }: DataTableProps<TData, TValue>) {
   const columFiltered = columnFilter || "name";
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -103,7 +105,8 @@ export function DataTable<TData, TValue>({
             />
           </div>
         )}
-        <div className="flex flex-col gap-3 sm:flex-row md:items-center">
+        <div className="flex w-full flex-col gap-3 sm:flex-row md:items-center md:justify-end">
+          {filters?.(table)}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size={"sm"}>
