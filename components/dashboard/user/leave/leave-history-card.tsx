@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -8,10 +10,40 @@ import {
 import { DataTable } from "@/components/ui/data-table";
 import { Leave } from "@prisma/client";
 import { UserLeaveColumns } from "./user-leave-columns";
+import { DataTableFilter } from "@/components/tables/data-table-filter";
+import {
+  Baby,
+  BanknoteX,
+  Calendar,
+  CheckCircle,
+  CircleX,
+  Pill,
+} from "lucide-react";
 
 type LeaveHistoryCardProps = {
   leave: Leave[];
 };
+
+const filterConfigs = [
+  {
+    title: "Type",
+    key: "leaveType",
+    options: [
+      { label: "Sick", value: "SICK", icon: Pill },
+      { label: "Unpaid", value: "UNPAID", icon: BanknoteX },
+      { label: "Annual", value: "ANNUA:", icon: Calendar },
+      { label: "Maternity", value: "MATERNITY", icon: Baby },
+    ],
+  },
+  {
+    title: "Status",
+    key: "status",
+    options: [
+      { label: "Approved", value: "APPROVED", icon: CheckCircle },
+      { label: "Rejected", value: "REJECTED", icon: CircleX },
+    ],
+  },
+];
 
 function LeaveHistoryCard({ leave }: LeaveHistoryCardProps) {
   return (
@@ -29,6 +61,18 @@ function LeaveHistoryCard({ leave }: LeaveHistoryCardProps) {
           columns={UserLeaveColumns}
           data={leave}
           searchEnabled={false}
+          filters={(table) => (
+            <>
+              {filterConfigs.map((config) => (
+                <DataTableFilter
+                  key={config.key}
+                  title={config.title}
+                  column={table.getColumn(config.key)}
+                  options={config.options}
+                />
+              ))}
+            </>
+          )}
         />
       </CardContent>
     </Card>

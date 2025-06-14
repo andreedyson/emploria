@@ -106,7 +106,7 @@ export function DataTable<TData, TValue>({
           </div>
         )}
         <div className="flex w-full flex-col gap-3 sm:flex-row md:items-center md:justify-end">
-          {filters?.(table)}
+          <div className="flex flex-wrap gap-2">{filters?.(table)}</div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size={"sm"}>

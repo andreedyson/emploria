@@ -21,6 +21,7 @@ export const UserLeaveColumns: ColumnDef<Leave>[] = [
   {
     accessorKey: "leaveType",
     enableSorting: true,
+    filterFn: (row, id, value) => value.includes(row.getValue(id)),
     header: ({ column }) => {
       return (
         <DataTableColumnHeader column={column} title="Type" icon={Layers} />
