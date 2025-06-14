@@ -31,7 +31,7 @@ const filterConfigs = [
     options: [
       { label: "Sick", value: "SICK", icon: Pill },
       { label: "Unpaid", value: "UNPAID", icon: BanknoteX },
-      { label: "Annual", value: "ANNUA:", icon: Calendar },
+      { label: "Annual", value: "ANNUAL", icon: Calendar },
       { label: "Maternity", value: "MATERNITY", icon: Baby },
     ],
   },
