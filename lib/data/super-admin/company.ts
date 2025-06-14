@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/db";
 import { AllCompaniesProps } from "@/types/super-admin/company";
-import { Company } from "@prisma/client";
+import { Company, LeavePolicy } from "@prisma/client";
 
 export async function getAllCompanies(): Promise<AllCompaniesProps[]> {
   try {
@@ -32,15 +32,16 @@ export async function getAllCompanies(): Promise<AllCompaniesProps[]> {
 
 export async function getCompanyById(
   companyId: string,
-): Promise<Company | null> {
+): Promise<(Company & { LeavePolicy: LeavePolicy[] }) | null> {
   try {
-    const company = await prisma.company.findUnique({
+    return await prisma.company.findUnique({
       where: {
         id: companyId,
       },
+      include: {
+        LeavePolicy: true,
+      },
     });
-
-    return company;
   } catch (error) {
     console.error(error);
     return null;

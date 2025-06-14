@@ -77,11 +77,12 @@ export function CompanySettingInput({
           <Label className="font-medium">{label}</Label>
           <Input
             type="number"
+            min={0}
             value={value}
             onChange={(e) => setValue(e.target.value)}
           />
           <Button
-            className="cursor-pointer rounded bg-blue-600 px-4 py-2 text-white"
+            className="bg-picton-blue-600 cursor-pointer rounded px-4 py-2 text-white"
             onClick={handleSave}
             disabled={loading}
           >
@@ -94,7 +95,7 @@ export function CompanySettingInput({
             <Label className="font-medium">{label}</Label>
             <Pencil size={12} onClick={handleEditMode} />
           </div>
-          <div className="bg-muted text-muted-foreground w-full rounded border p-2">
+          <div className="bg-input text-muted-foreground w-full rounded border p-2">
             {convertRupiah(initialValue)}
           </div>
         </div>
