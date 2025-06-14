@@ -17,6 +17,8 @@ import {
   Calendar,
   CheckCircle,
   CircleX,
+  Layers,
+  Loader,
   Pill,
 } from "lucide-react";
 
@@ -34,6 +36,7 @@ const filterConfigs = [
       { label: "Annual", value: "ANNUAL", icon: Calendar },
       { label: "Maternity", value: "MATERNITY", icon: Baby },
     ],
+    toggleIcon: Layers,
   },
   {
     title: "Status",
@@ -42,6 +45,7 @@ const filterConfigs = [
       { label: "Approved", value: "APPROVED", icon: CheckCircle },
       { label: "Rejected", value: "REJECTED", icon: CircleX },
     ],
+    toggleIcon: Loader,
   },
 ];
 
@@ -69,6 +73,7 @@ function LeaveHistoryCard({ leave }: LeaveHistoryCardProps) {
                   title={config.title}
                   column={table.getColumn(config.key)}
                   options={config.options}
+                  toggleIcon={config.toggleIcon}
                 />
               ))}
             </>

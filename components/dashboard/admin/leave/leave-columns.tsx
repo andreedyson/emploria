@@ -14,9 +14,10 @@ import ViewLeaveDialog from "./view-leave-dialog";
 
 export const LeaveColumns: ColumnDef<LeaveColumnProps>[] = [
   {
-    id: "employee",
+    id: "name",
     accessorKey: "employee.name",
     enableSorting: true,
+    filterFn: (row, id, value) => value.includes(row.getValue(id)),
     header: ({ column }) => {
       return (
         <DataTableColumnHeader title="Employee" column={column} icon={User} />
@@ -46,6 +47,7 @@ export const LeaveColumns: ColumnDef<LeaveColumnProps>[] = [
   {
     accessorKey: "leaveType",
     enableSorting: true,
+    filterFn: (row, id, value) => value.includes(row.getValue(id)),
     header: ({ column }) => {
       return (
         <DataTableColumnHeader column={column} title="Type" icon={Layers} />

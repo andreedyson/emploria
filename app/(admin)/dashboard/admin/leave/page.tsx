@@ -1,7 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import AddLeaveDialog from "@/components/dashboard/admin/leave/add-leave-dialog";
-import { LeaveColumns } from "@/components/dashboard/admin/leave/leave-columns";
-import { DataTable } from "@/components/ui/data-table";
+import LeaveTable from "@/components/dashboard/admin/leave/leave-table";
 import { getAllLeaves } from "@/lib/data/admin/leave";
 import { CalendarX } from "lucide-react";
 import { Metadata } from "next";
@@ -41,13 +40,7 @@ async function SuperAdminCompanyLeavePage() {
           </div>
         </div>
         {/* Data Table */}
-        <div>
-          <DataTable
-            columns={LeaveColumns}
-            data={leaves}
-            columnFilter="employee"
-          />
-        </div>
+        <LeaveTable leaves={leaves} />
       </div>
     </section>
   );
