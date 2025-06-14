@@ -9,7 +9,7 @@ export const customToast = (
     <div
       className={`${
         t.visible ? "animate-enter" : "animate-leave"
-      } ring-opacity-5 w-fit max-w-sm rounded-lg p-4 text-white shadow-lg dark:bg-zinc-900 ${type === "success" ? "bg-[#22c55e]" : type === "error" ? "bg-[#ef4444]" : "bg-white"}`}
+      } ring-opacity-5 w-fit max-w-sm rounded-lg p-4 text-white shadow-lg ${type === "success" ? "bg-[#22c55e]" : type === "error" ? "bg-[#ef4444]" : "bg-white"}`}
     >
       <div className="flex items-center gap-3">
         <div className="text-lg">
