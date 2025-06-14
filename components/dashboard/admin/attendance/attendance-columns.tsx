@@ -24,7 +24,7 @@ import EditAttendanceDialog from "./edit-attendance-dialog";
 
 export const AttendanceColumns: ColumnDef<AttendanceColumnsProps>[] = [
   {
-    id: "employee",
+    id: "name",
     accessorKey: "employee.name",
     enableSorting: true,
     filterFn: (row, id, value) => value.includes(row.getValue(id)),
@@ -55,7 +55,8 @@ export const AttendanceColumns: ColumnDef<AttendanceColumnsProps>[] = [
     },
   },
   {
-    accessorKey: "department",
+    id: "department",
+    accessorFn: (row) => row.department?.name ?? "",
     enableSorting: true,
     filterFn: (row, id, value) => value.includes(row.getValue(id)),
     header: () => {

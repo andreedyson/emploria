@@ -1,8 +1,7 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import AddAttendanceDialog from "@/components/dashboard/admin/attendance/add-attendance-dialog";
-import { AttendanceColumns } from "@/components/dashboard/admin/attendance/attendance-columns";
+import AttendanceTable from "@/components/dashboard/admin/attendance/attendance-table";
 import EvaluateAttendanceDayDialog from "@/components/dashboard/admin/attendance/evaluate-day-dialog";
-import { DataTable } from "@/components/ui/data-table";
 import { getAllAttendances } from "@/lib/data/admin/attendance";
 import { CalendarDays } from "lucide-react";
 import { Metadata } from "next";
@@ -43,13 +42,7 @@ async function SuperAdminCompanyAttendancePage() {
           </div>
         </div>
         {/* Data Table */}
-        <div>
-          <DataTable
-            columns={AttendanceColumns}
-            data={attendances}
-            columnFilter="employee"
-          />
-        </div>
+        <AttendanceTable attendances={attendances} />
       </div>
     </section>
   );
