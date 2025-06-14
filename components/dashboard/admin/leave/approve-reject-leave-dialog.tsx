@@ -102,7 +102,7 @@ function ApproveRejectLeaveDialog({
               variant={
                 form.watch("status") === "APPROVED" ? "default" : "outline"
               }
-              className={`flex-1 ${form.watch("status") === "APPROVED" ? "bg-green-500 hover:bg-green-500" : "outline-green-500"}`}
+              className={`flex-1 ${form.watch("status") === "APPROVED" ? "bg-green-500 text-white hover:bg-green-500" : "outline-green-500"}`}
               onClick={() => form.setValue("status", "APPROVED")}
             >
               <ThumbsUp className="mr-2 h-4 w-4" /> Approve
@@ -112,7 +112,7 @@ function ApproveRejectLeaveDialog({
               variant={
                 form.watch("status") === "REJECTED" ? "destructive" : "outline"
               }
-              className="flex-1"
+              className="flex-1 text-white"
               onClick={() => form.setValue("status", "REJECTED")}
             >
               <ThumbsDown className="mr-2 h-4 w-4" /> Reject
@@ -122,7 +122,7 @@ function ApproveRejectLeaveDialog({
           <DialogFooter>
             <SubmitButton
               isSubmitting={submitting}
-              className="bg-picton-blue-500 hover:bg-picton-blue-600 w-full duration-200"
+              className="bg-picton-blue-500 hover:bg-picton-blue-600 w-full text-white duration-200"
             >
               {submitting ? "Submitting..." : "Submit Decision"}
             </SubmitButton>
