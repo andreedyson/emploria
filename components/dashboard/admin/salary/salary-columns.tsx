@@ -21,7 +21,7 @@ import ViewSalaryDialog from "./view-salary-dialog";
 
 export const SalaryColumns: ColumnDef<SalaryColumnsProps>[] = [
   {
-    id: "employee",
+    id: "name",
     accessorKey: "employee.name",
     enableSorting: true,
     filterFn: (row, id, value) => value.includes(row.getValue(id)),

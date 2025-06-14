@@ -2,32 +2,22 @@
 
 import { DataTableFilter } from "@/components/tables/data-table-filter";
 import { DataTable } from "@/components/ui/data-table";
-import { LeaveColumnProps } from "@/types/admin/leave";
-import {
-  Baby,
-  BanknoteX,
-  Calendar,
-  CheckCircle,
-  CircleX,
-  Layers,
-  Loader,
-  Pill,
-  User,
-} from "lucide-react";
-import { LeaveColumns } from "./leave-columns";
+import { SalaryColumnsProps } from "@/types/admin/salary";
+import { CheckCircle, Loader, User } from "lucide-react";
+import { SalaryColumns } from "./salary-columns";
 
-type LeaveTableProps = {
-  leaves: LeaveColumnProps[];
+type SalaryTableProps = {
+  salaries: SalaryColumnsProps[];
 };
 
-function LeaveTable({ leaves }: LeaveTableProps) {
+function SalaryTable({ salaries }: SalaryTableProps) {
   const filterConfigs = [
     {
       title: "Employee",
       key: "name",
       options: Array.from(
         new Map(
-          leaves.map((item) => [
+          salaries.map((item) => [
             item.employee.name ?? "",
             {
               label: item.employee.name ?? "",
@@ -39,30 +29,19 @@ function LeaveTable({ leaves }: LeaveTableProps) {
       toggleIcon: User,
     },
     {
-      title: "Type",
-      key: "leaveType",
-      options: [
-        { label: "Sick", value: "SICK", icon: Pill },
-        { label: "Unpaid", value: "UNPAID", icon: BanknoteX },
-        { label: "Annual", value: "ANNUAL", icon: Calendar },
-        { label: "Maternity", value: "MATERNITY", icon: Baby },
-      ],
-      toggleIcon: Layers,
-    },
-    {
       title: "Status",
       key: "status",
       options: [
-        { label: "Approved", value: "APPROVED", icon: CheckCircle },
-        { label: "Rejected", value: "REJECTED", icon: CircleX },
+        { label: "Paid", value: "PAID", icon: CheckCircle },
+        { label: "Unpaid", value: "UNPAID", icon: Loader },
       ],
       toggleIcon: Loader,
     },
   ];
   return (
     <DataTable
-      columns={LeaveColumns}
-      data={leaves}
+      columns={SalaryColumns}
+      data={salaries}
       searchEnabled={false}
       filters={(table) => (
         <>
@@ -81,4 +60,4 @@ function LeaveTable({ leaves }: LeaveTableProps) {
   );
 }
 
-export default LeaveTable;
+export default SalaryTable;

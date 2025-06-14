@@ -1,13 +1,11 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import AddSalaryDialog from "@/components/dashboard/admin/salary/add-salary-dialog";
-import { SalaryColumns } from "@/components/dashboard/admin/salary/salary-columns";
-import { DataTable } from "@/components/ui/data-table";
+import SalaryTable from "@/components/dashboard/admin/salary/salary-table";
 import { getAllSalaries } from "@/lib/data/admin/salary";
 import { Banknote } from "lucide-react";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import React from "react";
 
 export const metadata: Metadata = {
   title: "Salary",
@@ -41,13 +39,7 @@ async function SuperAdminCompanySalaryPage() {
           </div>
         </div>
         {/* Data Table */}
-        <div>
-          <DataTable
-            columns={SalaryColumns}
-            data={salaries}
-            columnFilter="employee"
-          />
-        </div>
+        <SalaryTable salaries={salaries} />
       </div>
     </section>
   );
