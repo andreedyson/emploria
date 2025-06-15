@@ -8,7 +8,6 @@ import { z } from "zod";
 import { customToast } from "@/components/custom-toast";
 import { SubmitButton } from "@/components/submit-button";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -27,7 +26,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -35,6 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { BASE_URL } from "@/constants";
 import { useCompanies } from "@/hooks/use-company";
 import { SuperAdminCompanyUserProps } from "@/types/super-admin/user";
@@ -183,17 +182,16 @@ function EditSuperAdminUserDialog({ user }: EditSuperAdminUserDialogProps) {
               control={form.control}
               name="isActive"
               render={({ field }) => (
-                <FormItem>
-                  <div className="flex items-center gap-2">
-                    <Checkbox
-                      id="isActive"
-                      checked={field.value}
-                      onCheckedChange={(checked) =>
-                        field.onChange(Boolean(checked))
-                      }
-                    />
-                    <Label htmlFor="isActive">Active</Label>
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                  <div className="space-y-0.5">
+                    <FormLabel>Is Active</FormLabel>
                   </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
                 </FormItem>
               )}
             />
