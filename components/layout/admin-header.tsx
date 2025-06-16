@@ -9,9 +9,10 @@ type AdminHeaderProps = {
   name: string;
   email: string;
   role: string;
+  image: string | null;
 };
 
-function AdminHeader({ name, email, role }: AdminHeaderProps) {
+function AdminHeader({ name, email, role, image }: AdminHeaderProps) {
   const pathname = usePathname();
   const pageName =
     pathname.split("/").length >= 4
@@ -26,7 +27,7 @@ function AdminHeader({ name, email, role }: AdminHeaderProps) {
       </div>
       <div className="flex items-center gap-2">
         <ThemeToggle />
-        <UserAvatar fullname={name} role={role} email={email} />
+        <UserAvatar fullname={name} role={role} email={email} image={image} />
       </div>
     </header>
   );

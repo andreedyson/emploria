@@ -53,6 +53,7 @@ export default async function AdminLayout({
               name={session.user.name as string}
               email={session.user.email as string}
               role={session.user.role}
+              image={session.user.image}
             />
           </div>
           <div className="m-4">{children}</div>

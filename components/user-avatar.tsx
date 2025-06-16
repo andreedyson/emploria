@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,6 +12,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getImageUrl } from "@/lib/supabase";
 import {
   ChartBarStacked,
   House,
@@ -27,9 +28,10 @@ type UserAvatarProps = {
   fullname: string;
   role: string;
   email: string;
+  image: string | null;
 };
 
-function UserAvatar({ fullname, role, email }: UserAvatarProps) {
+function UserAvatar({ fullname, role, email, image }: UserAvatarProps) {
   const pathname = usePathname();
   const nameParts = fullname.trim().split(" ");
   const userInitial = nameParts
@@ -70,7 +72,17 @@ function UserAvatar({ fullname, role, email }: UserAvatarProps) {
           className="relative size-8 rounded-full border-2 md:size-10"
         >
           <Avatar className="bg-main-violet-300 flex items-center justify-center font-semibold">
-            {userInitial}
+            <AvatarImage
+              src={
+                getImageUrl(image as string, "users") ||
+                "/assets/image-placeholder.svg"
+              }
+              width={100}
+              height={100}
+              alt={userInitial || "User Profile"}
+              className="border-background z-[99] rounded-full border-4"
+            />
+            <AvatarFallback>{userInitial}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
