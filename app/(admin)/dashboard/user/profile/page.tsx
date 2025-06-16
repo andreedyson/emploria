@@ -23,6 +23,7 @@ import {
   MarsStroke,
   PhoneCall,
   UserCheck,
+  UserCog,
 } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
@@ -173,6 +174,15 @@ async function UserProfilePage() {
                 </div>
                 <p className="text-foreground line-clamp-1 font-semibold">
                   {userProfile?.employee.position}
+                </p>
+              </div>
+              <div className="text-muted-foreground flex items-center justify-between text-sm">
+                <div className="flex items-center gap-1">
+                  <UserCog size={20} />
+                  <p className="font-medium">Role</p>
+                </div>
+                <p className="text-foreground line-clamp-1 font-semibold">
+                  {userProfile?.employee.role}
                 </p>
               </div>
               <div className="text-muted-foreground flex items-center justify-between text-sm">
