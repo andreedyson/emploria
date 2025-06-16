@@ -1,4 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import UserProfileAvatar from "@/components/dashboard/user/profile/user-profile-avatar";
 import {
   Card,
   CardContent,
@@ -8,7 +9,6 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { getUserProfileData } from "@/lib/data/user/profile";
-import { getImageUrl } from "@/lib/supabase";
 import { calculateAge, formatDate } from "@/lib/utils";
 import {
   Briefcase,
@@ -54,15 +54,10 @@ async function UserProfilePage() {
           </div>
           <div className="mt-[-3rem] px-3 lg:absolute lg:top-48">
             <div className="-mt-12 flex justify-center lg:justify-start">
-              <Image
-                src={
-                  getImageUrl(userProfile?.image as string, "users") ||
-                  "/assets/image-placeholder.svg"
-                }
-                width={100}
-                height={100}
-                alt={userProfile?.name || "User Profile"}
-                className="border-background z-[99] rounded-full border-4"
+              <UserProfileAvatar
+                userId={userId}
+                name={userProfile?.name}
+                image={userProfile?.image}
               />
             </div>
 

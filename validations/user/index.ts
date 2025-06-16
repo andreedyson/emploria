@@ -1,3 +1,4 @@
+import { ALLOWED_FILE_TYPE } from "@/constants";
 import { LeaveType } from "@prisma/client";
 import { z } from "zod";
 
@@ -14,4 +15,28 @@ export const applyLeaveSchema = z.object({
     invalid_type_error:
       "Invalid leave type. Must be ANNUAL, SICK, MATERNITY, or UNPAID",
   }),
+});
+
+export const changeProfileImageSchema = z.object({
+  image: z
+    .any()
+    .optional()
+    .refine(
+      (file) => {
+        if (!file) return true; // Allow empty
+        return ALLOWED_FILE_TYPE.includes(file.type);
+      },
+      {
+        message: "File type is not allowed",
+      },
+    )
+    .refine(
+      (file) => {
+        if (!file) return true;
+        return file.size <= 1024 * 1024 * 2; // Max file size is 2MB
+      },
+      {
+        message: "File size must be less than 2MB",
+      },
+    ),
 });

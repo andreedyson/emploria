@@ -4,15 +4,21 @@ import { updateFile, uploadFile } from "@/lib/supabase";
 
 export async function PATCH(
   req: NextRequest,
-  props: { params: Promise<{ id: string }> },
+  props: { params: Promise<{ userId: string }> },
 ) {
   const params = await props.params;
-  const userId = params.id;
+  const userId = params.userId;
   let newFilename;
 
+  if (!userId) {
+    return NextResponse.json({ message: "Missing user ID" }, { status: 400 });
+  }
+
   try {
-    const body = await req.json();
-    const { name, phone, address, gender, dateOfBirth, image } = body;
+    // const body = await req.json();
+    // const { name, phone, address, gender, dateOfBirth } = body;
+    const formData = await req.formData();
+    const image = formData.get("image") as File;
 
     const user = await prisma.user.findUnique({
       where: {
@@ -37,13 +43,7 @@ export async function PATCH(
         const updatedUser = await prisma.user.update({
           where: { id: userId },
           data: {
-            name,
-            phone,
-            address,
-            gender,
-            dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : undefined,
             image: !prevFile ? fileName : "",
-            updatedAt: new Date(),
           },
         });
 
@@ -60,13 +60,7 @@ export async function PATCH(
     const updatedUser = await prisma.user.update({
       where: { id: userId },
       data: {
-        name,
-        phone,
-        address,
-        gender,
-        dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : undefined,
         image: newFilename,
-        updatedAt: new Date(),
       },
     });
 
