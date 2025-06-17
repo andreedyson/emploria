@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { updateFile, uploadFile } from "@/lib/supabase";
+import { Gender } from "@prisma/client";
 
 export async function PATCH(
   req: NextRequest,
@@ -15,10 +16,13 @@ export async function PATCH(
   }
 
   try {
-    // const body = await req.json();
-    // const { name, phone, address, gender, dateOfBirth } = body;
     const formData = await req.formData();
     const image = formData.get("image") as File;
+    const name = formData.get("name") as string;
+    const phone = formData.get("phone") as string;
+    const address = formData.get("address") as string;
+    const gender = formData.get("gender") as string;
+    const dateOfBirth = formData.get("dateOfBirth") as string;
 
     const user = await prisma.user.findUnique({
       where: {
@@ -61,6 +65,11 @@ export async function PATCH(
       where: { id: userId },
       data: {
         image: newFilename,
+        name: name || undefined,
+        phone: phone || undefined,
+        address: address || undefined,
+        gender: (gender as Gender) || undefined,
+        dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : undefined,
       },
     });
 

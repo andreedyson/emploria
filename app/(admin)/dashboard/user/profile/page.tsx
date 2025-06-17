@@ -1,4 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import EditProfileDialog from "@/components/dashboard/user/profile/edit-profile-dialog";
 import UserProfileAvatar from "@/components/dashboard/user/profile/user-profile-avatar";
 import {
   Card,
@@ -10,6 +11,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { getUserProfileData } from "@/lib/data/user/profile";
 import { calculateAge, formatDate } from "@/lib/utils";
+import { Gender } from "@prisma/client";
 import {
   Briefcase,
   Building,
@@ -39,7 +41,7 @@ async function UserProfilePage() {
   const userAge = calculateAge(userProfile?.dateOfBirth as Date);
   return (
     <section className="w-full space-y-4">
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
+      <div className="grid w-full grid-cols-1 gap-4 lg:grid-cols-4">
         {/* Employee Profile */}
         <div className="relative col-span-1 w-full rounded-md">
           <div className="relative rounded-t-md">
@@ -52,7 +54,7 @@ async function UserProfilePage() {
             />
             <div className="absolute inset-0 rounded-t-md bg-black/40" />
           </div>
-          <div className="mt-[-3rem] px-3 lg:absolute lg:top-48">
+          <div className="mt-[-3rem] w-full px-3 lg:absolute lg:top-48">
             <div className="-mt-12 flex justify-center lg:justify-start">
               <UserProfileAvatar
                 userId={userId}
@@ -61,11 +63,23 @@ async function UserProfilePage() {
               />
             </div>
 
-            <div>
-              <h4 className="text-lg font-bold">{userProfile?.name}</h4>
-              <p className="text-muted-foreground text-sm font-medium">
-                {userProfile?.email}
-              </p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="text-lg font-bold">{userProfile?.name}</h4>
+                <p className="text-muted-foreground text-sm font-medium">
+                  {userProfile?.email}
+                </p>
+              </div>
+              <EditProfileDialog
+                userId={userId}
+                defaultValues={{
+                  name: userProfile?.name ?? "",
+                  phone: userProfile?.phone ?? "",
+                  address: userProfile?.address ?? "",
+                  gender: userProfile?.gender as Gender,
+                  dateOfBirth: userProfile?.dateOfBirth,
+                }}
+              />
             </div>
             <div className="mt-3">
               <p className="font-semibold">User Information</p>
