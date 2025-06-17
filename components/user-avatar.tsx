@@ -46,7 +46,7 @@ function UserAvatar({ fullname, role, email, image }: UserAvatarProps) {
     ? isOnDashboard
       ? "/"
       : "/dashboard"
-    : "/profile";
+    : "/dashboard/user/profile";
 
   const linkLabel = isUserAdmin
     ? isOnDashboard
@@ -66,7 +66,7 @@ function UserAvatar({ fullname, role, email, image }: UserAvatarProps) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild className="cursor-pointer">
         <Button
           variant="ghost"
           className="relative size-8 rounded-full border-2 md:size-10"
@@ -110,15 +110,17 @@ function UserAvatar({ fullname, role, email, image }: UserAvatarProps) {
               {linkLabel}
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild className="cursor-pointer">
-            <Link
-              href={"/dashboard/settings"}
-              className="flex w-full items-center gap-2"
-            >
-              <Settings2 />
-              Settings
-            </Link>
-          </DropdownMenuItem>
+          {isUserAdmin && (
+            <DropdownMenuItem asChild className="cursor-pointer">
+              <Link
+                href={`/dashboard/${role === "SUPER_ADMIN" ? "super-admin" : "admin"}/settings`}
+                className="flex w-full items-center gap-2"
+              >
+                <Settings2 />
+                Settings
+              </Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => signOut({ redirect: true })}
