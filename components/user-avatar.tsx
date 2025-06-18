@@ -80,7 +80,7 @@ function UserAvatar({ fullname, role, email, image }: UserAvatarProps) {
               width={100}
               height={100}
               alt={userInitial || "User Profile"}
-              className="border-background z-[99] rounded-full border-4"
+              className="border-background z-[99] rounded-full object-cover"
             />
             <AvatarFallback>{userInitial}</AvatarFallback>
           </Avatar>

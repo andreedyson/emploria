@@ -23,6 +23,7 @@ export async function getUserProfileData(
         isActive: true,
         company: {
           select: {
+            id: true,
             name: true,
           },
         },
@@ -47,8 +48,14 @@ export async function getUserProfileData(
       phone: user.phone ?? "",
       joinedDate: user.createdAt,
       isActive: user.isActive,
-      companyName: user.company?.name ?? "",
-      departmentName: user.employee?.department?.name ?? "",
+      company: {
+        id: user.company?.id ?? "",
+        name: user.company?.name ?? "",
+      },
+      department: {
+        id: user.employee?.department?.id ?? "",
+        name: user.employee?.department?.name ?? "",
+      },
       employee: {
         id: user.employee?.id,
         position: user.employee?.position ?? "",

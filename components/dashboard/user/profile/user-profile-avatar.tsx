@@ -119,7 +119,7 @@ function UserProfileAvatar({ userId, name, image }: UserProfileAvatarProps) {
           width={100}
           height={100}
           alt={name || "User Profile"}
-          className="border-background z-[99] rounded-full border-4"
+          className="border-background z-[99] rounded-full border-4 object-cover"
         />
         <AvatarFallback>{initials}</AvatarFallback>
       </Avatar>

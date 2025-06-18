@@ -149,7 +149,7 @@ async function UserProfilePage() {
                 <div>
                   <p className="font-medium">Company</p>
                   <p className="text-foreground line-clamp-1 font-semibold">
-                    {userProfile?.companyName}
+                    {userProfile?.company.name}
                   </p>
                 </div>
               </div>
@@ -158,7 +158,7 @@ async function UserProfilePage() {
                 <div>
                   <p className="font-medium">Department</p>
                   <p className="text-foreground line-clamp-1 font-semibold">
-                    {userProfile?.departmentName}
+                    {userProfile?.department.name}
                   </p>
                 </div>
               </div>

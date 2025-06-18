@@ -1,5 +1,6 @@
 "use client";
 
+import { DataTableFilter } from "@/components/tables/data-table-filter";
 import {
   Card,
   CardContent,
@@ -8,13 +9,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
-import { UserAttendanceColumns } from "./user-attendance-columns";
+import { AttendanceColumnsProps } from "@/types/admin/attendance";
 import { Attendance } from "@prisma/client";
-import { DataTableFilter } from "@/components/tables/data-table-filter";
 import { BadgeCheck, Ban, Clock, Plane } from "lucide-react";
+import { DepartmentAttendanceColumns } from "./department-attendance-columns";
+import { UserAttendanceColumns } from "./user-attendance-columns";
 
 type AttendanceHistoryCardProps = {
   attendance: Attendance[];
+  departmentAttendances: AttendanceColumnsProps[];
 };
 
 const statusOptions = [
@@ -24,7 +27,10 @@ const statusOptions = [
   { label: "On Leave", value: "ON_LEAVE", icon: Plane },
 ];
 
-function AttendanceHistoryCard({ attendance }: AttendanceHistoryCardProps) {
+function AttendanceHistoryCard({
+  attendance,
+  departmentAttendances,
+}: AttendanceHistoryCardProps) {
   return (
     <Card className="col-span-1 w-full">
       <CardHeader>
@@ -38,6 +44,19 @@ function AttendanceHistoryCard({ attendance }: AttendanceHistoryCardProps) {
         <DataTable
           columns={UserAttendanceColumns}
           data={attendance}
+          searchEnabled={false}
+          columnFilter="name"
+          filters={(table) => (
+            <DataTableFilter
+              title="Status"
+              column={table.getColumn("status")}
+              options={statusOptions}
+            />
+          )}
+        />
+        <DataTable
+          columns={DepartmentAttendanceColumns}
+          data={departmentAttendances}
           searchEnabled={false}
           columnFilter="name"
           filters={(table) => (

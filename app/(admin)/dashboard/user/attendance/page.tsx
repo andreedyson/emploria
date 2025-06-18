@@ -4,10 +4,12 @@ import AttendanceHistoryCard from "@/components/dashboard/user/attendance/attend
 import AttendanceStatsCard from "@/components/dashboard/user/attendance/attendance-stats-card";
 import { Separator } from "@/components/ui/separator";
 import {
+  getDepartmentAttendances,
   getEmployeeAttendanceHistory,
   getEmployeeAttendanceSummary,
 } from "@/lib/data/user/attendance";
 import { getTodayAttendanceStatus } from "@/lib/data/user/dashboard";
+import { getUserProfileData } from "@/lib/data/user/profile";
 import { convertToGmt7TimeString } from "@/lib/utils";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -21,6 +23,11 @@ async function UserAttendancePage() {
   const attendanceSummary = await getEmployeeAttendanceSummary(userId);
   const todaysAttendance = await getTodayAttendanceStatus(userId);
   const attendanceHistory = await getEmployeeAttendanceHistory(userId);
+  const userData = await getUserProfileData(userId);
+  const departmentAttendances = await getDepartmentAttendances(
+    session.user.companyId as string,
+    userData?.department.id as string,
+  );
   return (
     <section className="space-y-4">
       {/* Attendance Stats Card */}
@@ -63,7 +70,10 @@ async function UserAttendancePage() {
 
       {/* Employee Attendance History */}
       <div>
-        <AttendanceHistoryCard attendance={attendanceHistory} />
+        <AttendanceHistoryCard
+          attendance={attendanceHistory}
+          departmentAttendances={departmentAttendances}
+        />
       </div>
     </section>
   );
