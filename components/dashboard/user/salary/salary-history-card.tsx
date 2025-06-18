@@ -10,40 +10,31 @@ import {
 } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AttendanceColumnsProps } from "@/types/admin/attendance";
-import { Attendance, EmployeeRole } from "@prisma/client";
-import {
-  BadgeCheck,
-  Ban,
-  Building2,
-  Clock,
-  Loader,
-  Plane,
-  User,
-} from "lucide-react";
-import { DepartmentAttendanceColumns } from "./department-attendance-columns";
-import { UserAttendanceColumns } from "./user-attendance-columns";
+import { SalaryColumnsProps } from "@/types/admin/salary";
+import { EmployeeSalaryHistoryProps } from "@/types/user/salary";
+import { EmployeeRole } from "@prisma/client";
+import { Banknote, Building2, CheckCircle, Loader, User } from "lucide-react";
+import { DepartmentSalaryColumns } from "./department-salary-columns";
+import { UserSalaryColumns } from "./user-salary-columns";
 
-type AttendanceHistoryCardProps = {
+type SalaryHistoryCardProps = {
   employeeRole?: EmployeeRole;
-  attendance: Attendance[];
-  departmentAttendances: AttendanceColumnsProps[];
+  salaries: EmployeeSalaryHistoryProps[];
+  departmentSalaries: SalaryColumnsProps[];
 };
 
-function AttendanceHistoryCard({
+function SalaryHistoryCard({
   employeeRole,
-  attendance,
-  departmentAttendances,
-}: AttendanceHistoryCardProps) {
+  salaries,
+  departmentSalaries,
+}: SalaryHistoryCardProps) {
   const personalFilterConfig = [
     {
       title: "Status",
       key: "status",
       options: [
-        { label: "Present", value: "PRESENT", icon: BadgeCheck },
-        { label: "Absent", value: "ABSENT", icon: Ban },
-        { label: "Late", value: "LATE", icon: Clock },
-        { label: "On Leave", value: "ON_LEAVE", icon: Plane },
+        { label: "Paid", value: "PAID", icon: CheckCircle },
+        { label: "Unpaid", value: "UNPAID", icon: Loader },
       ],
       toggleIcon: Loader,
     },
@@ -55,11 +46,11 @@ function AttendanceHistoryCard({
       key: "name",
       options: Array.from(
         new Map(
-          departmentAttendances.map((item) => [
-            item.employee.name ?? "",
+          salaries.map((item) => [
+            item.employee.user.name ?? "",
             {
-              label: item.employee.name ?? "",
-              value: item.employee.name ?? "",
+              label: item.employee.user.name ?? "",
+              value: item.employee.user.name ?? "",
             },
           ]),
         ).values(),
@@ -70,29 +61,28 @@ function AttendanceHistoryCard({
       title: "Status",
       key: "status",
       options: [
-        { label: "Present", value: "PRESENT", icon: BadgeCheck },
-        { label: "Absent", value: "ABSENT", icon: Ban },
-        { label: "Late", value: "LATE", icon: Clock },
-        { label: "On Leave", value: "ON_LEAVE", icon: Plane },
+        { label: "Paid", value: "PAID", icon: CheckCircle },
+        { label: "Unpaid", value: "UNPAID", icon: Loader },
       ],
       toggleIcon: Loader,
     },
   ];
-
   return (
-    <Card className="col-span-1 w-full">
-      {employeeRole === "STAFF" && (
-        <CardHeader>
-          <CardTitle className="text-sm font-semibold">
-            Attendance History
+    <Card className="bg-background space-y-3 rounded-lg border-2">
+      {/* Salary Page Header */}
+      <CardHeader className="flex flex-col items-center justify-between gap-4 md:flex-row">
+        <div className="w-full space-y-2">
+          <CardTitle className="flex items-center gap-2">
+            <Banknote className="size-6 md:size-8" />
+            Your Salaries
           </CardTitle>
           <CardDescription>
-            Detailed look at past attendance records.
+            View a summary of your monthly salary records, including payment
+            status and amounts.
           </CardDescription>
-        </CardHeader>
-      )}
-
-      <CardContent className="space-y-4">
+        </div>
+      </CardHeader>
+      <CardContent>
         {employeeRole === "MANAGER" ? (
           <Tabs defaultValue="personal" className="h-full w-full">
             <div className="w-full">
@@ -107,7 +97,7 @@ function AttendanceHistoryCard({
                 <TabsTrigger
                   value="department"
                   className="w-full"
-                  title="Department Attendances"
+                  title="Department Salaries"
                 >
                   <Building2 size={20} />
                 </TabsTrigger>
@@ -118,14 +108,14 @@ function AttendanceHistoryCard({
               className="mt-2 grid grid-cols-1 gap-4"
             >
               <div className="text-sm">
-                <h3 className="font-semibold">Personal Attendances</h3>
+                <h3 className="font-semibold">Personal Salaries</h3>
                 <div className="text-muted-foreground">
-                  Your personal attendance history.
+                  Your personal salaries history.
                 </div>
               </div>
               <DataTable
-                columns={UserAttendanceColumns}
-                data={attendance}
+                columns={UserSalaryColumns}
+                data={salaries}
                 searchEnabled={false}
                 columnFilter="name"
                 filters={(table) => (
@@ -148,14 +138,14 @@ function AttendanceHistoryCard({
               className="mt-2 grid h-full grid-cols-1 gap-4"
             >
               <div className="text-sm">
-                <h3 className="font-semibold">Department Attendances</h3>
+                <h3 className="font-semibold">Department Salaries</h3>
                 <div className="text-muted-foreground">
-                  Your department employee attendances history.
+                  Your department employee salaries history.
                 </div>
               </div>
               <DataTable
-                columns={DepartmentAttendanceColumns}
-                data={departmentAttendances}
+                columns={DepartmentSalaryColumns}
+                data={departmentSalaries}
                 searchEnabled={false}
                 columnFilter="name"
                 filters={(table) => (
@@ -176,8 +166,8 @@ function AttendanceHistoryCard({
           </Tabs>
         ) : (
           <DataTable
-            columns={UserAttendanceColumns}
-            data={attendance}
+            columns={UserSalaryColumns}
+            data={salaries}
             searchEnabled={false}
             columnFilter="name"
             filters={(table) => (
@@ -200,4 +190,4 @@ function AttendanceHistoryCard({
   );
 }
 
-export default AttendanceHistoryCard;
+export default SalaryHistoryCard;
