@@ -71,6 +71,7 @@ async function UserAttendancePage() {
       {/* Employee Attendance History */}
       <div>
         <AttendanceHistoryCard
+          employeeRole={userData?.employee.role}
           attendance={attendanceHistory}
           departmentAttendances={departmentAttendances}
         />
