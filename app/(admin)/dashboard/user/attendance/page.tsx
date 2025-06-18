@@ -73,7 +73,9 @@ async function UserAttendancePage() {
         <AttendanceHistoryCard
           employeeRole={userData?.employee.role}
           attendance={attendanceHistory}
-          departmentAttendances={departmentAttendances}
+          departmentAttendances={departmentAttendances.filter(
+            (attendance) => attendance.employee.id !== userData?.employee.id,
+          )}
         />
       </div>
     </section>
