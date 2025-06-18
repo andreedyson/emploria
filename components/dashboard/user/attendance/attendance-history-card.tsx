@@ -12,7 +12,15 @@ import { DataTable } from "@/components/ui/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AttendanceColumnsProps } from "@/types/admin/attendance";
 import { Attendance, EmployeeRole } from "@prisma/client";
-import { BadgeCheck, Ban, Building2, Clock, Plane, User } from "lucide-react";
+import {
+  BadgeCheck,
+  Ban,
+  Building2,
+  Clock,
+  Loader,
+  Plane,
+  User,
+} from "lucide-react";
 import { DepartmentAttendanceColumns } from "./department-attendance-columns";
 import { UserAttendanceColumns } from "./user-attendance-columns";
 
@@ -22,18 +30,55 @@ type AttendanceHistoryCardProps = {
   departmentAttendances: AttendanceColumnsProps[];
 };
 
-const statusOptions = [
-  { label: "Present", value: "PRESENT", icon: BadgeCheck },
-  { label: "Absent", value: "ABSENT", icon: Ban },
-  { label: "Late", value: "LATE", icon: Clock },
-  { label: "On Leave", value: "ON_LEAVE", icon: Plane },
-];
-
 function AttendanceHistoryCard({
   employeeRole,
   attendance,
   departmentAttendances,
 }: AttendanceHistoryCardProps) {
+  const personalFilterConfig = [
+    {
+      title: "Status",
+      key: "status",
+      options: [
+        { label: "Present", value: "PRESENT", icon: BadgeCheck },
+        { label: "Absent", value: "ABSENT", icon: Ban },
+        { label: "Late", value: "LATE", icon: Clock },
+        { label: "On Leave", value: "ON_LEAVE", icon: Plane },
+      ],
+      toggleIcon: Loader,
+    },
+  ];
+
+  const departmentFilterConfig = [
+    {
+      title: "Employee",
+      key: "name",
+      options: Array.from(
+        new Map(
+          departmentAttendances.map((item) => [
+            item.employee.name ?? "",
+            {
+              label: item.employee.name ?? "",
+              value: item.employee.name ?? "",
+            },
+          ]),
+        ).values(),
+      ),
+      toggleIcon: User,
+    },
+    {
+      title: "Status",
+      key: "status",
+      options: [
+        { label: "Present", value: "PRESENT", icon: BadgeCheck },
+        { label: "Absent", value: "ABSENT", icon: Ban },
+        { label: "Late", value: "LATE", icon: Clock },
+        { label: "On Leave", value: "ON_LEAVE", icon: Plane },
+      ],
+      toggleIcon: Loader,
+    },
+  ];
+
   return (
     <Card className="col-span-1 w-full">
       <CardHeader>
@@ -82,11 +127,17 @@ function AttendanceHistoryCard({
                 searchEnabled={false}
                 columnFilter="name"
                 filters={(table) => (
-                  <DataTableFilter
-                    title="Status"
-                    column={table.getColumn("status")}
-                    options={statusOptions}
-                  />
+                  <>
+                    {personalFilterConfig.map((config) => (
+                      <DataTableFilter
+                        key={config.key}
+                        title={config.title}
+                        column={table.getColumn(config.key)}
+                        options={config.options}
+                        toggleIcon={config.toggleIcon}
+                      />
+                    ))}
+                  </>
                 )}
               />
             </TabsContent>
@@ -106,11 +157,17 @@ function AttendanceHistoryCard({
                 searchEnabled={false}
                 columnFilter="name"
                 filters={(table) => (
-                  <DataTableFilter
-                    title="Status"
-                    column={table.getColumn("status")}
-                    options={statusOptions}
-                  />
+                  <>
+                    {departmentFilterConfig.map((config) => (
+                      <DataTableFilter
+                        key={config.key}
+                        title={config.title}
+                        column={table.getColumn(config.key)}
+                        options={config.options}
+                        toggleIcon={config.toggleIcon}
+                      />
+                    ))}
+                  </>
                 )}
               />
             </TabsContent>
@@ -122,11 +179,17 @@ function AttendanceHistoryCard({
             searchEnabled={false}
             columnFilter="name"
             filters={(table) => (
-              <DataTableFilter
-                title="Status"
-                column={table.getColumn("status")}
-                options={statusOptions}
-              />
+              <>
+                {personalFilterConfig.map((config) => (
+                  <DataTableFilter
+                    key={config.key}
+                    title={config.title}
+                    column={table.getColumn(config.key)}
+                    options={config.options}
+                    toggleIcon={config.toggleIcon}
+                  />
+                ))}
+              </>
             )}
           />
         )}
