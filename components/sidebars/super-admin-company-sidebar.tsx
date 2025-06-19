@@ -27,6 +27,8 @@ import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Company, Employee, LeavePolicy } from "@prisma/client";
+import { getImageUrl } from "@/lib/supabase";
 
 const items = [
   {
@@ -66,7 +68,15 @@ const items = [
   },
 ];
 
-export function SuperAdminCompanySidebar() {
+type SuperAdminCompanySidebarProps = {
+  company:
+    | (Company & { LeavePolicy: LeavePolicy[]; employee: Employee[] })
+    | null;
+};
+
+export function SuperAdminCompanySidebar({
+  company,
+}: SuperAdminCompanySidebarProps) {
   const pathname = usePathname();
   const pathnameSplit = pathname.split("/").slice(0, 4).join("/");
 
@@ -95,6 +105,27 @@ export function SuperAdminCompanySidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
+          <div className="rounded border-2 p-1">
+            <div className="flex items-center gap-2">
+              <Image
+                src={
+                  getImageUrl(company?.image as string, "companies") ||
+                  "/assets/image-placeholder.svg"
+                }
+                width={100}
+                height={100}
+                alt={company?.name || "Company"}
+                className="size-10"
+              />
+              <div className="text-sm">
+                <p className="line-clamp-1 font-semibold">{company?.name}</p>
+                <div className="text-muted-foreground flex items-center gap-1 text-sm">
+                  <Users size={12} />
+                  <p>{company?.employee.length} Members</p>
+                </div>
+              </div>
+            </div>
+          </div>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>

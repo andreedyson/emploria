@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import { Geist } from "next/font/google";
 import { SuperAdminCompanySidebar } from "@/components/sidebars/super-admin-company-sidebar";
 import { UserSidebar } from "@/components/sidebars/user-sidebar";
+import { getCompanyById } from "@/lib/data/super-admin/company";
 
 export const metadata: Metadata = {
   title: {
@@ -31,11 +32,11 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }>) {
   const session = await getServerSession(authOptions);
-
   if (!session) {
     redirect("/");
   }
 
+  const company = await getCompanyById(session.user.companyId ?? "");
   return (
     // ⚠️ Wraps the dashboard with React Query so all pages inside can use hooks like `useQuery`
     <ReactQueryProvider>
@@ -43,7 +44,7 @@ export default async function AdminLayout({
         {session.user.role === "SUPER_ADMIN" ? (
           <SuperAdminSidebar />
         ) : session.user.role === "SUPER_ADMIN_COMPANY" ? (
-          <SuperAdminCompanySidebar />
+          <SuperAdminCompanySidebar company={company} />
         ) : (
           <UserSidebar />
         )}

@@ -51,9 +51,17 @@ export async function getUserStatsCardData(
         employeeId,
         status: "PAID",
       },
-      orderBy: {
-        paidAt: "desc",
-      },
+      orderBy: [
+        {
+          year: "desc",
+        },
+        {
+          month: "desc",
+        },
+        {
+          paidAt: "desc",
+        },
+      ],
     });
 
     // Remaining Annual Leave
@@ -127,7 +135,7 @@ export async function getUserStatsCardData(
       },
       {
         title: "Annual Leave Left",
-        text: `${remainingAnnualLeave} Leaves`,
+        text: `${remainingAnnualLeave} Days`,
         icon: CalendarCog,
         textColor: "text-orange-500",
       },

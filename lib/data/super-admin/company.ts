@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/db";
 import { AllCompaniesProps } from "@/types/super-admin/company";
-import { Company, LeavePolicy } from "@prisma/client";
+import { Company, Employee, LeavePolicy } from "@prisma/client";
 
 export async function getAllCompanies(): Promise<AllCompaniesProps[]> {
   try {
@@ -32,7 +32,9 @@ export async function getAllCompanies(): Promise<AllCompaniesProps[]> {
 
 export async function getCompanyById(
   companyId: string,
-): Promise<(Company & { LeavePolicy: LeavePolicy[] }) | null> {
+): Promise<
+  (Company & { LeavePolicy: LeavePolicy[]; employee: Employee[] }) | null
+> {
   try {
     return await prisma.company.findUnique({
       where: {
@@ -40,6 +42,7 @@ export async function getCompanyById(
       },
       include: {
         LeavePolicy: true,
+        employee: true,
       },
     });
   } catch (error) {
