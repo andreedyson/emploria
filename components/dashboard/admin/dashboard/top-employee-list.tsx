@@ -1,3 +1,4 @@
+import { getImageUrl } from "@/lib/supabase";
 import { TopEmployeeListProps } from "@/types/admin/dashboard";
 import Image from "next/image";
 import React from "react";
@@ -17,7 +18,10 @@ function TopEmployeeListItem({ number, employee }: TopEmployeeListItemProps) {
         <div className="flex items-center gap-3">
           <div>
             <Image
-              src={employee.image || "/assets/image-placeholder.svg"}
+              src={
+                getImageUrl(employee.image as string, "users") ||
+                "/assets/image-placeholder.svg"
+              }
               width={80}
               height={80}
               alt={employee.name}

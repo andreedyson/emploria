@@ -106,9 +106,11 @@ export function DataTable<TData, TValue>({
           </div>
         )}
         <div className="flex w-full flex-col gap-3 sm:flex-row md:items-center md:justify-end">
-          <div className="flex flex-wrap gap-3">{filters?.(table)}</div>
+          <div className="flex cursor-pointer flex-wrap gap-3">
+            {filters?.(table)}
+          </div>
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger asChild className="cursor-pointer">
               <Button variant="outline" size={"sm"}>
                 <Eye />
                 Toggle
