@@ -60,3 +60,60 @@ export async function getEmployeeLeaveHistory(
     return [];
   }
 }
+
+export async function getDepartmentLeaves(
+  companyId: string,
+  departmentId: string,
+) {
+  try {
+    const leaves = await prisma.leave.findMany({
+      where: {
+        employee: {
+          companyId: companyId,
+          departmentId: departmentId,
+        },
+      },
+      include: {
+        employee: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                image: true,
+                gender: true,
+              },
+            },
+            company: true,
+          },
+        },
+      },
+    });
+
+    const data = leaves.map((leave) => ({
+      id: leave.id,
+      employee: {
+        id: leave.employee.id,
+        name: leave.employee.user.name,
+        image: leave.employee.user.image,
+        gender: leave.employee.user.gender,
+      },
+      company: {
+        id: leave.employee.company.id,
+        name: leave.employee.company.name,
+      },
+      leaveType: leave.leaveType,
+      startDate: leave.startDate,
+      endDate: leave.endDate,
+      status: leave.status,
+      reason: leave.reason,
+      createdAt: leave.createdAt,
+    }));
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}

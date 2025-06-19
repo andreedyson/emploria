@@ -3,9 +3,11 @@ import ApplyLeaveDialog from "@/components/dashboard/user/leave/apply-leave-dial
 import LeaveHistoryCard from "@/components/dashboard/user/leave/leave-history-card";
 import LeaveStatsCard from "@/components/dashboard/user/leave/leave-stats-card";
 import {
+  getDepartmentLeaves,
   getEmployeeLeaveHistory,
   getEmployeeLeaveSummary,
 } from "@/lib/data/user/leave";
+import { getUserProfileData } from "@/lib/data/user/profile";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
@@ -15,8 +17,13 @@ async function UserLeavePage() {
     redirect("/");
   }
   const userId = session.user.id;
+  const userData = await getUserProfileData(userId);
   const leaveSummary = await getEmployeeLeaveSummary(userId);
   const leaveHistory = await getEmployeeLeaveHistory(userId);
+  const departmentLeaves = await getDepartmentLeaves(
+    session.user.companyId ?? "",
+    userData?.department.id ?? "",
+  );
 
   return (
     <section className="space-y-4">
@@ -39,7 +46,13 @@ async function UserLeavePage() {
       </div>
 
       <div>
-        <LeaveHistoryCard leave={leaveHistory} />
+        <LeaveHistoryCard
+          employeeRole={userData?.employee.role}
+          leave={leaveHistory}
+          departmentLeaves={departmentLeaves.filter(
+            (leave) => leave.employee.id !== userData?.employee.id,
+          )}
+        />
       </div>
     </section>
   );

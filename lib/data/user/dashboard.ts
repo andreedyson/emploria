@@ -16,9 +16,7 @@ export async function getUserStatsCardData(
       include: { employee: true },
     });
 
-    if (!user || !user.employee) throw new Error("User or employee not found");
-
-    const employeeId = user.employee.id;
+    const employeeId = user?.employee?.id;
 
     const now = new Date();
     const start = startOfMonth(now);
@@ -61,7 +59,7 @@ export async function getUserStatsCardData(
     // Remaining Annual Leave
     const leavePolicy = await prisma.leavePolicy.findFirst({
       where: {
-        companyId: user.companyId!,
+        companyId: user?.companyId ?? "",
         leaveType: "ANNUAL",
       },
     });
