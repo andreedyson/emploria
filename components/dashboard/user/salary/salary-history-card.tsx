@@ -69,19 +69,20 @@ function SalaryHistoryCard({
   ];
   return (
     <Card className="bg-background space-y-3 rounded-lg border-2">
-      {/* Salary Page Header */}
-      <CardHeader className="flex flex-col items-center justify-between gap-4 md:flex-row">
-        <div className="w-full space-y-2">
-          <CardTitle className="flex items-center gap-2">
-            <Banknote className="size-6 md:size-8" />
-            Your Salaries
-          </CardTitle>
-          <CardDescription>
-            View a summary of your monthly salary records, including payment
-            status and amounts.
-          </CardDescription>
-        </div>
-      </CardHeader>
+      {employeeRole === "STAFF" && (
+        <CardHeader className="flex flex-col items-center justify-between gap-4 md:flex-row">
+          <div className="w-full space-y-2">
+            <CardTitle className="flex items-center gap-2">
+              <Banknote className="size-6 md:size-8" />
+              Your Salaries
+            </CardTitle>
+            <CardDescription>
+              View a summary of monthly salary records, including payment status
+              and amounts.
+            </CardDescription>
+          </div>
+        </CardHeader>
+      )}
       <CardContent>
         {employeeRole === "MANAGER" ? (
           <Tabs defaultValue="personal" className="h-full w-full">
@@ -103,10 +104,7 @@ function SalaryHistoryCard({
                 </TabsTrigger>
               </TabsList>
             </div>
-            <TabsContent
-              value="personal"
-              className="mt-2 grid grid-cols-1 gap-4"
-            >
+            <TabsContent value="personal" className="grid grid-cols-1 gap-4">
               <div className="text-sm">
                 <h3 className="font-semibold">Personal Salaries</h3>
                 <div className="text-muted-foreground">
@@ -135,7 +133,7 @@ function SalaryHistoryCard({
             </TabsContent>
             <TabsContent
               value="department"
-              className="mt-2 grid h-full grid-cols-1 gap-4"
+              className="grid h-full grid-cols-1 gap-4"
             >
               <div className="text-sm">
                 <h3 className="font-semibold">Department Salaries</h3>
