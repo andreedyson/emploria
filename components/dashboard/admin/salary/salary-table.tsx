@@ -3,7 +3,7 @@
 import { DataTableFilter } from "@/components/tables/data-table-filter";
 import { DataTable } from "@/components/ui/data-table";
 import { SalaryColumnsProps } from "@/types/admin/salary";
-import { CheckCircle, Loader, User } from "lucide-react";
+import { CheckCircle, Loader } from "lucide-react";
 import { SalaryColumns } from "./salary-columns";
 
 type SalaryTableProps = {
@@ -12,22 +12,6 @@ type SalaryTableProps = {
 
 function SalaryTable({ salaries }: SalaryTableProps) {
   const filterConfigs = [
-    {
-      title: "Employee",
-      key: "name",
-      options: Array.from(
-        new Map(
-          salaries.map((item) => [
-            item.employee.name ?? "",
-            {
-              label: item.employee.name ?? "",
-              value: item.employee.name ?? "",
-            },
-          ]),
-        ).values(),
-      ),
-      toggleIcon: User,
-    },
     {
       title: "Status",
       key: "status",
@@ -42,7 +26,6 @@ function SalaryTable({ salaries }: SalaryTableProps) {
     <DataTable
       columns={SalaryColumns}
       data={salaries}
-      searchEnabled={false}
       filters={(table) => (
         <>
           {filterConfigs.map((config) => (

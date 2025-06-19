@@ -26,7 +26,21 @@ export const DepartmentAttendanceColumns: ColumnDef<AttendanceColumnsProps>[] =
       id: "name",
       accessorKey: "employee.name",
       enableSorting: true,
-      filterFn: (row, id, value) => value.includes(row.getValue(id)),
+      filterFn: (row, id, value) => {
+        const cellValue = (row.getValue(id) as string)?.toLowerCase();
+
+        if (!value) return true;
+
+        if (typeof value === "string") {
+          return cellValue.includes(value.toLowerCase());
+        }
+
+        if (Array.isArray(value)) {
+          return value.some((val) => cellValue === val.toLowerCase());
+        }
+
+        return false;
+      },
       header: ({ column }) => {
         return (
           <DataTableColumnHeader title="Employee" column={column} icon={User} />
@@ -57,7 +71,21 @@ export const DepartmentAttendanceColumns: ColumnDef<AttendanceColumnsProps>[] =
       id: "department",
       accessorFn: (row) => row.department?.name ?? "",
       enableSorting: true,
-      filterFn: (row, id, value) => value.includes(row.getValue(id)),
+      filterFn: (row, id, value) => {
+        const cellValue = (row.getValue(id) as string)?.toLowerCase();
+
+        if (!value) return true;
+
+        if (typeof value === "string") {
+          return cellValue.includes(value.toLowerCase());
+        }
+
+        if (Array.isArray(value)) {
+          return value.some((val) => cellValue === val.toLowerCase());
+        }
+
+        return false;
+      },
       header: () => {
         return (
           <div className="flex items-center gap-1">
@@ -161,7 +189,21 @@ export const DepartmentAttendanceColumns: ColumnDef<AttendanceColumnsProps>[] =
     {
       accessorKey: "status",
       header: "Status",
-      filterFn: (row, id, value) => value.includes(row.getValue(id)),
+      filterFn: (row, id, value) => {
+        const cellValue = (row.getValue(id) as string)?.toLowerCase();
+
+        if (!value) return true;
+
+        if (typeof value === "string") {
+          return cellValue.includes(value.toLowerCase());
+        }
+
+        if (Array.isArray(value)) {
+          return value.some((val) => cellValue === val.toLowerCase());
+        }
+
+        return false;
+      },
       cell: ({ row }) => {
         const attendance = row.original;
 

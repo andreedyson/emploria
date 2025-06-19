@@ -3,7 +3,7 @@
 import { DataTableFilter } from "@/components/tables/data-table-filter";
 import { DataTable } from "@/components/ui/data-table";
 import { AttendanceColumnsProps } from "@/types/admin/attendance";
-import { Building2, User } from "lucide-react";
+import { Building2 } from "lucide-react";
 import { AttendanceColumns } from "./attendance-columns";
 
 type AttendanceTableProps = {
@@ -12,22 +12,6 @@ type AttendanceTableProps = {
 
 function AttendanceTable({ attendances }: AttendanceTableProps) {
   const filterConfigs = [
-    {
-      title: "Employee",
-      key: "name",
-      options: Array.from(
-        new Map(
-          attendances.map((item) => [
-            item.employee.name ?? "",
-            {
-              label: item.employee.name ?? "",
-              value: item.employee.name ?? "",
-            },
-          ]),
-        ).values(),
-      ),
-      toggleIcon: User,
-    },
     {
       title: "Department",
       key: "department",

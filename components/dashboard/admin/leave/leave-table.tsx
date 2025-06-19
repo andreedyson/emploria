@@ -12,7 +12,6 @@ import {
   Layers,
   Loader,
   Pill,
-  User,
 } from "lucide-react";
 import { LeaveColumns } from "./leave-columns";
 
@@ -22,22 +21,6 @@ type LeaveTableProps = {
 
 function LeaveTable({ leaves }: LeaveTableProps) {
   const filterConfigs = [
-    {
-      title: "Employee",
-      key: "name",
-      options: Array.from(
-        new Map(
-          leaves.map((item) => [
-            item.employee.name ?? "",
-            {
-              label: item.employee.name ?? "",
-              value: item.employee.name ?? "",
-            },
-          ]),
-        ).values(),
-      ),
-      toggleIcon: User,
-    },
     {
       title: "Type",
       key: "leaveType",
@@ -63,7 +46,6 @@ function LeaveTable({ leaves }: LeaveTableProps) {
     <DataTable
       columns={LeaveColumns}
       data={leaves}
-      searchEnabled={false}
       filters={(table) => (
         <>
           {filterConfigs.map((config) => (
