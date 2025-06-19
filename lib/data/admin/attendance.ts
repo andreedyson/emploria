@@ -36,6 +36,9 @@ export async function getAllAttendances(
           },
         },
       },
+      orderBy: {
+        date: "desc",
+      },
     });
 
     const data = attendances.map((attendance) => ({

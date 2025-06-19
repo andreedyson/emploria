@@ -27,6 +27,7 @@ export async function getAllSalaries(
           },
         },
       },
+      orderBy: [{ year: "desc" }, { month: "desc" }, { status: "asc" }],
     });
 
     const data = salaries.map((salary) => {

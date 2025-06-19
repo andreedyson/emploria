@@ -27,6 +27,9 @@ export async function getAllLeaves(
           },
         },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     const data = leaves.map((leave) => ({

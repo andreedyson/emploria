@@ -26,6 +26,7 @@ export async function getEmployeeSalaryHistory(
           },
         },
       },
+      orderBy: [{ year: "desc" }, { month: "desc" }, { status: "asc" }],
     });
 
     return salaries;
@@ -63,6 +64,7 @@ export async function getDepartmentSalaries(
           },
         },
       },
+      orderBy: [{ year: "desc" }, { month: "desc" }, { status: "asc" }],
     });
 
     const data = salaries.map((salary) => {
