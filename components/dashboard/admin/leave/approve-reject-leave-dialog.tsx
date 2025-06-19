@@ -102,7 +102,11 @@ function ApproveRejectLeaveDialog({
               variant={
                 form.watch("status") === "APPROVED" ? "default" : "outline"
               }
-              className={`flex-1 ${form.watch("status") === "APPROVED" ? "bg-green-500 text-white hover:bg-green-500" : "outline-green-500"}`}
+              className={`flex-1 cursor-pointer ${
+                form.watch("status") === "APPROVED"
+                  ? "bg-green-500 text-white hover:bg-green-500"
+                  : "text-green-500 outline-green-500 hover:bg-green-500 hover:text-white"
+              }`}
               onClick={() => form.setValue("status", "APPROVED")}
             >
               <ThumbsUp className="mr-2 h-4 w-4" /> Approve
@@ -110,9 +114,13 @@ function ApproveRejectLeaveDialog({
             <Button
               type="button"
               variant={
-                form.watch("status") === "REJECTED" ? "destructive" : "outline"
+                form.watch("status") === "REJECTED" ? "default" : "outline"
               }
-              className="flex-1 text-white"
+              className={`flex-1 cursor-pointer ${
+                form.watch("status") === "REJECTED"
+                  ? "bg-red-500 text-white hover:bg-red-500"
+                  : "text-red-500 outline-red-500 hover:bg-red-500 hover:text-white"
+              }`}
               onClick={() => form.setValue("status", "REJECTED")}
             >
               <ThumbsDown className="mr-2 h-4 w-4" /> Reject
