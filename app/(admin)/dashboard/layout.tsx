@@ -1,16 +1,15 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
-import { SuperAdminSidebar } from "@/components/sidebars/super-admin-sidebar";
 import AdminHeader from "@/components/layout/admin-header";
 import ReactQueryProvider from "@/components/providers/react-query-provider";
+import { SuperAdminCompanySidebar } from "@/components/sidebars/super-admin-company-sidebar";
+import { SuperAdminSidebar } from "@/components/sidebars/super-admin-sidebar";
+import { UserSidebar } from "@/components/sidebars/user-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { getCompanyById } from "@/lib/data/super-admin/company";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import { Toaster } from "react-hot-toast";
 import { Geist } from "next/font/google";
-import { SuperAdminCompanySidebar } from "@/components/sidebars/super-admin-company-sidebar";
-import { UserSidebar } from "@/components/sidebars/user-sidebar";
-import { getCompanyById } from "@/lib/data/super-admin/company";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: {
@@ -59,7 +58,7 @@ export default async function AdminLayout({
           </div>
           <div className="m-4">{children}</div>
         </main>
-        <Toaster position="top-center" />
+        {/* <Toaster position="top-center" /> */}
       </SidebarProvider>
     </ReactQueryProvider>
   );

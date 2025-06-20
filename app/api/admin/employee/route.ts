@@ -298,7 +298,7 @@ export async function PUT(req: NextRequest) {
         phone: validatedFields.data.phone,
         address: validatedFields.data.address,
         gender: validatedFields.data.gender,
-        dateOfBirth: new Date(dateOfBirth),
+        dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
         isActive: validatedFields.data.isActive,
         image: fileName,
       },

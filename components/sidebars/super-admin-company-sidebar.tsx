@@ -115,7 +115,7 @@ export function SuperAdminCompanySidebar({
                 width={100}
                 height={100}
                 alt={company?.name || "Company"}
-                className="size-10"
+                className="size-10 rounded-md"
               />
               <div className="text-sm">
                 <p className="line-clamp-1 font-semibold">{company?.name}</p>

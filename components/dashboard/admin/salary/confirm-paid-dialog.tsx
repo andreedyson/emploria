@@ -129,7 +129,7 @@ export function ConfirmPaidDialog({
               height={160}
             />
           </div>
-          <DialogFooter>
+          <DialogFooter className="flex items-center justify-center">
             <Button onClick={() => setSuccessOpen(false)}>Close</Button>
           </DialogFooter>
         </DialogContent>
