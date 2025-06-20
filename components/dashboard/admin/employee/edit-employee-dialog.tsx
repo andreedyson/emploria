@@ -106,6 +106,7 @@ function EditEmployeeDialog({ employeeData }: EditEmployeeDialogProps) {
       companyId: employeeData.company?.id ?? "",
       position: employeeData.position,
       employeeRole: employeeData.employeeRole,
+      baseSalary: employeeData.baseSalary,
       isActive: employeeData.isActive,
     });
   }, [employeeData, form]);
@@ -129,6 +130,7 @@ function EditEmployeeDialog({ employeeData }: EditEmployeeDialogProps) {
           departmentId: values.departmentId,
           position: values.position,
           employeeRole: values.employeeRole,
+          baseSalary: values.baseSalary,
           isActive: values.isActive,
         }),
       });
@@ -398,6 +400,19 @@ function EditEmployeeDialog({ employeeData }: EditEmployeeDialogProps) {
                 )}
               />
             </div>
+            <FormField
+              control={form.control}
+              name="baseSalary"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Base Salary</FormLabel>
+                  <FormControl>
+                    <Input type="number" autoComplete="off" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="isActive"

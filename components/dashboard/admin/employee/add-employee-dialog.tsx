@@ -77,6 +77,7 @@ function AddEmployeeDialog() {
       companyId: companyId ?? "",
       position: "",
       employeeRole: undefined,
+      baseSalary: 0,
       isActive: true,
     },
   });
@@ -106,6 +107,7 @@ function AddEmployeeDialog() {
           departmentId: values.departmentId,
           position: values.position,
           employeeRole: values.employeeRole,
+          baseSalary: values.baseSalary,
           isActive: true,
         }),
       });
@@ -383,6 +385,19 @@ function AddEmployeeDialog() {
                 <FormItem className="hidden">
                   <FormControl>
                     <Input type="hidden" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="baseSalary"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Base Salary</FormLabel>
+                  <FormControl>
+                    <Input type="number" autoComplete="off" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

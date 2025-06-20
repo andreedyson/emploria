@@ -56,6 +56,11 @@ export const employeeSchema = z.object({
     required_error: "Employee role is required",
     invalid_type_error: "Invalid employee role. Must be MANAGER or USER",
   }),
+  baseSalary: z.coerce
+    .number({
+      required_error: "Base Salary is required",
+    })
+    .nonnegative("Base Salary must be non-negative"),
 });
 
 export const editEmployeeSchema = employeeSchema.omit({ password: true });

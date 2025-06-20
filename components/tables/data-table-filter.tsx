@@ -39,7 +39,7 @@ export function DataTableFilter<TData, TValue>({
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild className="cursor-pointer">
         <Button variant="outline" size="sm" className="h-8 border-dashed">
           {ToggleIcon ? (
             <ToggleIcon className="mr-2 h-4 w-4" />
