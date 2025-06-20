@@ -1,8 +1,8 @@
-import bcrypt from "bcrypt";
 import prisma from "@/lib/db";
-import { editEmployeeSchema, employeeSchema } from "@/validations/admin";
-import { NextRequest, NextResponse } from "next/server";
 import { uploadFile } from "@/lib/supabase";
+import { editEmployeeSchema, employeeSchema } from "@/validations/admin";
+import bcrypt from "bcrypt";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const {
@@ -16,9 +16,9 @@ export async function POST(req: NextRequest) {
     image,
     companyId,
     departmentId,
-    position,
     employeeRole,
     isActive,
+    baseSalary,
   } = await req.json();
 
   try {
@@ -34,9 +34,9 @@ export async function POST(req: NextRequest) {
       image,
       companyId,
       departmentId,
-      position,
       employeeRole,
       isActive,
+      baseSalary,
     });
 
     let fileName;
@@ -156,12 +156,11 @@ export async function POST(req: NextRequest) {
         userId: newUser.id,
         companyId: validatedFields.data.companyId ?? "",
         departmentId: validatedFields.data.departmentId || null,
-        position: validatedFields.data.position,
         role: validatedFields.data.employeeRole,
+        baseSalary: validatedFields.data.baseSalary,
       },
       select: {
         id: true,
-        position: true,
         role: true,
         isActive: true,
         joinDate: true,
@@ -214,9 +213,9 @@ export async function PUT(req: NextRequest) {
       image,
       companyId,
       departmentId,
-      position,
       employeeRole,
       isActive,
+      baseSalary,
     } = await req.json();
 
     const validatedFields = editEmployeeSchema.safeParse({
@@ -229,9 +228,9 @@ export async function PUT(req: NextRequest) {
       image,
       companyId,
       departmentId,
-      position,
       employeeRole,
       isActive,
+      baseSalary,
     });
 
     if (!validatedFields.success) {
@@ -317,13 +316,12 @@ export async function PUT(req: NextRequest) {
       where: { userId: updatedUser.id },
       data: {
         departmentId: departmentId || null,
-        position: validatedFields.data.position,
         role: employeeRole,
         isActive: validatedFields.data.isActive,
+        baseSalary: validatedFields.data.baseSalary,
       },
       select: {
         id: true,
-        position: true,
         role: true,
         isActive: true,
         joinDate: true,

@@ -59,7 +59,7 @@ export default async function AdminLayout({
           </div>
           <div className="m-4">{children}</div>
         </main>
-        <Toaster position="bottom-right" />
+        <Toaster position="top-center" />
       </SidebarProvider>
     </ReactQueryProvider>
   );

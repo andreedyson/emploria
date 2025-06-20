@@ -21,7 +21,6 @@ export type UserProfileProps = {
   };
   employee: {
     id?: string;
-    position: string;
     role: EmployeeRole;
   };
 };

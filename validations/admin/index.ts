@@ -48,10 +48,6 @@ export const employeeSchema = z.object({
     ),
   companyId: z.string({ required_error: "Company ID is required" }).min(1),
   departmentId: z.string().optional(),
-  position: z
-    .string({ required_error: "Position is required" })
-    .min(1, { message: "Position is required" })
-    .max(50, { message: "Position should be less than 50 characters" }),
   employeeRole: z.nativeEnum(EmployeeRole, {
     required_error: "Employee role is required",
     invalid_type_error: "Invalid employee role. Must be MANAGER or USER",

@@ -39,7 +39,6 @@ import { useDepartments } from "@/hooks/use-department";
 import { employeeSchema } from "@/validations/admin";
 import {
   AtSign,
-  BriefcaseBusiness,
   Building2,
   Calendar,
   LetterText,
@@ -75,7 +74,6 @@ function AddEmployeeDialog() {
       image: "",
       departmentId: "",
       companyId: companyId ?? "",
-      position: "",
       employeeRole: undefined,
       baseSalary: 0,
       isActive: true,
@@ -105,7 +103,6 @@ function AddEmployeeDialog() {
           image: values.image,
           companyId: values.companyId,
           departmentId: values.departmentId,
-          position: values.position,
           employeeRole: values.employeeRole,
           baseSalary: values.baseSalary,
           isActive: true,
@@ -220,26 +217,6 @@ function AddEmployeeDialog() {
               />
               <FormField
                 control={form.control}
-                name="address"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-1">
-                      <MapPin size={14} />
-                      Address
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Jl. Ikan Dori No.24"
-                        autoComplete="off"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
                 name="dateOfBirth"
                 render={({ field }) => (
                   <FormItem>
@@ -258,30 +235,28 @@ function AddEmployeeDialog() {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="position"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-1">
-                      <BriefcaseBusiness size={14} />
-                      <div>
-                        Position
-                        <span className="ml-0.5 text-red-500">*</span>
-                      </div>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="e.g: Finance"
-                        autoComplete="off"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </div>
+
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center gap-1">
+                    <MapPin size={14} />
+                    Address
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Jl. Ikan Dori No.24"
+                      autoComplete="off"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <FormField

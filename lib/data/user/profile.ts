@@ -58,7 +58,6 @@ export async function getUserProfileData(
       },
       employee: {
         id: user.employee?.id,
-        position: user.employee?.position ?? "",
         role: user.employee?.role ?? EmployeeRole.STAFF,
       },
     };

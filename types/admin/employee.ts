@@ -5,7 +5,6 @@ export type EmployeeColumnProps = {
   name: string;
   email: string;
   gender: string | null;
-  position: string;
   isActive: boolean;
   image: string | null;
   phone: string | null;

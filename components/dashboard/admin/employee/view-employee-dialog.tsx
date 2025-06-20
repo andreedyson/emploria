@@ -13,7 +13,6 @@ import { formatDate } from "@/lib/utils";
 import { EmployeeColumnProps } from "@/types/admin/employee";
 import {
   Briefcase,
-  BriefcaseBusiness,
   Calendar,
   Calendar1,
   Copy,
@@ -94,13 +93,6 @@ function ViewEmployeeDialog({ employeeData }: ViewEmployeeDialogProps) {
                 <p>Email</p>
               </div>
               <p>{employeeData.email}</p>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="text-muted-foreground flex items-center gap-1">
-                <BriefcaseBusiness size={14} />
-                <p>Position</p>
-              </div>
-              <p>{employeeData.position ?? "-"}</p>
             </div>
             <div className="flex items-center justify-between">
               <div className="text-muted-foreground flex items-center gap-1">

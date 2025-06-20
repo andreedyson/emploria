@@ -13,7 +13,6 @@ import { getUserProfileData } from "@/lib/data/user/profile";
 import { calculateAge, formatDate } from "@/lib/utils";
 import { Gender } from "@prisma/client";
 import {
-  Briefcase,
   Building,
   Building2,
   Calendar1,
@@ -174,15 +173,6 @@ async function UserProfilePage() {
                 </div>
                 <p className="text-foreground line-clamp-1 font-semibold">
                   {userProfile?.employee.id}
-                </p>
-              </div>
-              <div className="text-muted-foreground flex items-center justify-between text-sm">
-                <div className="flex items-center gap-1">
-                  <Briefcase size={20} />
-                  <p className="font-medium">Position</p>
-                </div>
-                <p className="text-foreground line-clamp-1 font-semibold">
-                  {userProfile?.employee.position}
                 </p>
               </div>
               <div className="text-muted-foreground flex items-center justify-between text-sm">

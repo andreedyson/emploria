@@ -6,14 +6,7 @@ import { getImageUrl } from "@/lib/supabase";
 import { formatDate } from "@/lib/utils";
 import { EmployeeColumnProps } from "@/types/admin/employee";
 import { ColumnDef } from "@tanstack/react-table";
-import {
-  Briefcase,
-  BriefcaseBusiness,
-  Calendar,
-  LetterText,
-  Mail,
-  Mars,
-} from "lucide-react";
+import { Briefcase, Calendar, LetterText, Mail, Mars } from "lucide-react";
 import Image from "next/image";
 import DeleteEmployeeDialog from "./delete-employee-dialog";
 import EditEmployeeDialog from "./edit-employee-dialog";
@@ -65,19 +58,6 @@ export const EmployeeColumns: ColumnDef<EmployeeColumnProps>[] = [
     header: ({ column }) => {
       return (
         <DataTableColumnHeader column={column} title="Gender" icon={Mars} />
-      );
-    },
-  },
-  {
-    accessorKey: "position",
-    enableSorting: true,
-    header: ({ column }) => {
-      return (
-        <DataTableColumnHeader
-          column={column}
-          title="Position"
-          icon={BriefcaseBusiness}
-        />
       );
     },
   },

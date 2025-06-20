@@ -62,7 +62,6 @@ model Employee {
   userId       String       @unique
   companyId    String
   departmentId String?
-  position     String
   baseSalary   Float        @default(0)
   isActive     Boolean      @default(true)
   joinDate     DateTime     @default(now())
