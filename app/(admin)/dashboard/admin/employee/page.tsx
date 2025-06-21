@@ -1,8 +1,10 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import AddEmployeeDialog from "@/components/dashboard/admin/employee/add-employee-dialog";
+import EmployeeGalleryCard from "@/components/dashboard/admin/employee/employee-gallery-card";
 import EmployeeTable from "@/components/dashboard/admin/employee/employee-table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getAllEmployees } from "@/lib/data/admin/employee";
-import { Users } from "lucide-react";
+import { Image as ImageIcon, Table, Users } from "lucide-react";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -39,8 +41,42 @@ async function SuperAdminCompanyEmployeePage() {
             <AddEmployeeDialog />
           </div>
         </div>
-        {/* Data Table */}
-        <EmployeeTable employees={employees} />
+        {/* Employee Data Table & Gallery View */}
+        <div>
+          <Tabs defaultValue="table" className="h-full w-full">
+            <div className="w-full">
+              <TabsList className="w-[160px]">
+                <TabsTrigger
+                  value="table"
+                  className="w-full"
+                  title="Employees Table"
+                >
+                  <Table size={20} />
+                </TabsTrigger>
+                <TabsTrigger
+                  value="gallery"
+                  className="w-full"
+                  title="Employees Gallery"
+                >
+                  <ImageIcon size={20} />
+                </TabsTrigger>
+              </TabsList>
+            </div>
+            <TabsContent value="table" className="mt-2 grid grid-cols-1 gap-4">
+              <EmployeeTable employees={employees} />
+            </TabsContent>
+            <TabsContent
+              value="gallery"
+              className="mt-2 grid h-full grid-cols-1 gap-4"
+            >
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                {employees.map((employee) => (
+                  <EmployeeGalleryCard key={employee.id} employee={employee} />
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </section>
   );
