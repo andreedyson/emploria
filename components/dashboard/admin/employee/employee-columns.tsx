@@ -34,7 +34,7 @@ export const EmployeeColumns: ColumnDef<EmployeeColumnProps>[] = [
               alt={user.name}
               width={80}
               height={80}
-              className="size-8 rounded-full object-contain"
+              className="size-8 rounded-full object-cover"
             />
           </div>
           <p>{user.name}</p>
@@ -59,6 +59,25 @@ export const EmployeeColumns: ColumnDef<EmployeeColumnProps>[] = [
       return (
         <DataTableColumnHeader column={column} title="Gender" icon={Mars} />
       );
+    },
+  },
+  {
+    id: "department",
+    accessorKey: "department.name",
+    enableSorting: true,
+    header: ({ column }) => {
+      return (
+        <DataTableColumnHeader
+          column={column}
+          title="Department"
+          icon={LetterText}
+        />
+      );
+    },
+    cell: ({ row }) => {
+      const employee = row.original;
+
+      return <div className="font-semibold">{employee.department?.name}</div>;
     },
   },
   {
