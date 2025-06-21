@@ -9,9 +9,10 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { getImageUrl } from "@/lib/supabase";
-import { formatDate } from "@/lib/utils";
+import { convertRupiah, formatDate } from "@/lib/utils";
 import { EmployeeColumnProps } from "@/types/admin/employee";
 import {
+  Banknote,
   Briefcase,
   Calendar,
   Calendar1,
@@ -128,6 +129,17 @@ function ViewEmployeeDialog({ employeeData }: ViewEmployeeDialogProps) {
               </div>
               <p className="line-clamp-2 text-right">
                 {employeeData.address ? employeeData.address : "-"}
+              </p>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="text-muted-foreground flex items-center gap-1">
+                <Banknote size={14} />
+                <p>Base Salary</p>
+              </div>
+              <p className="line-clamp-2 text-right">
+                {employeeData.baseSalary
+                  ? convertRupiah(employeeData.baseSalary)
+                  : "-"}
               </p>
             </div>
             <div className="flex items-center justify-between">
