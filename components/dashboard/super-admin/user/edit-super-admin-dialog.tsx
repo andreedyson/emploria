@@ -82,6 +82,9 @@ function EditSuperAdminUserDialog({ user }: EditSuperAdminUserDialogProps) {
     try {
       const res = await fetch(`${BASE_URL}/api/super-admin/user/${user.id}`, {
         method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(values),
       });
 

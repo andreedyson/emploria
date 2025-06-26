@@ -47,7 +47,9 @@ export function ConfirmPaidDialog({
     try {
       const res = await fetch(`/api/admin/salary/${salaryId}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           status: "PAID",
         }),

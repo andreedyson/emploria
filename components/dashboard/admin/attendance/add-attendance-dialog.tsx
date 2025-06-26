@@ -78,6 +78,9 @@ function AddAttendanceDialog({ companyId }: AddAttendanceDialogProps) {
 
       const res = await fetch(`${BASE_URL}/api/admin/attendance`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           employeeId: values.employeeId,
           date: values.date,

@@ -114,6 +114,9 @@ function EditEmployeeDialog({ employeeData }: EditEmployeeDialogProps) {
     try {
       const res = await fetch(`${BASE_URL}/api/admin/employee`, {
         method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           userId: employeeData.userId,
           name: values.name,

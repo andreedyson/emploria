@@ -56,6 +56,9 @@ function ApproveRejectLeaveDialog({
     try {
       const res = await fetch(`${BASE_URL}/api/admin/leave/${leaveId}`, {
         method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ status: values.status }),
       });
 

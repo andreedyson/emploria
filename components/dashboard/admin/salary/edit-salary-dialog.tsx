@@ -70,6 +70,9 @@ function EditSalaryDialog({ companyId, salaryData }: EditSalaryDialogProps) {
     try {
       const res = await fetch(`${BASE_URL}/api/admin/salary`, {
         method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           salaryId: salaryData.id,
           employeeId: values.employeeId,

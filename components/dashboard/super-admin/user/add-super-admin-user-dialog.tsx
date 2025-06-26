@@ -65,6 +65,9 @@ function AddSuperAdminUserDialog() {
     try {
       const res = await fetch(`${BASE_URL}/api/super-admin/user`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           name: values.name,
           email: values.email,

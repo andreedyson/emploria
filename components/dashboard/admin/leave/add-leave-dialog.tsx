@@ -76,6 +76,9 @@ function AddLeaveDialog({ companyId }: AddLeaveDialogProps) {
     try {
       const res = await fetch(`${BASE_URL}/api/admin/leave`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           employeeId: values.employeeId,
           startDate: values.startDate,

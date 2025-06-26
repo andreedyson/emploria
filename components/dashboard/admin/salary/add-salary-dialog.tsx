@@ -73,6 +73,9 @@ function AddSalaryDialog({ companyId }: AddSalaryDialogProps) {
     try {
       const res = await fetch(`${BASE_URL}/api/admin/salary`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           employeeId: values.employeeId,
           month: values.month,

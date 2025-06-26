@@ -65,6 +65,9 @@ function EditDepartmentDialog({
     try {
       const res = await fetch(`${BASE_URL}/api/admin/department`, {
         method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           departmentId: departmentData.id,
           name: values.name,

@@ -109,6 +109,9 @@ function EditAttendanceDialog({
 
       const res = await fetch(`${BASE_URL}/api/admin/attendance`, {
         method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           attendanceId: attendanceData.id,
           employeeId: values.employeeId,

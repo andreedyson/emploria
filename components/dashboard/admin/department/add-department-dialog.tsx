@@ -54,6 +54,9 @@ function AddDepartmentDialog({ companyId }: AddDepartmentDialogProps) {
     try {
       const res = await fetch(`${BASE_URL}/api/admin/department`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           name: values.name,
           companyId: companyId,

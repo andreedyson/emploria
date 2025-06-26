@@ -73,6 +73,9 @@ function ApplyLeaveDialog({ userId }: ApplyLeaveDialogProps) {
     try {
       const res = await fetch(`${BASE_URL}/api/user/leave`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           userId: userId,
           startDate: values.startDate,
