@@ -54,6 +54,7 @@ function LeaveHistoryCard({
       title: "Status",
       key: "status",
       options: [
+        { label: "Pending", value: "PENDING", icon: Loader },
         { label: "Approved", value: "APPROVED", icon: CheckCircle },
         { label: "Rejected", value: "REJECTED", icon: CircleX },
       ],
@@ -93,6 +94,7 @@ function LeaveHistoryCard({
       title: "Status",
       key: "status",
       options: [
+        { label: "Pending", value: "PENDING", icon: Loader },
         { label: "Approved", value: "APPROVED", icon: CheckCircle },
         { label: "Rejected", value: "REJECTED", icon: CircleX },
       ],

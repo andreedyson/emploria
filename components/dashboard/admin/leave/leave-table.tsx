@@ -36,6 +36,7 @@ function LeaveTable({ leaves }: LeaveTableProps) {
       title: "Status",
       key: "status",
       options: [
+        { label: "Pending", value: "PENDING", icon: Loader },
         { label: "Approved", value: "APPROVED", icon: CheckCircle },
         { label: "Rejected", value: "REJECTED", icon: CircleX },
       ],
