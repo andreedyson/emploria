@@ -1,5 +1,10 @@
 import { Column } from "@tanstack/react-table";
-import { Check, LucideIcon, SlidersHorizontal } from "lucide-react";
+import {
+  Check,
+  ChevronDown,
+  LucideIcon,
+  SlidersHorizontal,
+} from "lucide-react";
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
@@ -47,7 +52,10 @@ export function DataTableFilter<TData, TValue>({
             <SlidersHorizontal className="mr-2 h-4 w-4" />
           )}
 
-          {title}
+          <div className="flex items-center gap-1.5">
+            <p>{title}</p>
+            <ChevronDown className="size-4" />
+          </div>
           {selectedValues?.size > 0 && (
             <>
               <Separator orientation="vertical" className="mx-2 h-4" />
