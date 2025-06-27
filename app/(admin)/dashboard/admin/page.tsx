@@ -53,6 +53,7 @@ async function SuperAdminCompanyPage() {
             name={data.name}
             icon={data.icon}
             total={data.total}
+            title={data.title}
             textColor={data.textColor}
           />
         ))}

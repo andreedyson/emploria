@@ -35,6 +35,7 @@ export async function getSuperAdminCompanyStatsCardData(
         employee: {
           companyId: companyId,
         },
+        status: "APPROVED",
       },
     });
 
@@ -64,7 +65,7 @@ export async function getSuperAdminCompanyStatsCardData(
       },
       {
         name: "Leave Requests",
-        title: "Total Leave Requests",
+        title: "Approved Leaves",
         total: leaves.length,
         icon: CalendarX,
         textColor: "text-blue-500",

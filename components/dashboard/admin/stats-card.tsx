@@ -6,12 +6,13 @@ function SuperAdminCompanyStatsCard({
   total,
   icon: Icon,
   textColor,
+  title,
 }: StatsCardProps) {
   return (
     <div className="bg-card flex items-center justify-between rounded-lg border-2 p-4">
       <div className="space-y-2">
         <p className="line-clamp-1 text-xs font-semibold tracking-tight uppercase">
-          {name}
+          {title}
         </p>
         <h4
           className={cn(

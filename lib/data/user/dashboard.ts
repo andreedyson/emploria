@@ -117,7 +117,7 @@ export async function getUserStatsCardData(
       },
       {
         title: "Recent Leaves",
-        text: `${currentLeaves} Leaves`,
+        text: `${currentLeaves} ${currentLeaves > 1 ? "Leaves" : "Leave"}`,
         icon: CalendarX,
         textColor: "text-red-500",
       },
