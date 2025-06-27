@@ -29,6 +29,7 @@ export async function POST(req: NextRequest) {
         user: {
           select: {
             id: true,
+            name: true,
             email: true,
             gender: true,
           },
@@ -41,6 +42,25 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { message: "Employee not found" },
         { status: 404 },
+      );
+    }
+
+    // Check if there is PENDING leave
+    const pendingLeave = await prisma.leave.findFirst({
+      where: {
+        employee: {
+          userId: userId,
+        },
+        status: "PENDING",
+      },
+    });
+
+    if (pendingLeave) {
+      return NextResponse.json(
+        {
+          message: "You currently have a PENDING leave request",
+        },
+        { status: 400 },
       );
     }
 
