@@ -117,10 +117,13 @@ function AttendanceHistoryCard({
               value="personal"
               className="mt-2 grid grid-cols-1 gap-4"
             >
-              <div className="text-sm">
-                <h3 className="font-semibold">Personal Attendances</h3>
-                <div className="text-muted-foreground">
-                  Your personal attendance history.
+              <div className="flex items-center gap-2">
+                <User size={24} className="text-picton-blue-500" />
+                <div className="text-sm">
+                  <h4 className="font-semibold">Personal Attendance</h4>
+                  <p className="text-muted-foreground">
+                    Your personal attendances history.
+                  </p>
                 </div>
               </div>
               <DataTable
@@ -147,10 +150,13 @@ function AttendanceHistoryCard({
               value="department"
               className="mt-2 grid h-full grid-cols-1 gap-4"
             >
-              <div className="text-sm">
-                <h3 className="font-semibold">Department Attendances</h3>
-                <div className="text-muted-foreground">
-                  Your department employee attendances history.
+              <div className="flex items-center gap-2">
+                <Building2 size={24} className="text-yellow-500" />
+                <div className="text-sm">
+                  <h4 className="font-semibold">Department Attendances</h4>
+                  <p className="text-muted-foreground">
+                    Your department employees attendances history.
+                  </p>
                 </div>
               </div>
               <DataTable

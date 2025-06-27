@@ -111,11 +111,9 @@ export function CompanySettingInput({
         </div>
       ) : (
         <div className="space-y-2">
-          <div className="flex cursor-pointer items-center gap-1">
-            <Label id={label} className="font-medium">
-              {label}
-            </Label>
-            <Pencil size={12} onClick={handleEditMode} />
+          <div onClick={handleEditMode} className="flex items-center gap-1">
+            <Label className="cursor-pointer font-medium">{label}</Label>
+            <Pencil size={12} />
           </div>
           <div className="bg-input text-muted-foreground w-full rounded border p-2">
             {type === "attendanceBonus" || type === "lateAttendance"

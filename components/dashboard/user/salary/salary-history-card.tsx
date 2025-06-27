@@ -105,10 +105,13 @@ function SalaryHistoryCard({
               </TabsList>
             </div>
             <TabsContent value="personal" className="grid grid-cols-1 gap-4">
-              <div className="text-sm">
-                <h3 className="font-semibold">Personal Salaries</h3>
-                <div className="text-muted-foreground">
-                  Your personal salaries history.
+              <div className="flex items-center gap-2">
+                <User size={24} className="text-picton-blue-500" />
+                <div className="text-sm">
+                  <h4 className="font-semibold">Personal Salaries</h4>
+                  <p className="text-muted-foreground">
+                    Your personal salaries history.
+                  </p>
                 </div>
               </div>
               <DataTable
@@ -135,10 +138,13 @@ function SalaryHistoryCard({
               value="department"
               className="grid h-full grid-cols-1 gap-4"
             >
-              <div className="text-sm">
-                <h3 className="font-semibold">Department Salaries</h3>
-                <div className="text-muted-foreground">
-                  Your department employee salaries history.
+              <div className="flex items-center gap-2">
+                <User size={24} className="text-yellow-500" />
+                <div className="text-sm">
+                  <h4 className="font-semibold">Department Salaries</h4>
+                  <p className="text-muted-foreground">
+                    Your department employees salaries history.
+                  </p>
                 </div>
               </div>
               <DataTable

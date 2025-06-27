@@ -135,10 +135,13 @@ function LeaveHistoryCard({
               </TabsList>
             </div>
             <TabsContent value="personal" className="grid grid-cols-1 gap-4">
-              <div className="text-sm">
-                <h3 className="font-semibold">Personal Leaves</h3>
-                <div className="text-muted-foreground">
-                  Your personal leaves history.
+              <div className="flex items-center gap-2">
+                <User size={24} className="text-picton-blue-500" />
+                <div className="text-sm">
+                  <h4 className="font-semibold">Personal Leaves</h4>
+                  <p className="text-muted-foreground">
+                    Your personal leaves history.
+                  </p>
                 </div>
               </div>
               <DataTable
@@ -164,10 +167,13 @@ function LeaveHistoryCard({
               value="department"
               className="grid h-full grid-cols-1 gap-4"
             >
-              <div className="text-sm">
-                <h3 className="font-semibold">Department Leaves</h3>
-                <div className="text-muted-foreground">
-                  Your department employee leaves history.
+              <div className="flex items-center gap-2">
+                <Building2 size={24} className="text-yellow-500" />
+                <div className="text-sm">
+                  <h4 className="font-semibold">Department Leaves</h4>
+                  <p className="text-muted-foreground">
+                    Your department employees leaves history.
+                  </p>
                 </div>
               </div>
               <DataTable

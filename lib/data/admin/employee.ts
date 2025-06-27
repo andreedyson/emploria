@@ -10,7 +10,6 @@ export async function getAllEmployees(
     const employees = await prisma.employee.findMany({
       where: {
         companyId: companyId,
-        isActive: true,
       },
       include: {
         user: {
