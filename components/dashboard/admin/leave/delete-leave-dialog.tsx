@@ -62,6 +62,9 @@ function DeleteLeaveDialog({ leaveData }: DeleteLeaveDialogProps) {
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         <Button
+          disabled={
+            leaveData.status === "APPROVED" || leaveData.status === "REJECTED"
+          }
           size={"icon"}
           className="flex cursor-pointer items-center gap-2 bg-red-500 text-sm text-white duration-200 hover:bg-red-600"
         >
