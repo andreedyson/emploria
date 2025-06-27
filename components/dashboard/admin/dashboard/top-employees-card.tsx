@@ -22,7 +22,7 @@ function TopEmployeesCard({ topEmployees }: TopEmployeesCardProps) {
         <div>
           <CardTitle className="text-sm font-semibold">Top Employees</CardTitle>
           <CardDescription>
-            Employees with the most attendances this month
+            Employees with the highest attendance this month
           </CardDescription>
         </div>
         <Link

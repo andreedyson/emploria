@@ -44,7 +44,7 @@ async function SuperAdminCompanyEmployeePage() {
         {/* Employee Data Table & Gallery View */}
         <div>
           <Tabs defaultValue="table" className="h-full w-full">
-            <div className="w-full">
+            <div className="flex w-full max-md:justify-end">
               <TabsList className="w-[160px]">
                 <TabsTrigger
                   value="table"

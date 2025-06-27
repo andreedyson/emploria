@@ -59,7 +59,7 @@ export function GenderDiversityCharts({
           data={chartData}
           dataKey="total"
           nameKey="gender"
-          innerRadius={45}
+          innerRadius={40}
           strokeWidth={5}
         >
           <Label

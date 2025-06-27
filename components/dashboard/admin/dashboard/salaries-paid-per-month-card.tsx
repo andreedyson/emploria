@@ -19,7 +19,7 @@ function SalariesPaidPerMonthCard({
       <CardHeader>
         <CardTitle className="text-sm font-semibold">Salaries Paid</CardTitle>
         <CardDescription>
-          Total salaries paid per month for the past 6 months (in Millions IDR)
+          Monthly salaries paid for the past 6 months (in millions IDR).
         </CardDescription>
       </CardHeader>
 
