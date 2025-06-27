@@ -3,10 +3,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const { userId } = await req.json();
+
   try {
     // Check employee data
     const employee = await prisma.employee.findUnique({
-      where: { userId: userId },
+      where: { userId },
+      include: { company: true },
     });
 
     if (!employee) {
@@ -16,30 +18,33 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const company = employee.company;
+    const now = new Date();
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Check if there is already an existing attendance
+    // Check if user already checked in
     const existingAttendance = await prisma.attendance.findFirst({
-      where: {
-        employeeId: employee.id,
-        date: today,
-      },
+      where: { employeeId: employee.id, date: today },
     });
 
-    if (existingAttendance && existingAttendance.checkIn) {
+    if (existingAttendance?.checkIn) {
       return NextResponse.json(
         { message: "Already checked in today." },
         { status: 400 },
       );
     }
 
-    // Check if the check in is late or not
-    const now = new Date();
-    const scheduledCheckIn = new Date();
-    scheduledCheckIn.setHours(9, 15, 0, 0); // 9:00 AM check-in standard
+    // Parse company check-in policy
+    const checkInEndTime = company?.checkInEndTime || "09:00";
+    const [checkInEndHour, checkInMinute] = checkInEndTime
+      .split(":")
+      .map(Number);
 
-    const status = now > scheduledCheckIn ? "LATE" : "PRESENT";
+    const lateTime = new Date(now);
+    lateTime.setHours(checkInEndHour, checkInMinute, 0, 0);
+
+    const status = now > lateTime ? "LATE" : "PRESENT";
 
     const attendance = await prisma.attendance.upsert({
       where: {

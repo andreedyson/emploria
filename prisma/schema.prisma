@@ -47,6 +47,10 @@ model Company {
   isActive                  Boolean @default(true)
   attendanceBonusRate       Float?
   lateAttendancePenaltyRate Float?
+  checkInStartTime          String?
+  checkInEndTime            String?
+  latestCheckOut            String?
+  minimumWorkHours          Int?
 
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt

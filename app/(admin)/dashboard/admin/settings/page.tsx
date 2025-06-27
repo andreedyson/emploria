@@ -52,7 +52,7 @@ async function SuperAdminCompanySettingsPage() {
       <CardContent>
         <Separator className="mb-3" />
         <div className="space-y-3">
-          <p className="text-sm font-semibold">Employee Attendance Settings</p>
+          <p className="text-sm font-semibold">Employee Attendance Bonus</p>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <CompanySettingInput
               companyId={companyId}
@@ -66,6 +66,28 @@ async function SuperAdminCompanySettingsPage() {
             />
           </div>
         </div>
+        <Separator className="my-3" />
+        <div className="space-y-3">
+          <p className="text-sm font-semibold">Employee Attendance Time</p>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <CompanySettingInput
+              companyId={companyId}
+              initialValue={company?.checkInStartTime ?? "06:00"}
+              type="checkInStartTime"
+            />
+            <CompanySettingInput
+              companyId={companyId}
+              initialValue={company?.checkInEndTime ?? "09:00"}
+              type="checkInEndTime"
+            />
+            <CompanySettingInput
+              companyId={companyId}
+              initialValue={company?.minimumWorkHours ?? 4}
+              type="minimumWorkHours"
+            />
+          </div>
+        </div>
+
         <Separator className="my-3" />
         <div className="space-y-3">
           <p className="text-sm font-semibold">Leave Policy Settings</p>

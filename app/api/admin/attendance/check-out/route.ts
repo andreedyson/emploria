@@ -3,10 +3,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const { userId } = await req.json();
+
   try {
     // Check employee data
     const employee = await prisma.employee.findUnique({
-      where: { userId: userId },
+      where: { userId },
+      include: { company: true },
     });
 
     if (!employee) {
@@ -16,18 +18,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const company = employee.company;
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Check if there's already a check-in or the user already check-out
     const attendance = await prisma.attendance.findFirst({
-      where: {
-        employeeId: employee.id,
-        date: today,
-      },
+      where: { employeeId: employee.id, date: today },
     });
 
-    if (!attendance) {
+    if (!attendance || !attendance.checkIn) {
       return NextResponse.json(
         { message: "No check-in found." },
         { status: 400 },
@@ -41,10 +40,42 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Update check-out attendance status
+    // Check minimum work hours before allowing check-out
+    const now = new Date();
+    const checkIn = attendance.checkIn;
+    const minHours = company?.minimumWorkHours ?? 4;
+
+    const workedInMs = now.getTime() - checkIn.getTime();
+    const workedHours = workedInMs / (1000 * 60 * 60);
+
+    if (workedHours < minHours) {
+      return NextResponse.json(
+        {
+          message: `You must work at least ${minHours} hours before checking out.`,
+        },
+        { status: 400 },
+      );
+    }
+
+    // Check if the user is trying to check out after overtime
+    const latestCheckOut = company?.latestCheckOut || "23:00";
+    const [lateHour, lateMinute] = latestCheckOut.split(":").map(Number);
+    const latestTimeAllowed = new Date(now);
+    latestTimeAllowed.setHours(lateHour, lateMinute, 0, 0);
+
+    if (now > latestTimeAllowed) {
+      return NextResponse.json(
+        {
+          message:
+            "You cannot check out after 11:00 PM without overtime approval.",
+        },
+        { status: 400 },
+      );
+    }
+
     const updatedCheckout = await prisma.attendance.update({
       where: { id: attendance.id },
-      data: { checkOut: new Date() },
+      data: { checkOut: now },
     });
 
     return NextResponse.json(
