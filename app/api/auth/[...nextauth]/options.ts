@@ -5,6 +5,8 @@
  */
 
 import prisma from "@/lib/db";
+import { logActivity } from "@/lib/log-activity";
+import { ActivityAction, ActivityTarget } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { NextAuthOptions } from "next-auth";
 import { AdapterUser } from "next-auth/adapters";
@@ -70,16 +72,14 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     // 👤 Handle new OAuth users on first login
     async signIn({ user, account }) {
-      if (account?.provider === "credentials") return true;
-
       if (!user.email || !user.name) return false;
 
-      const userExist = await prisma.user.findUnique({
+      let dbUser = await prisma.user.findUnique({
         where: { email: user.email },
       });
 
-      if (!userExist) {
-        await prisma.user.create({
+      if (!dbUser) {
+        dbUser = await prisma.user.create({
           data: {
             name: user.name,
             email: user.email,
@@ -88,9 +88,21 @@ export const authOptions: NextAuthOptions = {
         });
       }
 
+      if (account?.provider === "credentials") {
+        await logActivity({
+          userId: dbUser.id,
+          companyId: dbUser.companyId ?? undefined,
+          action: ActivityAction.LOGIN,
+          targetType: ActivityTarget.USER,
+          targetId: dbUser.id,
+          description: `User ${dbUser.email} logged in.`,
+        });
+
+        return true;
+      }
+
       return true;
     },
-
     // 🔄 Adds user info to session object
     async session({ session, token }) {
       if (token) {
