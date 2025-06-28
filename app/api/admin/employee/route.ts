@@ -1,7 +1,10 @@
 import prisma from "@/lib/db";
+import { logActivity } from "@/lib/log-activity";
 import { uploadFile } from "@/lib/supabase";
 import { editEmployeeSchema, employeeSchema } from "@/validations/admin";
+import { ActivityAction, ActivityTarget } from "@prisma/client";
 import bcrypt from "bcrypt";
+import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -22,6 +25,12 @@ export async function POST(req: NextRequest) {
   } = await req.json();
 
   try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!token || token.role !== "SUPER_ADMIN_COMPANY") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     // Check user inputs
     const validatedFields = employeeSchema.safeParse({
       name,
@@ -187,6 +196,29 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    await logActivity({
+      userId: token.sub,
+      action: ActivityAction.CREATE,
+      targetType: ActivityTarget.EMPLOYEE,
+      targetId: newEmployee.id,
+      companyId: newEmployee.company.id ?? undefined,
+      description: `Company Admin: ${token.name} Created employee record for ${newUser.name}`,
+      metadata: {
+        company: company.name,
+        companyAdmin: {
+          id: token.sub,
+          name: token.name,
+          email: token.email,
+        },
+        newEmployee: {
+          id: newEmployee.id,
+          name: newUser.name,
+          email: newUser.email,
+          role: newEmployee.role,
+        },
+      },
+    });
+
     return NextResponse.json(
       { message: "Employee successfully created", data: newEmployee },
       { status: 201 },
@@ -218,6 +250,11 @@ export async function PUT(req: NextRequest) {
       baseSalary,
     } = await req.json();
 
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!token || token.role !== "SUPER_ADMIN_COMPANY") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     const validatedFields = editEmployeeSchema.safeParse({
       name,
       email,
@@ -348,6 +385,29 @@ export async function PUT(req: NextRequest) {
       },
     });
 
+    await logActivity({
+      userId: token.sub,
+      action: ActivityAction.UPDATE,
+      targetType: ActivityTarget.EMPLOYEE,
+      targetId: updatedEmployee.id,
+      companyId: updatedEmployee.company.id ?? undefined,
+      description: `Company Admin: ${token.name} Updated ${updatedUser.name} employee record`,
+      metadata: {
+        company: company.name,
+        companyAdmin: {
+          id: token.sub,
+          name: token.name,
+          email: token.email,
+        },
+        updatedEmployee: {
+          id: updatedEmployee.id,
+          name: updatedUser.name,
+          email: updatedUser.email,
+          role: updatedEmployee.role,
+        },
+      },
+    });
+
     return NextResponse.json(
       { message: "Employee successfully updated", data: updatedEmployee },
       { status: 200 },
@@ -364,6 +424,11 @@ export async function PUT(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   const { userId } = await req.json();
   try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!token || token.role !== "SUPER_ADMIN_COMPANY") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     // Check if user exists
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -374,13 +439,42 @@ export async function DELETE(req: NextRequest) {
     }
 
     // Soft delete
-    await prisma.user.update({
+    const softDeletedUser = await prisma.user.update({
       where: { id: userId },
       data: { isActive: false },
     });
-    await prisma.employee.update({
+
+    const softDeletedEmployee = await prisma.employee.update({
       where: { userId },
       data: { isActive: false },
+      select: {
+        id: true,
+        company: true,
+        role: true,
+      },
+    });
+
+    await logActivity({
+      userId: token.sub,
+      action: ActivityAction.DELETE,
+      targetType: ActivityTarget.EMPLOYEE,
+      targetId: softDeletedEmployee.id,
+      companyId: softDeletedEmployee.company.id ?? undefined,
+      description: `Company Admin: ${token.name} deleted / deactivated ${softDeletedUser.name} employee record`,
+      metadata: {
+        company: softDeletedEmployee.company.name,
+        companyAdmin: {
+          id: token.sub,
+          name: token.name,
+          email: token.email,
+        },
+        softDeletedEmployee: {
+          id: softDeletedEmployee.id,
+          name: softDeletedUser.name,
+          email: softDeletedUser.email,
+          role: softDeletedEmployee.role,
+        },
+      },
     });
 
     return NextResponse.json(
