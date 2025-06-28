@@ -95,7 +95,7 @@ export const authOptions: NextAuthOptions = {
           action: ActivityAction.LOGIN,
           targetType: ActivityTarget.USER,
           targetId: dbUser.id,
-          description: `User ${dbUser.email} logged in.`,
+          description: `User ${dbUser.email} logged in`,
         });
 
         return true;

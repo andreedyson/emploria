@@ -1,11 +1,20 @@
-import bcrypt from "bcrypt";
 import prisma from "@/lib/db";
+import { logActivity } from "@/lib/log-activity";
 import { superAdminUserSchema } from "@/validations/super-admin";
+import { ActivityAction, ActivityTarget } from "@prisma/client";
+import bcrypt from "bcrypt";
+import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const { name, email, password, companyId } = await req.json();
   try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!token || token.role !== "SUPER_ADMIN") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const validatedFields = superAdminUserSchema.safeParse({
       name,
       email,
@@ -60,6 +69,23 @@ export async function POST(req: NextRequest) {
         name: true,
         role: true,
         companyId: true,
+      },
+    });
+
+    await logActivity({
+      userId: token.sub,
+      action: ActivityAction.CREATE,
+      targetType: ActivityTarget.USER,
+      targetId: newUser.id,
+      companyId: newUser.companyId ?? undefined,
+      description: `Admin ${token.name} registered a new Company Admin Account for ${company.name}`,
+      metadata: {
+        company: company.name,
+        newUser: {
+          id: newUser.id,
+          name: newUser.name,
+          email: newUser.email,
+        },
       },
     });
 
