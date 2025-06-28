@@ -1,5 +1,8 @@
 import prisma from "@/lib/db";
+import { logActivity } from "@/lib/log-activity";
+import { capitalizeWord } from "@/lib/utils";
 import { editLeaveSchema } from "@/validations/admin";
+import { ActivityAction, ActivityTarget } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
@@ -36,6 +39,28 @@ export async function PATCH(
       data: {
         status: validatedFields.data.status,
       },
+      include: {
+        employee: {
+          select: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            companyId: true,
+          },
+        },
+      },
+    });
+
+    await logActivity({
+      userId: updatedLeave.employee.user.id,
+      companyId: updatedLeave.employee.companyId,
+      action: ActivityAction.APPROVE,
+      targetType: ActivityTarget.LEAVE,
+      targetId: updatedLeave.employeeId,
+      description: `${capitalizeWord(updatedLeave.status)} ${capitalizeWord(updatedLeave.leaveType)} leave for ${updatedLeave.employee.user.name}`,
     });
 
     return NextResponse.json(

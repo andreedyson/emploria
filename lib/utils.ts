@@ -10,6 +10,13 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function capitalizeWord(word: string): string {
+  if (!word || word !== word.toUpperCase()) return word;
+
+  const lower = word.toLowerCase();
+  return lower.charAt(0).toUpperCase() + lower.slice(1);
+}
+
 // Convert currency into Rupiah (can be adjusted to other currency)
 export const convertRupiah = (amount: number) => {
   const formatter = Intl.NumberFormat("id-ID", {
