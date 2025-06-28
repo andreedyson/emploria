@@ -1,6 +1,9 @@
 import prisma from "@/lib/db";
+import { logActivity } from "@/lib/log-activity";
 import { deleteFiles, updateFile, uploadFile } from "@/lib/supabase";
 import { companySchema } from "@/validations/super-admin";
+import { ActivityAction, ActivityTarget } from "@prisma/client";
+import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -10,6 +13,12 @@ export async function POST(req: NextRequest) {
   let fileName;
 
   try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!token || token.role !== "SUPER_ADMIN") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const validatedFields = companySchema.safeParse({ name, image });
 
     if (!validatedFields.success) {
@@ -40,6 +49,18 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    await logActivity({
+      userId: token.sub,
+      action: ActivityAction.CREATE,
+      targetType: ActivityTarget.COMPANY,
+      targetId: company.id,
+      companyId: undefined,
+      description: `Admin ${token.name} created company "${company.name}"`,
+      metadata: {
+        name: company.name,
+      },
+    });
+
     return NextResponse.json(
       { message: "Company created successfully", data: company },
       { status: 201 },
@@ -61,6 +82,12 @@ export async function PUT(req: NextRequest) {
   let newFilename;
 
   try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!token || token.role !== "SUPER_ADMIN") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const validatedFields = companySchema.safeParse({ name, image });
 
     if (!validatedFields.success) {
@@ -119,6 +146,18 @@ export async function PUT(req: NextRequest) {
       },
     });
 
+    await logActivity({
+      userId: token.sub,
+      action: ActivityAction.UPDATE,
+      targetType: ActivityTarget.COMPANY,
+      targetId: company.id,
+      companyId: undefined,
+      description: `Admin ${token.name} updated company ${image ? "logo" : `name to "${editedCompany.name}"`}`,
+      metadata: {
+        name: editedCompany.name,
+      },
+    });
+
     return NextResponse.json(
       { message: "Company edited successfully", data: editedCompany },
       { status: 200 },
@@ -136,6 +175,12 @@ export async function DELETE(req: NextRequest) {
   const { companyId } = await req.json();
 
   try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!token || token.role !== "SUPER_ADMIN") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const company = await prisma.company.findUnique({
       where: {
         id: companyId,
@@ -154,6 +199,18 @@ export async function DELETE(req: NextRequest) {
     const deletedCompany = await prisma.company.delete({
       where: {
         id: companyId,
+      },
+    });
+
+    await logActivity({
+      userId: token.sub,
+      action: ActivityAction.DELETE,
+      targetType: ActivityTarget.COMPANY,
+      targetId: company.id,
+      companyId: undefined,
+      description: `Admin ${token.name} deleted company "${company.name}"`,
+      metadata: {
+        name: company.name,
       },
     });
 

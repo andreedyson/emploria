@@ -1,4 +1,4 @@
-import { ActivityAction, ActivityTarget } from "@prisma/client";
+import { ActivityAction, ActivityTarget, Prisma } from "@prisma/client";
 import prisma from "./db";
 
 interface LogActivityParams {
@@ -8,6 +8,7 @@ interface LogActivityParams {
   targetType: ActivityTarget;
   targetId?: string;
   description: string;
+  metadata?: Prisma.InputJsonValue | Prisma.NullableJsonNullValueInput;
 }
 
 export async function logActivity({
@@ -17,6 +18,7 @@ export async function logActivity({
   targetType,
   targetId,
   description,
+  metadata,
 }: LogActivityParams) {
   await prisma.activity.create({
     data: {
@@ -26,6 +28,7 @@ export async function logActivity({
       targetType,
       targetId,
       description,
+      metadata,
     },
   });
 }
