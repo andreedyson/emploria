@@ -45,8 +45,8 @@ function UserViewLeaveDialog({ leave }: UserViewLeaveDialogProps) {
           <DialogDescription>Your leave request details.</DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-3">
-          <div className="text-sm">
+        <div className="space-y-3 text-xs sm:text-sm">
+          <div>
             <div className="text-muted-foreground flex items-center gap-1.5">
               <Loader size={14} />
               <p>Status</p>
@@ -54,7 +54,7 @@ function UserViewLeaveDialog({ leave }: UserViewLeaveDialogProps) {
             <LeaveStatusBadge status={leave.status} />
           </div>
           <Separator />
-          <div className="text-sm">
+          <div>
             <div className="text-muted-foreground flex items-center gap-1.5">
               <IdCard size={14} />
               <p>Leave ID</p>
@@ -68,14 +68,14 @@ function UserViewLeaveDialog({ leave }: UserViewLeaveDialogProps) {
               <Copy strokeWidth={2} size={16} />
             </p>
           </div>
-          <div className="text-sm">
+          <div>
             <div className="text-muted-foreground flex items-center gap-1.5">
               <Calendar size={14} />
               <p>Requested At</p>
             </div>
             <p>{formatDate(leave.createdAt)}</p>
           </div>
-          <div className="text-sm">
+          <div>
             <div className="text-muted-foreground flex items-center gap-1.5">
               <CalendarDays size={14} />
               <p>Duration</p>
@@ -84,7 +84,7 @@ function UserViewLeaveDialog({ leave }: UserViewLeaveDialogProps) {
               {formatDate(leave.startDate)} - {formatDate(leave.endDate)}
             </p>
           </div>
-          <div className="text-sm">
+          <div>
             <div className="text-muted-foreground flex items-center gap-1">
               <LetterText size={14} />
               <p>Reason</p>
