@@ -61,7 +61,7 @@ function ViewEmployeeDialog({ employeeData }: ViewEmployeeDialogProps) {
 
         {/* Employee Details Content */}
         <div className="space-y-6 p-4">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col gap-2 md:flex-row md:items-center">
             <Image
               src={
                 getImageUrl(employeeData.image as string, "users") ||
@@ -72,9 +72,9 @@ function ViewEmployeeDialog({ employeeData }: ViewEmployeeDialogProps) {
               height={80}
               className="size-8 rounded-full border-2 object-contain md:size-10"
             />
-            <div>
+            <div className="text-xs sm:text-sm">
               <p className="font-semibold">{employeeData.name}</p>
-              <p className="text-muted-foreground flex items-center gap-1 text-sm">
+              <p className="text-muted-foreground flex items-center gap-1">
                 {employeeData.id}
                 <span
                   title="Copy ID"
@@ -87,13 +87,13 @@ function ViewEmployeeDialog({ employeeData }: ViewEmployeeDialogProps) {
             </div>
           </div>
 
-          <div className="space-y-3 text-sm">
+          <div className="space-y-3 text-xs sm:text-sm">
             <div className="flex items-center justify-between">
               <div className="text-muted-foreground flex items-center gap-1">
                 <Mail size={14} />
                 <p>Email</p>
               </div>
-              <p>{employeeData.email}</p>
+              <p className="line-clamp-1">{employeeData.email}</p>
             </div>
             <div className="flex items-center justify-between">
               <div className="text-muted-foreground flex items-center gap-1">
@@ -109,7 +109,7 @@ function ViewEmployeeDialog({ employeeData }: ViewEmployeeDialogProps) {
                 <LetterText size={14} />
                 <p>Department</p>
               </div>
-              <p>
+              <p className="line-clamp-1">
                 {employeeData.department?.name
                   ? employeeData.department?.name
                   : "-"}
@@ -120,7 +120,9 @@ function ViewEmployeeDialog({ employeeData }: ViewEmployeeDialogProps) {
                 <Phone size={14} />
                 <p>Phone</p>
               </div>
-              <p>{employeeData.phone ? employeeData.phone : "-"}</p>
+              <p className="line-clamp-1">
+                {employeeData.phone ? employeeData.phone : "-"}
+              </p>
             </div>
             <div className="flex items-center justify-between">
               <div className="text-muted-foreground flex items-center gap-1">
@@ -145,7 +147,7 @@ function ViewEmployeeDialog({ employeeData }: ViewEmployeeDialogProps) {
             <div className="flex items-center justify-between">
               <div className="text-muted-foreground flex items-center gap-1">
                 <Calendar1 size={14} />
-                <p>Birthdate</p>
+                <p className="line-clamp-1">Birthdate</p>
               </div>
               <p>
                 {employeeData.dateOfBirth
@@ -156,7 +158,7 @@ function ViewEmployeeDialog({ employeeData }: ViewEmployeeDialogProps) {
             <div className="flex items-center justify-between">
               <div className="text-muted-foreground flex items-center gap-1">
                 <Calendar size={14} />
-                <p>Joined</p>
+                <p className="line-clamp-1">Joined</p>
               </div>
               <p>{formatDate(employeeData.joinDate)}</p>
             </div>
@@ -164,24 +166,24 @@ function ViewEmployeeDialog({ employeeData }: ViewEmployeeDialogProps) {
 
           <Separator />
 
-          <div className="space-y-3">
+          <div className="space-y-3 text-xs sm:text-sm">
             <h4 className="font-medium">Company & Department Details</h4>
 
-            <div className="text-sm">
+            <div>
               <div className="text-muted-foreground flex items-center gap-1">
                 <LetterText size={14} />
                 <p>Company Name</p>
               </div>
-              <p className="font-semibold">
+              <p className="line-clamp-1 font-semibold">
                 {employeeData.company?.name ? employeeData.company?.name : "-"}
               </p>
             </div>
-            <div className="text-sm">
+            <div>
               <div className="text-muted-foreground flex items-center gap-1">
                 <Briefcase size={14} />
                 <p>Position</p>
               </div>
-              <p className="font-semibold">
+              <p className="line-clamp-1 font-semibold">
                 {employeeData.department?.name && employeeData.employeeRole
                   ? `${employeeData.department.name} ${employeeData.employeeRole}`
                   : "-"}

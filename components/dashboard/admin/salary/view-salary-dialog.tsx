@@ -60,9 +60,9 @@ function ViewSalaryDialog({ salaryData }: ViewSalaryDialogProps) {
         </SheetHeader>
 
         {/* Salary Details Content */}
-        <div className="space-y-6 p-4">
+        <div className="space-y-6 p-4 text-xs sm:text-sm">
           <div className="space-y-1">
-            <div className="flex items-center justify-between text-sm">
+            <div className="flex flex-col justify-between text-sm md:flex-row md:items-center">
               <p className="text-muted-foreground">Payslip ID</p>
               <p
                 title="Copy ID"
@@ -78,7 +78,7 @@ function ViewSalaryDialog({ salaryData }: ViewSalaryDialogProps) {
               {salaryData.year}
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col gap-2 md:flex-row md:items-center">
             <Image
               src={
                 getImageUrl(salaryData.employee.image as string, "users") ||
@@ -92,13 +92,11 @@ function ViewSalaryDialog({ salaryData }: ViewSalaryDialogProps) {
 
             <div>
               <p className="font-semibold">{salaryData.employee.name}</p>
-              <p className="text-muted-foreground text-sm">
-                {salaryData.employee.id}
-              </p>
+              <p className="text-muted-foreground">{salaryData.employee.id}</p>
             </div>
           </div>
 
-          <div className="space-y-3 text-sm">
+          <div className="space-y-3 text-xs sm:text-sm">
             <div className="flex items-center justify-between">
               <div className="text-muted-foreground flex items-center gap-1">
                 🕛 Generated On

@@ -65,34 +65,34 @@ function ViewLeaveDialog({ leaveData }: ViewLeaveDialogProps) {
             <p className="font-semibold">{leaveData.employee.name}</p>
           </div>
 
-          <div className="space-y-3 text-sm">
+          <div className="space-y-3 text-xs sm:text-sm">
             <div className="flex items-center justify-between">
               <div className="text-muted-foreground flex items-center gap-1">
                 <Layers size={14} />
                 <p>Leave Type</p>
               </div>
-              <p>{leaveData.leaveType}</p>
+              <p className="line-clamp-1">{leaveData.leaveType}</p>
             </div>
             <div className="flex items-center justify-between">
               <div className="text-muted-foreground flex items-center gap-1">
                 <Calendar1 size={14} />
                 <p>Start Date</p>
               </div>
-              <p>{formatDate(leaveData.startDate)}</p>
+              <p className="line-clamp-1">{formatDate(leaveData.startDate)}</p>
             </div>
             <div className="flex items-center justify-between">
               <div className="text-muted-foreground flex items-center gap-1">
                 <CalendarDays size={14} />
                 <p>End Date</p>
               </div>
-              <p>{formatDate(leaveData.endDate)}</p>
+              <p className="line-clamp-1">{formatDate(leaveData.endDate)}</p>
             </div>
           </div>
 
           <Separator />
 
-          <div className="space-y-3">
-            <div className="text-sm">
+          <div className="space-y-3 text-xs sm:text-sm">
+            <div>
               <div className="text-muted-foreground flex items-center gap-1.5">
                 <IdCard size={14} />
                 <p>Leave ID</p>
@@ -106,21 +106,21 @@ function ViewLeaveDialog({ leaveData }: ViewLeaveDialogProps) {
                 <Copy strokeWidth={2} size={16} />
               </p>
             </div>
-            <div className="text-sm">
+            <div>
               <div className="text-muted-foreground flex items-center gap-1.5">
                 <Calendar size={14} />
                 <p>Requested At</p>
               </div>
               <p>{formatDate(leaveData.createdAt)}</p>
             </div>
-            <div className="text-sm">
+            <div>
               <div className="text-muted-foreground flex items-center gap-1.5">
                 <Loader size={14} />
                 <p>Status</p>
               </div>
               <LeaveStatusBadge status={leaveData.status} />
             </div>
-            <div className="text-sm">
+            <div>
               <div className="text-muted-foreground flex items-center gap-1">
                 <LetterText size={14} />
                 <p>Reason</p>
