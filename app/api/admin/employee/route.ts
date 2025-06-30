@@ -385,28 +385,53 @@ export async function PUT(req: NextRequest) {
       },
     });
 
-    await logActivity({
-      userId: token.sub,
-      action: ActivityAction.UPDATE,
-      targetType: ActivityTarget.EMPLOYEE,
-      targetId: updatedEmployee.id,
-      companyId: updatedEmployee.company.id ?? undefined,
-      description: `Company Admin: ${token.name} Updated ${updatedUser.name} employee record`,
-      metadata: {
-        company: company.name,
-        companyAdmin: {
-          id: token.sub,
-          name: token.name,
-          email: token.email,
+    if (isActive !== userExist.isActive) {
+      await logActivity({
+        userId: token.sub,
+        action: isActive ? ActivityAction.ACTIVATE : ActivityAction.DEACTIVATE,
+        targetType: ActivityTarget.EMPLOYEE,
+        targetId: updatedEmployee.id,
+        companyId: updatedEmployee.company.id ?? undefined,
+        description: `Company Admin: ${token.name} ${isActive ? "activated" : "deactivated"} ${updatedUser.name} account`,
+        metadata: {
+          company: company.name,
+          companyAdmin: {
+            id: token.sub,
+            name: token.name,
+            email: token.email,
+          },
+          activatedEmployee: {
+            id: updatedEmployee.id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            role: updatedEmployee.role,
+          },
         },
-        updatedEmployee: {
-          id: updatedEmployee.id,
-          name: updatedUser.name,
-          email: updatedUser.email,
-          role: updatedEmployee.role,
+      });
+    } else {
+      await logActivity({
+        userId: token.sub,
+        action: ActivityAction.UPDATE,
+        targetType: ActivityTarget.EMPLOYEE,
+        targetId: updatedEmployee.id,
+        companyId: updatedEmployee.company.id ?? undefined,
+        description: `Company Admin: ${token.name} Updated ${updatedUser.name} employee record`,
+        metadata: {
+          company: company.name,
+          companyAdmin: {
+            id: token.sub,
+            name: token.name,
+            email: token.email,
+          },
+          updatedEmployee: {
+            id: updatedEmployee.id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            role: updatedEmployee.role,
+          },
         },
-      },
-    });
+      });
+    }
 
     return NextResponse.json(
       { message: "Employee successfully updated", data: updatedEmployee },
