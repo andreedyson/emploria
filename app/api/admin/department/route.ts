@@ -1,10 +1,19 @@
 import prisma from "@/lib/db";
+import { logActivity } from "@/lib/log-activity";
 import { departmentSchema } from "@/validations/admin";
+import { ActivityAction, ActivityTarget } from "@prisma/client";
+import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const { name, companyId } = await req.json();
   try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!token || token.role !== "SUPER_ADMIN_COMPANY") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const validatedFields = departmentSchema.safeParse({ name, companyId });
 
     if (!validatedFields.success) {
@@ -51,6 +60,27 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    await logActivity({
+      userId: token.sub,
+      action: ActivityAction.CREATE,
+      targetType: ActivityTarget.DEPARTMENT,
+      targetId: newDepartment.id,
+      companyId: companyId ?? undefined,
+      description: `Company Admin: ${token.name} created a new department "${newDepartment.name}"`,
+      metadata: {
+        company: company.name,
+        companyAdmin: {
+          id: token.sub,
+          name: token.name,
+          email: token.email,
+        },
+        newDepartment: {
+          id: newDepartment.id,
+          name: newDepartment.name,
+        },
+      },
+    });
+
     return NextResponse.json(
       { message: "Department created successfully", data: newDepartment },
       { status: 201 },
@@ -68,6 +98,12 @@ export async function PUT(req: NextRequest) {
   const { departmentId, name, companyId } = await req.json();
 
   try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!token || token.role !== "SUPER_ADMIN_COMPANY") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const validatedFields = departmentSchema.safeParse({ name, companyId });
 
     if (!validatedFields.success) {
@@ -133,6 +169,27 @@ export async function PUT(req: NextRequest) {
       },
     });
 
+    await logActivity({
+      userId: token.sub,
+      action: ActivityAction.UPDATE,
+      targetType: ActivityTarget.DEPARTMENT,
+      targetId: updatedDepartment.id,
+      companyId: companyId ?? undefined,
+      description: `Company Admin: ${token.name} updated "${updatedDepartment.name}" department data`,
+      metadata: {
+        company: company.name,
+        companyAdmin: {
+          id: token.sub,
+          name: token.name,
+          email: token.email,
+        },
+        updatedDepartment: {
+          id: updatedDepartment.id,
+          name: updatedDepartment.name,
+        },
+      },
+    });
+
     return NextResponse.json(
       { message: "Department edited successfully", data: updatedDepartment },
       { status: 200 },
@@ -149,6 +206,12 @@ export async function PUT(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   const { departmentId, companyId } = await req.json();
   try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!token || token.role !== "SUPER_ADMIN_COMPANY") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     // Check department data
     const department = await prisma.department.findUnique({
       where: {
@@ -181,6 +244,27 @@ export async function DELETE(req: NextRequest) {
       where: {
         id: departmentId,
         companyId: companyId,
+      },
+    });
+
+    await logActivity({
+      userId: token.sub,
+      action: ActivityAction.DELETE,
+      targetType: ActivityTarget.DEPARTMENT,
+      targetId: deletedDepartment.id,
+      companyId: companyId ?? undefined,
+      description: `Company Admin: ${token.name} deleted "${deletedDepartment.name}" department`,
+      metadata: {
+        company: company.name,
+        companyAdmin: {
+          id: token.sub,
+          name: token.name,
+          email: token.email,
+        },
+        deletedDepartment: {
+          id: deletedDepartment.id,
+          name: deletedDepartment.name,
+        },
       },
     });
 
