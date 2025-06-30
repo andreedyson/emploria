@@ -1,13 +1,26 @@
 import prisma from "@/lib/db";
+import { logActivity } from "@/lib/log-activity";
 import { leaveSchema } from "@/validations/admin";
-import { LeaveFrequency, LeaveType } from "@prisma/client";
+import {
+  ActivityAction,
+  ActivityTarget,
+  LeaveFrequency,
+  LeaveType,
+} from "@prisma/client";
 import { startOfMonth, startOfYear } from "date-fns";
+import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const { employeeId, startDate, endDate, reason, status, leaveType } =
     await req.json();
   try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!token || token.role !== "SUPER_ADMIN_COMPANY") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const validatedFields = leaveSchema.safeParse({
       employeeId,
       startDate,
@@ -155,6 +168,41 @@ export async function POST(req: NextRequest) {
         endDate: end,
         reason,
         status,
+      },
+      include: {
+        employee: {
+          select: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            companyId: true,
+          },
+        },
+      },
+    });
+
+    await logActivity({
+      userId: token.sub,
+      action: ActivityAction.CREATE,
+      targetType: ActivityTarget.LEAVE,
+      targetId: leave.id,
+      companyId: leave.employee.companyId ?? undefined,
+      description: `Company Admin: ${token.name} created a new leave application for 
+          ${leave.employee.user.name}`,
+      metadata: {
+        companyAdmin: {
+          id: token.sub,
+          name: token.name,
+          email: token.email,
+        },
+        newLeave: {
+          id: leave.id,
+          employee: leave.employee.user.name,
+          requestedAt: leave.createdAt,
+        },
       },
     });
 

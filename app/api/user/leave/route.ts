@@ -1,13 +1,27 @@
 import prisma from "@/lib/db";
 import { applyLeaveSchema } from "@/validations/user";
-import { LeaveType, LeaveFrequency } from "@prisma/client";
+import {
+  LeaveType,
+  LeaveFrequency,
+  ActivityAction,
+  ActivityTarget,
+} from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { startOfMonth, startOfYear } from "date-fns";
+import { logActivity } from "@/lib/log-activity";
+import { getToken } from "next-auth/jwt";
+import { formatDate } from "@/lib/utils";
 
 export async function POST(req: NextRequest) {
   const { userId, startDate, endDate, reason, leaveType } = await req.json();
 
   try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!token || token.role !== "USER") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     // Validate request
     const validatedFields = applyLeaveSchema.safeParse({
       userId,
@@ -153,6 +167,40 @@ export async function POST(req: NextRequest) {
         endDate: end,
         reason,
         status: "PENDING",
+      },
+      include: {
+        employee: {
+          select: {
+            companyId: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    await logActivity({
+      userId: token.sub,
+      action: ActivityAction.CREATE,
+      targetType: ActivityTarget.LEAVE,
+      targetId: leave.id,
+      companyId: leave.employee.companyId ?? undefined,
+      description: `${leave.employee.user.name} applied for a new leave on ${formatDate(leave.createdAt)}`,
+      metadata: {
+        companyAdmin: {
+          id: token.sub,
+          name: token.name,
+          email: token.email,
+        },
+        newLeave: {
+          id: leave.id,
+          employee: leave.employee.user.name,
+          requestedAt: leave.createdAt,
+        },
       },
     });
 
