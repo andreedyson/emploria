@@ -27,9 +27,9 @@ import { customToast } from "@/components/custom-toast";
 import { SubmitButton } from "@/components/submit-button";
 import { Input } from "@/components/ui/input";
 import { BASE_URL } from "@/constants";
-import { companySchema } from "@/validations/super-admin";
-import { useRouter } from "next/navigation";
+import { departmentSchema } from "@/validations/admin";
 import { Building2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type AddDepartmentDialogProps = {
   companyId: string;
@@ -41,14 +41,15 @@ function AddDepartmentDialog({ companyId }: AddDepartmentDialogProps) {
 
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof companySchema>>({
-    resolver: zodResolver(companySchema),
+  const form = useForm<z.infer<typeof departmentSchema>>({
+    resolver: zodResolver(departmentSchema),
     defaultValues: {
       name: "",
+      color: "#000000",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof companySchema>) {
+  async function onSubmit(values: z.infer<typeof departmentSchema>) {
     setSubmitting(true);
 
     try {
@@ -58,8 +59,9 @@ function AddDepartmentDialog({ companyId }: AddDepartmentDialogProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: values.name,
           companyId: companyId,
+          name: values.name,
+          color: values.color,
         }),
       });
 
@@ -119,12 +121,24 @@ function AddDepartmentDialog({ companyId }: AddDepartmentDialogProps) {
               )}
             />
 
+            <FormField
+              control={form.control}
+              name="color"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Color</FormLabel>
+                  <FormControl>
+                    <Input type="color" {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
             <DialogFooter className="flex gap-2">
               <SubmitButton
                 isSubmitting={submitting}
                 className="bg-picton-blue-400 hover:bg-picton-blue-500 dark:text-foreground w-full"
               >
-                {submitting ? "Adding" : "Add Company"}
+                {submitting ? "Adding" : "Add Department"}
               </SubmitButton>
             </DialogFooter>
           </form>

@@ -66,7 +66,7 @@ export const departmentSchema = z.object({
     .string({ required_error: "Department Name is required" })
     .min(1, { message: "Department should be at least 1 character" })
     .max(50, { message: "Department should be less than 50 characters" }),
-  companyId: z.string({ required_error: "Company ID is required" }).min(1),
+  color: z.string().regex(/^#([0-9A-Fa-f]{6})$/, "Invalid color"),
 });
 
 export const attendanceSchema = z.object({

@@ -6,7 +6,7 @@ import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const { name, companyId } = await req.json();
+  const { name, companyId, color } = await req.json();
   try {
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
@@ -14,7 +14,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const validatedFields = departmentSchema.safeParse({ name, companyId });
+    const validatedFields = departmentSchema.safeParse({
+      name,
+      color,
+    });
 
     if (!validatedFields.success) {
       const { errors } = validatedFields.error;
@@ -25,7 +28,7 @@ export async function POST(req: NextRequest) {
     // Check company data
     const company = await prisma.company.findUnique({
       where: {
-        id: validatedFields.data.companyId,
+        id: companyId,
       },
     });
 
@@ -40,7 +43,8 @@ export async function POST(req: NextRequest) {
     const nameExist = await prisma.department.findFirst({
       where: {
         name: validatedFields.data.name,
-        companyId: validatedFields.data.companyId,
+        companyId: companyId,
+        color: validatedFields.data.color,
       },
     });
 
@@ -56,7 +60,8 @@ export async function POST(req: NextRequest) {
     const newDepartment = await prisma.department.create({
       data: {
         name: validatedFields.data.name,
-        companyId: validatedFields.data.companyId,
+        color: validatedFields.data.color,
+        companyId: companyId,
       },
     });
 
@@ -95,7 +100,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-  const { departmentId, name, companyId } = await req.json();
+  const { departmentId, name, companyId, color } = await req.json();
 
   try {
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
@@ -104,7 +109,10 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const validatedFields = departmentSchema.safeParse({ name, companyId });
+    const validatedFields = departmentSchema.safeParse({
+      name,
+      color,
+    });
 
     if (!validatedFields.success) {
       const { errors } = validatedFields.error;
@@ -129,7 +137,7 @@ export async function PUT(req: NextRequest) {
     // Check company data
     const company = await prisma.company.findUnique({
       where: {
-        id: validatedFields.data.companyId,
+        id: companyId,
       },
     });
 
@@ -146,7 +154,8 @@ export async function PUT(req: NextRequest) {
       const nameExist = await prisma.department.findFirst({
         where: {
           name: validatedFields.data.name,
-          companyId: validatedFields.data.companyId,
+          companyId: companyId,
+          color: validatedFields.data.color,
         },
       });
 
@@ -166,6 +175,7 @@ export async function PUT(req: NextRequest) {
       },
       data: {
         name: validatedFields.data.name,
+        color: validatedFields.data.color,
       },
     });
 

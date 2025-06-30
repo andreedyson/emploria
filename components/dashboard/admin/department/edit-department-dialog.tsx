@@ -27,10 +27,10 @@ import { customToast } from "@/components/custom-toast";
 import { SubmitButton } from "@/components/submit-button";
 import { Input } from "@/components/ui/input";
 import { BASE_URL } from "@/constants";
-import { companySchema } from "@/validations/super-admin";
 import { Department } from "@prisma/client";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { departmentSchema } from "@/validations/admin";
 
 type EditDepartmentDialogProps = {
   companyId: string;
@@ -46,20 +46,22 @@ function EditDepartmentDialog({
 
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof companySchema>>({
-    resolver: zodResolver(companySchema),
+  const form = useForm<z.infer<typeof departmentSchema>>({
+    resolver: zodResolver(departmentSchema),
     defaultValues: {
       name: departmentData.name,
+      color: departmentData.color || "#000",
     },
   });
 
   useEffect(() => {
     form.reset({
       name: departmentData.name,
+      color: departmentData.color || "",
     });
-  }, [departmentData.name, form]);
+  }, [departmentData, form]);
 
-  async function onSubmit(values: z.infer<typeof companySchema>) {
+  async function onSubmit(values: z.infer<typeof departmentSchema>) {
     setSubmitting(true);
 
     try {
@@ -71,6 +73,7 @@ function EditDepartmentDialog({
         body: JSON.stringify({
           departmentId: departmentData.id,
           name: values.name,
+          color: values.color,
           companyId: companyId,
         }),
       });
@@ -123,6 +126,24 @@ function EditDepartmentDialog({
                       placeholder="e.g: Human Resources"
                       autoComplete="off"
                       {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="color"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Color</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="color"
+                      value={field.value}
+                      onChange={field.onChange}
                     />
                   </FormControl>
                   <FormMessage />
