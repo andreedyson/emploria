@@ -8,8 +8,6 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { getImageUrl } from "@/lib/supabase";
@@ -43,25 +41,19 @@ function UserAvatar({ fullname, role, email, image }: UserAvatarProps) {
 
   const isOnDashboard = pathname.includes("/dashboard");
   const linkHref = isUserAdmin
-    ? isOnDashboard
-      ? "/"
-      : "/dashboard"
+    ? `/dashboard${role === "SUPER_ADMIN" ? "super-admin" : "admin"}`
     : "/dashboard/user/profile";
 
-  const linkLabel = isUserAdmin
-    ? isOnDashboard
-      ? "Main Page"
-      : "Dashboard"
-    : "Profile";
+  const linkLabel = isUserAdmin ? "Dashboard" : "Profile";
 
   const linkIcon = isUserAdmin ? (
     isOnDashboard ? (
-      <House />
+      <House className="dark:text-background text-foreground" />
     ) : (
-      <ChartBarStacked />
+      <ChartBarStacked className="dark:text-background text-foreground" />
     )
   ) : (
-    <User />
+    <User className="dark:text-background text-foreground" />
   );
 
   return (
@@ -86,7 +78,7 @@ function UserAvatar({ fullname, role, email, image }: UserAvatarProps) {
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="z-[100] w-56" align="end" forceMount>
+      <DropdownMenuContent className="z-[100] w-60" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1 text-right">
             <p className="text-sm leading-none font-semibold">{fullname}</p>
@@ -106,30 +98,52 @@ function UserAvatar({ fullname, role, email, image }: UserAvatarProps) {
         <DropdownMenuGroup>
           <DropdownMenuItem asChild className="cursor-pointer">
             <Link href={linkHref} className="flex w-full items-center gap-2">
-              {linkIcon}
-              {linkLabel}
+              <div className="grid size-7 place-items-center rounded-full bg-slate-200">
+                {linkIcon}
+              </div>
+              <div>
+                <p className="text-sm">{linkLabel}</p>
+                <p className="text-muted-foreground text-xs">
+                  {isUserAdmin
+                    ? "View main dashboard"
+                    : "View  your user profile"}
+                </p>
+              </div>
             </Link>
           </DropdownMenuItem>
           {isUserAdmin && (
             <DropdownMenuItem asChild className="cursor-pointer">
               <Link
                 href={`/dashboard/${role === "SUPER_ADMIN" ? "super-admin" : "admin"}/settings`}
-                className="flex w-full items-center gap-2"
+                className="flex w-full items-center gap-3"
               >
-                <Settings2 />
-                Settings
+                <div className="grid size-7 place-items-center rounded-full bg-slate-200">
+                  <Settings2 className="dark:text-background text-foreground" />
+                </div>
+                <div>
+                  <p className="text-sm">Settings</p>
+                  <p className="text-muted-foreground text-xs">
+                    {role === "SUPER_ADMIN"
+                      ? "View application configuration"
+                      : "View company settings"}
+                  </p>
+                </div>
               </Link>
             </DropdownMenuItem>
           )}
-          <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => signOut({ redirect: true })}
-            className="cursor-pointer font-semibold text-red-500"
+            className="cursor-pointer text-red-500"
           >
-            Log out
-            <DropdownMenuShortcut className="text-red-500">
-              <LogOutIcon size={20} />
-            </DropdownMenuShortcut>
+            <div className="grid size-7 place-items-center rounded-full bg-slate-200 font-semibold">
+              <LogOutIcon className="text-red-500" />
+            </div>
+            <div>
+              <p className="text-sm">Log Out</p>
+              <p className="text-muted-foreground text-xs">
+                Sign out from your account
+              </p>
+            </div>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
