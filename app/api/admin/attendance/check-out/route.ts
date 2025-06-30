@@ -60,14 +60,13 @@ export async function POST(req: NextRequest) {
     // Check if the user is trying to check out after overtime
     const latestCheckOut = company?.latestCheckOut || "23:00";
     const [lateHour, lateMinute] = latestCheckOut.split(":").map(Number);
-    const latestTimeAllowed = new Date(now);
-    latestTimeAllowed.setHours(lateHour, lateMinute, 0, 0);
+    const latestCheckoutTimeAllowed = new Date(now);
+    latestCheckoutTimeAllowed.setHours(lateHour, lateMinute, 0, 0);
 
-    if (now > latestTimeAllowed) {
+    if (now > latestCheckoutTimeAllowed) {
       return NextResponse.json(
         {
-          message:
-            "You cannot check out after 11:00 PM without overtime approval.",
+          message: `You cannot check out after ${latestCheckOut} PM without overtime approval.`,
         },
         { status: 400 },
       );
