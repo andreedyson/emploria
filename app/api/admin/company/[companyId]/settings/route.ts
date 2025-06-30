@@ -1,10 +1,19 @@
 import prisma from "@/lib/db";
+import { logActivity } from "@/lib/log-activity";
+import { ActivityAction, ActivityTarget } from "@prisma/client";
+import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   req: NextRequest,
   props: { params: Promise<{ companyId: string }> },
 ) {
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+  if (!token || token.role !== "SUPER_ADMIN_COMPANY") {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
   const params = await props.params;
   const { ...updates } = await req.json();
 
@@ -57,6 +66,29 @@ export async function PATCH(
     const messages = validUpdateKeys.map(
       (key) => `${fieldLabels[key]} updated successfully`,
     );
+
+    await logActivity({
+      userId: token.sub,
+      action: ActivityAction.UPDATE,
+      targetType: ActivityTarget.SYSTEM,
+      targetId: updatedCompany.id,
+      companyId: updatedCompany.id ?? undefined,
+      description: `${token.name} (Company Admin) updated ${validUpdateKeys.map(
+        (key) => `${fieldLabels[key]}`,
+      )} settings for 
+          ${updatedCompany.name}`,
+      metadata: {
+        companyAdmin: {
+          id: token.sub,
+          name: token.name,
+          email: token.email,
+        },
+        updatedSettings: {
+          id: updatedCompany.id,
+          updatedAt: updatedCompany.updatedAt,
+        },
+      },
+    });
 
     return NextResponse.json({
       data: updatedCompany,
