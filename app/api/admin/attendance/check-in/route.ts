@@ -37,12 +37,22 @@ export async function POST(req: NextRequest) {
 
     // Parse company check-in policy
     const checkInEndTime = company?.checkInEndTime || "09:00";
+
     const [checkInEndHour, checkInMinute] = checkInEndTime
       .split(":")
       .map(Number);
-
     const lateTime = new Date(now);
     lateTime.setHours(checkInEndHour, checkInMinute, 0, 0);
+
+    const latestCheckInTime = new Date(now);
+    latestCheckInTime.setHours(16, 0, 0, 0);
+
+    if (now > latestCheckInTime) {
+      return NextResponse.json(
+        { message: "You can't check-in after 16:00, check-in tomorrow" },
+        { status: 400 },
+      );
+    }
 
     const status = now > lateTime ? "LATE" : "PRESENT";
 
