@@ -1,11 +1,20 @@
 // /app/api/admin/attendance/route.ts
 import prisma from "@/lib/db";
+import { logActivity } from "@/lib/log-activity";
 import { attendanceSchema } from "@/validations/admin";
+import { ActivityAction, ActivityTarget } from "@prisma/client";
+import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const { employeeId, date, status, checkIn, checkOut } = await req.json();
   try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!token || token.role !== "SUPER_ADMIN_COMPANY") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const validatedFields = attendanceSchema.safeParse({
       employeeId,
       date,
@@ -43,6 +52,43 @@ export async function POST(req: NextRequest) {
         checkOut: checkOut ? new Date(checkOut) : undefined,
         status,
       },
+      select: {
+        id: true,
+        date: true,
+        employee: {
+          select: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            companyId: true,
+          },
+        },
+      },
+    });
+
+    await logActivity({
+      userId: token.sub,
+      action: ActivityAction.CREATE,
+      targetType: ActivityTarget.ATTENDANCE,
+      targetId: attendance.id,
+      companyId: attendance.employee.companyId ?? undefined,
+      description: `Company Admin: ${token.name} generated a new manual attendance data for 
+      ${attendance.employee.user.name}`,
+      metadata: {
+        companyAdmin: {
+          id: token.sub,
+          name: token.name,
+          email: token.email,
+        },
+        newAttendance: {
+          id: attendance.id,
+          employee: attendance.employee.user.name,
+          date: attendance.date,
+        },
+      },
     });
 
     return NextResponse.json(
@@ -59,6 +105,12 @@ export async function PUT(req: NextRequest) {
   const { attendanceId, employeeId, date, status, checkIn, checkOut } =
     await req.json();
   try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!token || token.role !== "SUPER_ADMIN_COMPANY") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const validatedFields = attendanceSchema.safeParse({
       employeeId,
       date,
@@ -119,6 +171,43 @@ export async function PUT(req: NextRequest) {
         checkOut: checkOut ? new Date(checkOut) : null,
         status,
       },
+      select: {
+        id: true,
+        date: true,
+        employee: {
+          select: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            companyId: true,
+          },
+        },
+      },
+    });
+
+    await logActivity({
+      userId: token.sub,
+      action: ActivityAction.CREATE,
+      targetType: ActivityTarget.ATTENDANCE,
+      targetId: updatedAttendance.id,
+      companyId: updatedAttendance.employee.companyId ?? undefined,
+      description: `Company Admin: ${token.name} updated an attendance data for 
+      ${updatedAttendance.employee.user.name}`,
+      metadata: {
+        companyAdmin: {
+          id: token.sub,
+          name: token.name,
+          email: token.email,
+        },
+        updatedAttendance: {
+          id: updatedAttendance.id,
+          employee: updatedAttendance.employee.user.name,
+          date: updatedAttendance.date,
+        },
+      },
     });
 
     return NextResponse.json(
@@ -137,6 +226,12 @@ export async function PUT(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   const { attendanceId } = await req.json();
   try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!token || token.role !== "SUPER_ADMIN_COMPANY") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     // Check attendance data
     const attendance = await prisma.attendance.findUnique({
       where: {
@@ -154,6 +249,43 @@ export async function DELETE(req: NextRequest) {
     const deletedAttendance = await prisma.attendance.delete({
       where: {
         id: attendanceId,
+      },
+      select: {
+        id: true,
+        date: true,
+        employee: {
+          select: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            companyId: true,
+          },
+        },
+      },
+    });
+
+    await logActivity({
+      userId: token.sub,
+      action: ActivityAction.DELETE,
+      targetType: ActivityTarget.ATTENDANCE,
+      targetId: deletedAttendance.id,
+      companyId: deletedAttendance.employee.companyId ?? undefined,
+      description: `Company Admin: ${token.name} deleted an attendance data of 
+      ${deletedAttendance.employee.user.name}`,
+      metadata: {
+        companyAdmin: {
+          id: token.sub,
+          name: token.name,
+          email: token.email,
+        },
+        deletedAttendance: {
+          id: deletedAttendance.id,
+          employee: deletedAttendance.employee.user.name,
+          date: deletedAttendance.date,
+        },
       },
     });
 
