@@ -1,10 +1,19 @@
 import prisma from "@/lib/db";
+import { logActivity } from "@/lib/log-activity";
+import { convertToGmt7TimeString, formatDate } from "@/lib/utils";
+import { ActivityAction, ActivityTarget } from "@prisma/client";
+import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const { userId } = await req.json();
 
   try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!token || token.role !== "USER") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     // Check employee data
     const employee = await prisma.employee.findUnique({
       where: { userId },
@@ -72,6 +81,37 @@ export async function POST(req: NextRequest) {
         date: today,
         checkIn: now,
         status,
+      },
+      include: {
+        employee: {
+          select: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            companyId: true,
+          },
+        },
+      },
+    });
+
+    await logActivity({
+      userId: token.sub,
+      action: ActivityAction.CHECK_IN,
+      targetType: ActivityTarget.ATTENDANCE,
+      targetId: attendance.id,
+      companyId: attendance.employee.companyId ?? undefined,
+      description: `${attendance.employee.user.name} checked-in at ${convertToGmt7TimeString(attendance.checkIn as Date)} on ${formatDate(attendance.date)}`,
+      metadata: {
+        checkInAttendnace: {
+          id: attendance.id,
+          employee: attendance.employee.user.name,
+          date: attendance.date,
+          checkIn: attendance.checkIn,
+          checkOut: attendance.checkOut,
+        },
       },
     });
 

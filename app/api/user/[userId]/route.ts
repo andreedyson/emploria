@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { updateFile, uploadFile } from "@/lib/supabase";
-import { Gender } from "@prisma/client";
+import { ActivityAction, ActivityTarget, Gender } from "@prisma/client";
+import { logActivity } from "@/lib/log-activity";
+import { getToken } from "next-auth/jwt";
 
 export async function PATCH(
   req: NextRequest,
@@ -16,6 +18,12 @@ export async function PATCH(
   }
 
   try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!token || token.role !== "USER") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const formData = await req.formData();
     const image = formData.get("image") as File;
     const name = formData.get("name") as string;
@@ -73,9 +81,25 @@ export async function PATCH(
       },
     });
 
+    await logActivity({
+      userId: token.sub,
+      action: ActivityAction.UPDATE,
+      targetType: ActivityTarget.USER,
+      targetId: updatedUser.id,
+      companyId: updatedUser.companyId ?? undefined,
+      description: `${updatedUser.name} updated their user profile`,
+      metadata: {
+        companyId: updatedUser.companyId,
+        updatedUser: {
+          id: updatedUser.id,
+          email: updatedUser.email,
+        },
+      },
+    });
+
     return NextResponse.json(updatedUser, { status: 200 });
   } catch (error) {
-    console.error("[PATCH /api/user/[userId]]", error);
+    console.error("[PATCH /api/user/[userId]", error);
     return NextResponse.json(
       { message: "Failed to update user" },
       { status: 500 },

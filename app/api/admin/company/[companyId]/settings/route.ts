@@ -73,10 +73,9 @@ export async function PATCH(
       targetType: ActivityTarget.SYSTEM,
       targetId: updatedCompany.id,
       companyId: updatedCompany.id ?? undefined,
-      description: `${token.name} (Company Admin) updated ${validUpdateKeys.map(
-        (key) => `${fieldLabels[key]}`,
-      )} settings for 
-          ${updatedCompany.name}`,
+      description: `${token.name} (Company Admin) updated ${validUpdateKeys
+        .map((key) => `${fieldLabels[key]}`)
+        .join(" and ")} settings for ${updatedCompany.name}`,
       metadata: {
         companyAdmin: {
           id: token.sub,
