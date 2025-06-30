@@ -1,11 +1,19 @@
 import prisma from "@/lib/db";
+import { logActivity } from "@/lib/log-activity";
 import { salarySchema } from "@/validations/admin";
-import { Prisma } from "@prisma/client";
+import { ActivityAction, ActivityTarget, Prisma } from "@prisma/client";
+import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const { employeeId, month, year, bonus, deduction } = await req.json();
   try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!token || token.role !== "SUPER_ADMIN_COMPANY") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const validatedFields = salarySchema.safeParse({
       employeeId,
       month,
@@ -108,6 +116,42 @@ export async function POST(req: NextRequest) {
         attendanceBonus: attendanceBonus,
         total: total,
       },
+      include: {
+        employee: {
+          select: {
+            companyId: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    await logActivity({
+      userId: token.sub,
+      action: ActivityAction.CREATE,
+      targetType: ActivityTarget.SALARY,
+      targetId: salary.id,
+      companyId: salary.employee.companyId ?? undefined,
+      description: `${token.name} (Company Admin) generated a new payslip for ${salary.employee.user.name} for ${salary.month} ${salary.year}`,
+      metadata: {
+        companyAdmin: {
+          id: token.sub,
+          name: token.name,
+          email: token.email,
+        },
+        newSalary: {
+          id: salary.id,
+          employee: salary.employee.user.name,
+          month: salary.month,
+          year: salary.year,
+          total: salary.total,
+        },
+      },
     });
 
     return NextResponse.json(
@@ -139,6 +183,12 @@ export async function PUT(req: NextRequest) {
   const { salaryId, employeeId, month, year, bonus, deduction } =
     await req.json();
   try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!token || token.role !== "SUPER_ADMIN_COMPANY") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const validatedFields = salarySchema.safeParse({
       employeeId,
       month,
@@ -246,6 +296,41 @@ export async function PUT(req: NextRequest) {
         deduction: validatedFields.data.deduction ?? 0,
         attendanceBonus: attendanceBonus,
         total: total,
+      },
+      include: {
+        employee: {
+          select: {
+            companyId: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    await logActivity({
+      userId: token.sub,
+      action: ActivityAction.UPDATE,
+      targetType: ActivityTarget.SALARY,
+      targetId: updatedSalary.id,
+      companyId: updatedSalary.employee.companyId ?? undefined,
+      description: `${token.name} (Company Admin) updated a salary data of ${updatedSalary.employee.user.name} for ${updatedSalary.month} ${updatedSalary.year}`,
+      metadata: {
+        companyAdmin: {
+          id: token.sub,
+          name: token.name,
+          email: token.email,
+        },
+        updatedSalary: {
+          id: updatedSalary.id,
+          employee: updatedSalary.employee.user.name,
+          month: updatedSalary.month,
+          year: updatedSalary.year,
+        },
       },
     });
 
