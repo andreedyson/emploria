@@ -119,14 +119,14 @@ function UserProfileAvatar({ userId, name, image }: UserProfileAvatarProps) {
           width={100}
           height={100}
           alt={name || "User Profile"}
-          className="border-background z-[99] rounded-full border-4 object-cover"
+          className="border-background rounded-full border-4 object-cover"
         />
         <AvatarFallback>{initials}</AvatarFallback>
       </Avatar>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger
           asChild
-          className="absolute right-0 bottom-0 z-[100] cursor-pointer"
+          className="absolute right-0 bottom-0 cursor-pointer"
         >
           <div className="bg-muted grid size-8 place-items-center rounded-full border-2 border-gray-300">
             <Pencil size={16} className="text-yellow-500" />
