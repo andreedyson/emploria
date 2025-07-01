@@ -105,7 +105,7 @@ export async function POST(req: NextRequest) {
       companyId: attendance.employee.companyId ?? undefined,
       description: `${attendance.employee.user.name} checked-in at ${convertToGmt7TimeString(attendance.checkIn as Date)} on ${formatDate(attendance.date)}`,
       metadata: {
-        checkInAttendnace: {
+        checkInAttendace: {
           id: attendance.id,
           employee: attendance.employee.user.name,
           date: attendance.date,

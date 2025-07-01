@@ -41,7 +41,7 @@ function UserAvatar({ fullname, role, email, image }: UserAvatarProps) {
 
   const isOnDashboard = pathname.includes("/dashboard");
   const linkHref = isUserAdmin
-    ? `/dashboard${role === "SUPER_ADMIN" ? "super-admin" : "admin"}`
+    ? `/dashboard/${role === "SUPER_ADMIN" ? "super-admin" : "admin"}`
     : "/dashboard/user/profile";
 
   const linkLabel = isUserAdmin ? "Dashboard" : "Profile";
