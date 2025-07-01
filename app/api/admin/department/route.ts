@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
       targetType: ActivityTarget.DEPARTMENT,
       targetId: newDepartment.id,
       companyId: companyId ?? undefined,
-      description: `Company Admin: ${token.name} created a new department "${newDepartment.name}"`,
+      description: `${token.name} (Company Admin) created a new department "${newDepartment.name}"`,
       metadata: {
         company: company.name,
         companyAdmin: {
@@ -263,7 +263,7 @@ export async function DELETE(req: NextRequest) {
       targetType: ActivityTarget.DEPARTMENT,
       targetId: deletedDepartment.id,
       companyId: companyId ?? undefined,
-      description: `Company Admin: ${token.name} deleted "${deletedDepartment.name}" department`,
+      description: `${token.name} (Company Admin) deleted "${deletedDepartment.name}" department`,
       metadata: {
         company: company.name,
         companyAdmin: {
