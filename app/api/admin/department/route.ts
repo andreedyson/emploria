@@ -185,7 +185,7 @@ export async function PUT(req: NextRequest) {
       targetType: ActivityTarget.DEPARTMENT,
       targetId: updatedDepartment.id,
       companyId: companyId ?? undefined,
-      description: `Company Admin: ${token.name} updated "${updatedDepartment.name}" department data`,
+      description: `${token.name} (Company Admin) updated "${updatedDepartment.name}" department data`,
       metadata: {
         company: company.name,
         companyAdmin: {

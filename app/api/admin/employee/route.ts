@@ -202,7 +202,7 @@ export async function POST(req: NextRequest) {
       targetType: ActivityTarget.EMPLOYEE,
       targetId: newEmployee.id,
       companyId: newEmployee.company.id ?? undefined,
-      description: `Company Admin: ${token.name} Created employee record for ${newUser.name}`,
+      description: `${token.name} (Company Admin) Created employee record for ${newUser.name}`,
       metadata: {
         company: company.name,
         companyAdmin: {
@@ -392,7 +392,7 @@ export async function PUT(req: NextRequest) {
         targetType: ActivityTarget.EMPLOYEE,
         targetId: updatedEmployee.id,
         companyId: updatedEmployee.company.id ?? undefined,
-        description: `Company Admin: ${token.name} ${isActive ? "activated" : "deactivated"} ${updatedUser.name} account`,
+        description: `${token.name} (Company Admin) ${isActive ? "activated" : "deactivated"} ${updatedUser.name} account`,
         metadata: {
           company: company.name,
           companyAdmin: {
@@ -415,7 +415,7 @@ export async function PUT(req: NextRequest) {
         targetType: ActivityTarget.EMPLOYEE,
         targetId: updatedEmployee.id,
         companyId: updatedEmployee.company.id ?? undefined,
-        description: `Company Admin: ${token.name} Updated ${updatedUser.name} employee record`,
+        description: `${token.name} (Company Admin) Updated ${updatedUser.name} employee record`,
         metadata: {
           company: company.name,
           companyAdmin: {
@@ -485,7 +485,7 @@ export async function DELETE(req: NextRequest) {
       targetType: ActivityTarget.EMPLOYEE,
       targetId: softDeletedEmployee.id,
       companyId: softDeletedEmployee.company.id ?? undefined,
-      description: `Company Admin: ${token.name} deleted / deactivated ${softDeletedUser.name} employee record`,
+      description: `${token.name} (Company Admin) deleted / deactivated ${softDeletedUser.name} employee record`,
       metadata: {
         company: softDeletedEmployee.company.name,
         companyAdmin: {

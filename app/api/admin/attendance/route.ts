@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
       targetType: ActivityTarget.ATTENDANCE,
       targetId: attendance.id,
       companyId: attendance.employee.companyId ?? undefined,
-      description: `Company Admin: ${token.name} generated a new manual attendance data for 
+      description: `${token.name} (Company Admin) generated a new manual attendance data for 
       ${attendance.employee.user.name}`,
       metadata: {
         companyAdmin: {
@@ -194,7 +194,7 @@ export async function PUT(req: NextRequest) {
       targetType: ActivityTarget.ATTENDANCE,
       targetId: updatedAttendance.id,
       companyId: updatedAttendance.employee.companyId ?? undefined,
-      description: `Company Admin: ${token.name} updated an attendance data for 
+      description: `${token.name} (Company Admin) updated an attendance data for 
       ${updatedAttendance.employee.user.name}`,
       metadata: {
         companyAdmin: {
@@ -273,7 +273,7 @@ export async function DELETE(req: NextRequest) {
       targetType: ActivityTarget.ATTENDANCE,
       targetId: deletedAttendance.id,
       companyId: deletedAttendance.employee.companyId ?? undefined,
-      description: `Company Admin: ${token.name} deleted an attendance data of 
+      description: `${token.name} (Company Admin) deleted an attendance data of 
       ${deletedAttendance.employee.user.name}`,
       metadata: {
         companyAdmin: {

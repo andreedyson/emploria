@@ -190,7 +190,7 @@ export async function POST(req: NextRequest) {
       targetType: ActivityTarget.LEAVE,
       targetId: leave.id,
       companyId: leave.employee.companyId ?? undefined,
-      description: `Company Admin: ${token.name} created a new leave application data for 
+      description: `${token.name} (Company Admin) created a new leave application data for 
           ${leave.employee.user.name}`,
       metadata: {
         companyAdmin: {
