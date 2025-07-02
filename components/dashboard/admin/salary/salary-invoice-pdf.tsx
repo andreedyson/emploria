@@ -82,10 +82,11 @@ const styles = StyleSheet.create({
   },
   total: {
     fontSize: 14,
+    fontFamily: "Plus Jakarta Sans",
     fontWeight: "bold",
     marginTop: 8,
     textAlign: "right",
-    color: "#04f614",
+    color: "#066dc3",
   },
 });
 

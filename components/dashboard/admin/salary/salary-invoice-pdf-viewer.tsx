@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import SalaryInvoicePDF from "@/components/dashboard/admin/salary/salary-invoice-pdf";
 import { getSalaryById } from "@/lib/data/admin/salary";
 import { SalaryColumnsProps } from "@/types/admin/salary";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import { useQuery } from "@tanstack/react-query";
 import { Receipt } from "lucide-react";
 import { User } from "next-auth";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 type SalaryInvoicePDFViewerProps = { id: string; user: User };
 
@@ -15,29 +16,23 @@ export default function SalaryInvoicePDFViewer({
   id,
   user,
 }: SalaryInvoicePDFViewerProps) {
-  const [data, setData] = useState<SalaryColumnsProps | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data, isLoading, isError } = useQuery<SalaryColumnsProps | null>({
+    queryKey: ["salary-invoice"],
+    queryFn: async () => await getSalaryById(id),
+  });
   const router = useRouter();
 
   useEffect(() => {
-    const fetchSalary = async () => {
-      const salary = await getSalaryById(id);
+    if (data && data.employee.userId !== user.id) {
+      router.push(
+        `/dashboard/${user.role === "SUPER_ADMIN_COMPANY" ? "admin" : "user"}/salary`,
+      );
+    }
+  }, [data, user.id, user.role, router]);
 
-      if (salary?.employee.userId !== user.id) {
-        router.push(
-          `/dashboard/${user.role === "SUPER_ADMIN_COMPANY" ? "admin" : "user"}/salary`,
-        );
-      }
-
-      setData(salary);
-      setLoading(false);
-    };
-
-    fetchSalary();
-  }, [user.id, user.role, id, router]);
-
-  if (loading) return <div>Loading PDF...</div>;
-  if (!data) return <div className="text-red-500">Failed to load data</div>;
+  if (isLoading) return <div>Loading PDF...</div>;
+  if (!data || isError)
+    return <div className="text-red-500">Failed to load data</div>;
 
   // Custom filename depending on the employee data
   const fileName =
