@@ -48,8 +48,13 @@ function AddSalaryDialog({ companyId }: AddSalaryDialogProps) {
   const { data: employees } = useEmployee(companyId);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
-
   const router = useRouter();
+
+  const today = new Date();
+  const currentMonth = today.getMonth() + 1;
+  const availableMonths = months.filter((m) => {
+    return Number(m.value) <= currentMonth;
+  });
 
   const form = useForm<z.infer<typeof salarySchema>>({
     resolver: zodResolver(salarySchema),
@@ -174,7 +179,7 @@ function AddSalaryDialog({ companyId }: AddSalaryDialogProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {months?.map((month) => (
+                        {availableMonths.map((month) => (
                           <SelectItem
                             key={month.value}
                             value={String(month.value)}
