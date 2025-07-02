@@ -77,8 +77,16 @@ const styles = StyleSheet.create({
     padding: 6,
   },
   tableNumber: { width: "100%", alignItems: "flex-end" },
-
-  total: { fontSize: 14, fontWeight: "bold", marginTop: 8, textAlign: "right" },
+  late: {
+    color: "red",
+  },
+  total: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginTop: 8,
+    textAlign: "right",
+    color: "#04f614",
+  },
 });
 
 export default function SalaryInvoicePDF({
@@ -223,7 +231,9 @@ export default function SalaryInvoicePDF({
             <TableCell style={styles.tableCell}>Deduction</TableCell>
             <TableCell style={styles.tableCell}>
               <View style={styles.tableNumber}>
-                <Text>{deduction ? `- ${convertRupiah(deduction)}` : "-"}</Text>
+                <Text style={styles.late}>
+                  {deduction ? `- ${convertRupiah(deduction)}` : "-"}
+                </Text>
               </View>
             </TableCell>
           </TableRow>
@@ -264,7 +274,7 @@ export default function SalaryInvoicePDF({
             </TableCell>
             <TableCell style={styles.tableCell}>
               <View style={styles.tableNumber}>
-                <Text>
+                <Text style={styles.late}>
                   {totalLateAttendance
                     ? `- ${convertRupiah(totalLateAttendance * (lateAttendancePenaltyRate ?? 0))}`
                     : "-"}
