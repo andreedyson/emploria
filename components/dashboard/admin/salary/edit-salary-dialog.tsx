@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -50,19 +50,34 @@ function EditSalaryDialog({ companyId, salaryData }: EditSalaryDialogProps) {
   const { data: employees } = useEmployee(companyId);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
-
   const router = useRouter();
+
+  const today = new Date();
+  const currentMonth = today.getMonth() + 1;
+  const availableMonths = months.filter((m) => {
+    return Number(m.value) <= currentMonth;
+  });
 
   const form = useForm<z.infer<typeof salarySchema>>({
     resolver: zodResolver(salarySchema),
     defaultValues: {
       employeeId: salaryData.employee.id,
-      month: salaryData.month,
+      month: salaryData.month.toString(),
       year: new Date().getFullYear().toString(),
       bonus: salaryData.bonus,
       deduction: salaryData.deduction,
     },
   });
+
+  useEffect(() => {
+    form.reset({
+      employeeId: salaryData.employee.id,
+      month: salaryData.month.toString(),
+      year: salaryData.year.toString(),
+      bonus: salaryData.bonus,
+      deduction: salaryData.deduction,
+    });
+  }, [salaryData, form]);
 
   async function onSubmit(values: z.infer<typeof salarySchema>) {
     setSubmitting(true);
@@ -92,7 +107,6 @@ function EditSalaryDialog({ companyId, salaryData }: EditSalaryDialogProps) {
         setOpen(false);
         setSubmitting(false);
         customToast("success", "Success 🎉", data.message);
-        form.reset();
         router.refresh();
       }
     } catch (error) {
@@ -173,7 +187,7 @@ function EditSalaryDialog({ companyId, salaryData }: EditSalaryDialogProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {months?.map((month) => (
+                        {availableMonths?.map((month) => (
                           <SelectItem
                             key={month.value}
                             value={String(month.value)}

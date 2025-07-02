@@ -281,7 +281,7 @@ export async function PUT(req: NextRequest) {
     // Calculate total salary
     const total = Math.max(
       0,
-      baseSalary + bonus + attendanceBonus - deduction - lateDeduction,
+      baseSalary + bonus + attendanceBonus - (deduction + lateDeduction),
     );
 
     const updatedSalary = await prisma.salary.update({
@@ -337,7 +337,7 @@ export async function PUT(req: NextRequest) {
 
     return NextResponse.json(
       { message: "Salary edited successfully", data: updatedSalary },
-      { status: 201 },
+      { status: 200 },
     );
   } catch (error) {
     console.error("[UPDATE_SALARY_ERROR]", error);
