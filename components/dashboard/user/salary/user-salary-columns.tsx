@@ -2,7 +2,8 @@
 
 import SalaryStatusBadge from "@/components/badges/salary-status-badge";
 import { DataTableColumnHeader } from "@/components/tables/data-table-column-header";
-import { months } from "@/constants";
+import { Button } from "@/components/ui/button";
+import { BASE_URL, months } from "@/constants";
 import { convertRupiah } from "@/lib/utils";
 import { Salary } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
@@ -14,6 +15,7 @@ import {
   CalendarArrowUp,
   CalendarPlus,
   DollarSign,
+  Download,
 } from "lucide-react";
 
 export const UserSalaryColumns: ColumnDef<Salary>[] = [
@@ -148,6 +150,29 @@ export const UserSalaryColumns: ColumnDef<Salary>[] = [
       const salary = row.original;
 
       return <SalaryStatusBadge status={salary.status} />;
+    },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const salary = row.original;
+      const isPaid = salary.status === "PAID";
+
+      return (
+        <Button variant="ghost" size="icon" disabled={!isPaid}>
+          <a
+            href={
+              isPaid
+                ? `${BASE_URL}/dashboard/user/salary/${salary.id}`
+                : undefined
+            }
+            className={`hover:bg-muted flex h-8 w-8 items-center justify-center rounded ${!isPaid ? "pointer-events-none opacity-50" : ""} `}
+            aria-disabled={!isPaid}
+          >
+            <Download className="h-4 w-4" />
+          </a>
+        </Button>
+      );
     },
   },
 ];

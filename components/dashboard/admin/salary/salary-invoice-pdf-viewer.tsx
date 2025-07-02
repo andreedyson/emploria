@@ -6,19 +6,35 @@ import { getSalaryById } from "@/lib/data/admin/salary";
 import { SalaryColumnsProps } from "@/types/admin/salary";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import { Receipt } from "lucide-react";
+import { User } from "next-auth";
+import { useRouter } from "next/navigation";
 
-type Props = { id: string };
+type SalaryInvoicePDFViewerProps = { id: string; user: User };
 
-export default function SalaryInvoicePDFViewer({ id }: Props) {
+export default function SalaryInvoicePDFViewer({
+  id,
+  user,
+}: SalaryInvoicePDFViewerProps) {
   const [data, setData] = useState<SalaryColumnsProps | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    getSalaryById(id).then((salary) => {
+    const fetchSalary = async () => {
+      const salary = await getSalaryById(id);
+
+      if (salary?.employee.userId !== user.id) {
+        router.push(
+          `/dashboard/${user.role === "SUPER_ADMIN_COMPANY" ? "admin" : "user"}/salary`,
+        );
+      }
+
       setData(salary);
       setLoading(false);
-    });
-  }, [id]);
+    };
+
+    fetchSalary();
+  }, [user.id, user.role, id, router]);
 
   if (loading) return <div>Loading PDF...</div>;
   if (!data) return <div className="text-red-500">Failed to load data</div>;

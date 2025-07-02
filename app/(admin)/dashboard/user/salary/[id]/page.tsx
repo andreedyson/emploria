@@ -3,7 +3,7 @@ import SalaryInvoicePDFViewer from "@/components/dashboard/admin/salary/salary-i
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
-export default async function SalaryByIdPage({
+export default async function UserSalaryByIdPage({
   params: { id },
 }: {
   params: { id: string };

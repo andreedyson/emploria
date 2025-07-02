@@ -11,6 +11,7 @@ export type SalaryColumnsProps = {
     id: string;
     name: string;
     image: string | null;
+    userId?: string;
   };
   month: string | number;
   year: string | number;

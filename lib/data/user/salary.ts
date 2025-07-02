@@ -91,7 +91,11 @@ export async function getDepartmentSalaries(
 
       return {
         id: salary.id,
-        companyId: companyId,
+        company: {
+          id: salary.employee.company.id,
+          name: salary.employee.company.name,
+          image: salary.employee.company.image,
+        },
         employee: {
           id: salary.employee.id,
           name: salary.employee.user.name,
