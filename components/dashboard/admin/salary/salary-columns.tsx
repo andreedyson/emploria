@@ -135,6 +135,8 @@ export const SalaryColumns: ColumnDef<SalaryColumnsProps>[] = [
     id: "actions",
     cell: ({ row }) => {
       const salary = row.original;
+      const isPaid = salary.status === "PAID";
+
       return (
         <div className="flex items-center gap-1">
           <ViewSalaryDialog salaryData={salary} />
@@ -143,12 +145,15 @@ export const SalaryColumns: ColumnDef<SalaryColumnsProps>[] = [
             salaryId={salary.id}
             salaryStatus={salary.status}
           />
-          <Button variant="ghost" size="icon" asChild>
+          <Button variant="ghost" size="icon" disabled={!isPaid}>
             <a
-              href={`${BASE_URL}/dashboard/admin/salary/${salary.id}`}
-              target="_blank"
-              aria-label="Download Invoice"
-              className="hover:bg-muted flex h-8 w-8 items-center justify-center rounded"
+              href={
+                isPaid
+                  ? `${BASE_URL}/dashboard/admin/salary/${salary.id}`
+                  : undefined
+              }
+              className={`hover:bg-muted flex h-8 w-8 items-center justify-center rounded ${!isPaid ? "pointer-events-none opacity-50" : ""} `}
+              aria-disabled={!isPaid}
             >
               <Download className="h-4 w-4" />
             </a>
