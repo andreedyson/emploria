@@ -2,14 +2,18 @@ import { SalaryStatus } from "@prisma/client";
 
 export type SalaryColumnsProps = {
   id: string;
-  companyId: string;
+  company: {
+    id: string;
+    name: string;
+    image: string | null;
+  };
   employee: {
     id: string;
     name: string;
     image: string | null;
   };
-  month: string;
-  year: string;
+  month: string | number;
+  year: string | number;
   baseSalary: number;
   bonus: number;
   deduction: number;

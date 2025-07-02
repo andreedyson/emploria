@@ -104,7 +104,8 @@ model Salary {
   baseSalary      Float
   bonus           Float
   deduction       Float
-  attendanceBonus Float
+  attendanceBonus Float        @default(0)
+  latePenalty     Float        @default(0)
   total           Float
   date            DateTime     @default(now())
   status          SalaryStatus @default(UNPAID)

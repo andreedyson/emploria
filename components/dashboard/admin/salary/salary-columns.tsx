@@ -2,7 +2,8 @@
 
 import SalaryStatusBadge from "@/components/badges/salary-status-badge";
 import { DataTableColumnHeader } from "@/components/tables/data-table-column-header";
-import { months } from "@/constants";
+import { Button } from "@/components/ui/button";
+import { BASE_URL, months } from "@/constants";
 import { getImageUrl } from "@/lib/supabase";
 import { convertRupiah } from "@/lib/utils";
 import { SalaryColumnsProps } from "@/types/admin/salary";
@@ -12,6 +13,7 @@ import {
   Calendar1,
   CalendarArrowUp,
   DollarSign,
+  Download,
   User,
 } from "lucide-react";
 import Image from "next/image";
@@ -136,11 +138,21 @@ export const SalaryColumns: ColumnDef<SalaryColumnsProps>[] = [
       return (
         <div className="flex items-center gap-1">
           <ViewSalaryDialog salaryData={salary} />
-          <EditSalaryDialog salaryData={salary} companyId={salary.companyId} />
+          <EditSalaryDialog salaryData={salary} companyId={salary.company.id} />
           <ConfirmPaidDialog
             salaryId={salary.id}
             salaryStatus={salary.status}
           />
+          <Button variant="ghost" size="icon" asChild>
+            <a
+              href={`${BASE_URL}/dashboard/admin/salary/${salary.id}`}
+              target="_blank"
+              aria-label="Download Invoice"
+              className="hover:bg-muted flex h-8 w-8 items-center justify-center rounded"
+            >
+              <Download className="h-4 w-4" />
+            </a>
+          </Button>
         </div>
       );
     },

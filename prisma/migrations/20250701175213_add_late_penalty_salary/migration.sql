@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Salary" ADD COLUMN     "latePenalty" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ALTER COLUMN "attendanceBonus" SET DEFAULT 0;

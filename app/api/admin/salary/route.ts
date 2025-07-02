@@ -86,11 +86,11 @@ export async function POST(req: NextRequest) {
       );
     });
 
-    const presentAttendace = attendanceThisMonth.filter(
+    const presentAttendaceThisMonth = attendanceThisMonth.filter(
       (att) => att.status === "PRESENT",
     );
     const attendanceBonus =
-      presentAttendace.length * (company?.attendanceBonusRate ?? 0);
+      presentAttendaceThisMonth.length * (company?.attendanceBonusRate ?? 0);
 
     const lateAttendanceThisMonth = attendanceThisMonth.filter(
       (att) => att.status === "LATE",
@@ -102,7 +102,7 @@ export async function POST(req: NextRequest) {
     // Calculate total salary
     const total = Math.max(
       0,
-      baseSalary + bonus + attendanceBonus - deduction - lateDeduction,
+      baseSalary + bonus + attendanceBonus - (deduction + lateDeduction),
     );
 
     const salary = await prisma.salary.create({
@@ -114,6 +114,7 @@ export async function POST(req: NextRequest) {
         bonus: validatedFields.data.bonus,
         deduction: validatedFields.data.deduction ?? 0,
         attendanceBonus: attendanceBonus,
+        latePenalty: lateDeduction,
         total: total,
       },
       include: {
