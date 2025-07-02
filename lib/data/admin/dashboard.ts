@@ -54,28 +54,28 @@ export async function getSuperAdminCompanyStatsCardData(
         title: "Active Employees",
         total: activeEmployees.length,
         icon: Users,
-        textColor: "text-picton-blue-500",
+        bgColor: "bg-gradient-to-r from-picton-blue-600 to-picton-blue-500",
       },
       {
         name: "Employees",
         title: "Inactive Employees",
         total: inactiveEmployees.length,
         icon: UserX,
-        textColor: "text-red-500",
+        bgColor: "bg-gradient-to-r from-red-600 to-red-500",
       },
       {
         name: "Leave Requests",
         title: "Approved Leaves",
         total: leaves.length,
         icon: CalendarX,
-        textColor: "text-blue-500",
+        bgColor: "bg-gradient-to-r from-indigo-600 to-indigo-500",
       },
       {
         name: "Payslips",
         title: "Payslips Generated",
         total: payslips.length,
         icon: Receipt,
-        textColor: "text-yellow-500",
+        bgColor: "bg-gradient-to-r from-orange-500 to-orange-400",
       },
     ];
 

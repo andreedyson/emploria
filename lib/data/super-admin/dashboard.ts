@@ -27,7 +27,7 @@ export async function getStatsCardData(): Promise<StatsCardProps[]> {
         name: "Companies",
         total: companies.length,
         icon: Building,
-        textColor: "text-orange-600",
+        bgColor: "bg-gradient-to-r from-orange-600 to-orange-500",
       },
       {
         name: "Active Companies",
@@ -35,7 +35,7 @@ export async function getStatsCardData(): Promise<StatsCardProps[]> {
           return company.isActive;
         }).length,
         icon: Building2,
-        textColor: "text-green-500",
+        bgColor: "bg-gradient-to-r from-emerald-600 to-emerald-500",
       },
       {
         name: "Company Admin",
@@ -43,7 +43,7 @@ export async function getStatsCardData(): Promise<StatsCardProps[]> {
           return user.role === "SUPER_ADMIN_COMPANY";
         }).length,
         icon: Users,
-        textColor: "text-yellow-500",
+        bgColor: "bg-gradient-to-r from-amber-600 to-amber-500",
       },
       {
         name: "Users",
@@ -51,7 +51,7 @@ export async function getStatsCardData(): Promise<StatsCardProps[]> {
           return user.role === "USER";
         }).length,
         icon: UserSquare,
-        textColor: "text-violet-600",
+        bgColor: "bg-gradient-to-r from-violet-600 to-violet-500",
       },
     ];
 

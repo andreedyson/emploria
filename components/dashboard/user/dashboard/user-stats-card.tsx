@@ -15,81 +15,66 @@ function UserStatsCard({ stats }: UserStatsCardProps) {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
       {/* Card 1 */}
-      <div className="bg-card flex items-center gap-3 rounded-lg border-2 p-4">
+      <div
+        className={cn(
+          "bg-card flex items-center gap-3 rounded-lg border-2 p-4",
+          stats[0].bgColor,
+        )}
+      >
         <div>
-          <Icon1
-            className={cn(
-              "opacity-80 lg:size-10 xl:size-12",
-              stats[0].textColor,
-            )}
-          />
+          <Icon1 className="text-white lg:size-10 xl:size-12" />
         </div>
-        <div className="space-y-1">
+        <div className="space-y-1 text-white">
           <p className="line-clamp-1 text-xs font-semibold tracking-tight uppercase">
             {stats[0].title}
           </p>
-          <h4
-            className={cn(
-              "line-clamp-1 text-sm font-bold lg:text-base",
-              stats[0].textColor,
-            )}
-          >
+          <h4 className="line-clamp-1 text-sm font-bold lg:text-base">
             {stats[0].text}
           </h4>
         </div>
       </div>
 
       {/* Card 2 */}
-      <div className="bg-card flex items-center gap-3 rounded-lg border-2 p-4">
+      <div
+        className={cn(
+          "bg-card flex items-center gap-3 rounded-lg border-2 p-4",
+          stats[1].bgColor,
+        )}
+      >
         <div>
-          <Icon2
-            className={cn(
-              "opacity-80 lg:size-10 xl:size-12",
-              stats[1].textColor,
-            )}
-          />
+          <Icon2 className="text-white lg:size-10 xl:size-12" />
         </div>
-        <div className="space-y-1">
+        <div className="space-y-1 text-white">
           <p className="line-clamp-1 text-xs font-semibold tracking-tight uppercase">
             {stats[1].title}
           </p>
-          <h4
-            className={cn(
-              "line-clamp-1 text-sm font-bold lg:text-base",
-              stats[1].textColor,
-            )}
-          >
+          <h4 className="line-clamp-1 text-sm font-bold lg:text-base">
             {stats[1].text}
           </h4>
         </div>
       </div>
 
       {/* Card 3 */}
-      <div className="bg-card flex items-center gap-3 rounded-lg border-2 p-4">
+      <div
+        className={cn(
+          "bg-card flex items-center gap-3 rounded-lg border-2 p-4",
+          stats[2].bgColor,
+        )}
+      >
         <div>
-          <Icon3
-            className={cn(
-              "opacity-80 lg:size-10 xl:size-12",
-              stats[2].textColor,
-            )}
-          />
+          <Icon3 className="text-white lg:size-10 xl:size-12" />
         </div>
-        <div className="space-y-1">
+        <div className="space-y-1 text-white">
           <p className="line-clamp-1 text-xs font-semibold tracking-tight uppercase">
             {stats[2].title}
           </p>
 
           {stats[2].data ? (
-            <div>
-              <h4
-                className={cn(
-                  "line-clamp-1 text-sm font-bold lg:text-base",
-                  stats[2].textColor,
-                )}
-              >
+            <div className="text-white">
+              <h4 className="line-clamp-1 text-sm font-bold lg:text-base">
                 {convertRupiah(stats[2].data?.total ?? 0)}
               </h4>
-              <p className="text-muted-foreground text-xs font-medium">
+              <p className="text-muted text-xs font-medium">
                 {
                   months.find((month) => month.value === stats[2].data?.month)
                     ?.label
@@ -104,25 +89,20 @@ function UserStatsCard({ stats }: UserStatsCardProps) {
       </div>
 
       {/* Card 4 */}
-      <div className="bg-card flex items-center gap-3 rounded-lg border-2 p-4">
+      <div
+        className={cn(
+          "bg-card flex items-center gap-3 rounded-lg border-2 p-4",
+          stats[3].bgColor,
+        )}
+      >
         <div>
-          <Icon4
-            className={cn(
-              "opacity-80 lg:size-10 xl:size-12",
-              stats[3].textColor,
-            )}
-          />
+          <Icon4 className="text-white lg:size-10 xl:size-12" />
         </div>
-        <div className="space-y-1">
+        <div className="space-y-1 text-white">
           <p className="line-clamp-1 text-xs font-semibold tracking-tight uppercase">
             {stats[3].title}
           </p>
-          <h4
-            className={cn(
-              "line-clamp-1 text-sm font-bold lg:text-base",
-              stats[3].textColor,
-            )}
-          >
+          <h4 className="line-clamp-1 text-sm font-bold lg:text-base">
             {stats[3].text}
           </h4>
         </div>

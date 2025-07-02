@@ -54,7 +54,7 @@ async function SuperAdminCompanyPage() {
             icon={data.icon}
             total={data.total}
             title={data.title}
-            textColor={data.textColor}
+            bgColor={data.bgColor}
           />
         ))}
       </div>

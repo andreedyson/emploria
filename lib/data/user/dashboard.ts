@@ -113,13 +113,13 @@ export async function getUserStatsCardData(
         title: "Att. This Month",
         text: `${attendanceCount.length} Attendances`,
         icon: Calendar1,
-        textColor: "text-yellow-500",
+        bgColor: "bg-gradient-to-r from-yellow-500 to-yellow-400",
       },
       {
         title: "Recent Leaves",
         text: `${currentLeaves} ${currentLeaves > 1 ? "Leaves" : "Leave"}`,
         icon: CalendarX,
-        textColor: "text-red-500",
+        bgColor: "bg-gradient-to-r from-red-600 to-red-500",
       },
       {
         title: "Latest Salary",
@@ -131,13 +131,13 @@ export async function getUserStatsCardData(
             }
           : null,
         icon: Banknote,
-        textColor: "text-green-500",
+        bgColor: "bg-gradient-to-r from-green-600 to-green-500",
       },
       {
         title: "Annual Leave Left",
         text: `${remainingAnnualLeave} Days`,
         icon: CalendarCog,
-        textColor: "text-orange-500",
+        bgColor: "bg-gradient-to-r from-orange-600 to-orange-500",
       },
     ];
 

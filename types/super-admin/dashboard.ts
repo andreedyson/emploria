@@ -6,7 +6,7 @@ export type StatsCardProps = {
   title?: string;
   total: number;
   icon: LucideIcon;
-  textColor: string;
+  bgColor: string;
 };
 
 export type UserPerCompaniesProps = {

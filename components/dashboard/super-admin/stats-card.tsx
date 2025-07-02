@@ -2,27 +2,24 @@
 import { cn } from "@/lib/utils";
 import { StatsCardProps } from "@/types/super-admin/dashboard";
 
-const StatsCard = ({ name, total, icon: Icon, textColor }: StatsCardProps) => {
+const StatsCard = ({ name, total, icon: Icon, bgColor }: StatsCardProps) => {
   return (
-    <div className="bg-card flex items-center justify-between rounded-lg border-2 p-4">
-      <div className="space-y-2">
+    <div
+      className={cn(
+        "bg-card flex items-center justify-between rounded-lg border-2 p-4",
+        bgColor,
+      )}
+    >
+      <div className="space-y-2 text-white">
         <p className="line-clamp-1 text-xs font-semibold tracking-tight uppercase">
           {name}
         </p>
-        <h4
-          className={cn(
-            "line-clamp-1 text-2xl font-bold lg:text-3xl",
-            textColor,
-          )}
-        >
-          {total}{" "}
-          <span className="text-muted-foreground text-xs font-medium">
-            {name}
-          </span>
+        <h4 className="line-clamp-1 text-2xl font-bold lg:text-3xl">
+          {total} <span className="text-muted text-xs font-medium">{name}</span>
         </h4>
       </div>
       <div>
-        <Icon className={cn("opacity-80 lg:size-14 xl:size-18", textColor)} />
+        <Icon className="text-white lg:size-14 xl:size-18" />
       </div>
     </div>
   );

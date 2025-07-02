@@ -3,7 +3,7 @@ import { LucideIcon } from "lucide-react";
 type BaseProps = {
   title: string;
   icon: LucideIcon;
-  textColor: string;
+  bgColor: string;
 };
 
 export type UserStatsCardDataProps =
