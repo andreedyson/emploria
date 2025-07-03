@@ -1,6 +1,6 @@
 import prisma from "@/lib/db";
 import { logActivity } from "@/lib/log-activity";
-import { convertToGmt7TimeString, formatDate } from "@/lib/utils";
+import { convertToGmt7TimeString, formatDate, getGmt7Time } from "@/lib/utils";
 import { ActivityAction, ActivityTarget } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
@@ -69,8 +69,7 @@ export async function POST(req: NextRequest) {
     // Check if the user is trying to check out after overtime
     const latestCheckOut = company?.latestCheckOut || "23:00";
     const [lateHour, lateMinute] = latestCheckOut.split(":").map(Number);
-    const latestCheckoutTimeAllowed = new Date(now);
-    latestCheckoutTimeAllowed.setHours(lateHour, lateMinute, 0, 0);
+    const latestCheckoutTimeAllowed = getGmt7Time(lateHour, lateMinute);
 
     if (now > latestCheckoutTimeAllowed) {
       return NextResponse.json(

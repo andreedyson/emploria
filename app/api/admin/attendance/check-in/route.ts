@@ -1,6 +1,6 @@
 import prisma from "@/lib/db";
 import { logActivity } from "@/lib/log-activity";
-import { convertToGmt7TimeString, formatDate } from "@/lib/utils";
+import { convertToGmt7TimeString, formatDate, getGmt7Time } from "@/lib/utils";
 import { ActivityAction, ActivityTarget } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
@@ -53,8 +53,7 @@ export async function POST(req: NextRequest) {
     const lateTime = new Date(now);
     lateTime.setHours(checkInEndHour, checkInMinute, 0, 0);
 
-    const latestCheckInTime = new Date(now);
-    latestCheckInTime.setHours(16, 0, 0, 0);
+    const latestCheckInTime = getGmt7Time(16, 0);
 
     if (now > latestCheckInTime) {
       return NextResponse.json(

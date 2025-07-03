@@ -74,6 +74,13 @@ export function convertToGmt7TimeString(date: Date): string {
   return format(zonedDate, "HH:mm");
 }
 
+export function getGmt7Time(hours: number, minutes: number) {
+  const now = new Date();
+  const gmt7 = new Date(now.getTime() + 7 * 60 * 60 * 1000); // Convert to GMT+7
+  gmt7.setUTCHours(hours, minutes, 0, 0);
+  return new Date(gmt7.getTime() - 7 * 60 * 60 * 1000); // convert back to UTC
+}
+
 export function getDurationCompact(
   start: string | Date,
   end: string | Date,
