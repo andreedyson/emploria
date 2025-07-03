@@ -225,14 +225,10 @@ function AddEmployeeDialog() {
                   <FormItem>
                     <FormLabel className="flex items-center gap-1">
                       <Calendar size={14} />
-                      Date of Birth (YYYY-MM-DD)
+                      Date of Birth
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="e.g: 2004-12-13"
-                        autoComplete="off"
-                        {...field}
-                      />
+                      <Input type="date" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
