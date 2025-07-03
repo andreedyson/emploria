@@ -14,7 +14,7 @@ async function SuperAdminCompanyPage() {
   const companies = await getAllCompanies();
   return (
     <section className="space-y-4">
-      <div className="bg-background space-y-3 rounded-lg border-2 p-4">
+      <div className="bg-card space-y-3 rounded-lg border-2 p-4">
         {/* Companies Page Header */}
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
           <div className="w-full space-y-2">

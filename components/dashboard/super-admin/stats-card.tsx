@@ -15,7 +15,10 @@ const StatsCard = ({ name, total, icon: Icon, bgColor }: StatsCardProps) => {
           {name}
         </p>
         <h4 className="line-clamp-1 text-2xl font-bold lg:text-3xl">
-          {total} <span className="text-muted text-xs font-medium">{name}</span>
+          {total}{" "}
+          <span className="text-muted text-xs font-medium dark:text-white">
+            {name}
+          </span>
         </h4>
       </div>
       <div>
