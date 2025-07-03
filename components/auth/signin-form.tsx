@@ -179,16 +179,6 @@ export function SignInForm() {
             >
               {submitting ? "Signing In..." : "Sign In"}
             </Button>
-            <p className="my-2 grid w-full place-items-center text-center">
-              OR
-            </p>
-            <Button
-              type="button"
-              disabled={submitting}
-              className="w-full cursor-pointer"
-            >
-              Sign In with Google
-            </Button>
           </div>
           <p className="mt-2 text-center text-sm">
             © {new Date().getFullYear()} Emploria
