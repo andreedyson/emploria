@@ -11,6 +11,7 @@ import {
 import { getEmployeeSalariesGrowth } from "@/lib/data/user/dashboard";
 import { useQuery } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
+import Image from "next/image";
 
 export const description = "A line chart with a label";
 
@@ -38,7 +39,7 @@ export function SalariesGrowthCharts({ userId }: SalariesGrowthChartsProps) {
       </div>
     );
 
-  return (
+  return chartData && chartData.length > 0 ? (
     <ChartContainer
       config={chartConfig}
       className="h-[80%] min-h-[200px] w-full md:h-[85%]"
@@ -85,5 +86,25 @@ export function SalariesGrowthCharts({ userId }: SalariesGrowthChartsProps) {
         </Line>
       </LineChart>
     </ChartContainer>
+  ) : (
+    <div className="col-span-full flex h-full flex-col items-center justify-center gap-3 text-center">
+      <Image
+        src={"/assets/empty-salaries-paid-per-month.svg"}
+        width={500}
+        height={300}
+        alt="Salaries Not Found"
+        className="aspect-video w-[180px] lg:w-[280px]"
+        priority
+      />
+      <div className="space-y-0.5">
+        <h4 className="text-sm font-semibold md:text-base">
+          No Salaries Found
+        </h4>
+        <p className="text-muted-foreground max-w-sm text-xs md:text-sm">
+          Showing a chart of total salaries earned per month from the past 6
+          month.
+        </p>
+      </div>
+    </div>
   );
 }

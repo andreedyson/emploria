@@ -103,7 +103,7 @@ export function SalariesPaidPerMonthCharts({
       <div className="space-y-0.5">
         <h4 className="text-sm font-semibold">No Salaries Found</h4>
         <p className="text-muted-foreground max-w-sm text-xs md:text-sm">
-          Showing the list of total salaries paid per month from the past 6
+          Showing a chart of total salaries paid per month from the past 6
           month.
         </p>
         <div className="mt-3 flex items-center justify-center">
