@@ -18,6 +18,7 @@ import {
 import { getTotalUserPerCompanies } from "@/lib/data/super-admin/dashboard";
 import { useQuery } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
+import Image from "next/image";
 
 export function UserPerCompaniesCharts() {
   const { data: chartData, isLoading } = useQuery({
@@ -39,7 +40,7 @@ export function UserPerCompaniesCharts() {
       </div>
     );
 
-  return (
+  return chartData && chartData.length > 0 ? (
     <ChartContainer
       config={chartConfig}
       className="h-[80%] min-h-[200px] w-full md:h-[85%]"
@@ -77,5 +78,24 @@ export function UserPerCompaniesCharts() {
         </Bar>
       </BarChart>
     </ChartContainer>
+  ) : (
+    <div className="col-span-full flex h-full flex-col items-center justify-center gap-3 text-center">
+      <Image
+        src={"/assets/empty-user-per-company.svg"}
+        width={500}
+        height={300}
+        alt="User Per Company Not Found"
+        className="aspect-video w-[180px] md:h-[200px] lg:w-[280px]"
+        priority
+      />
+      <div className="space-y-0.5">
+        <h4 className="text-sm font-semibold md:text-base">
+          No User per Company Data
+        </h4>
+        <p className="text-muted-foreground max-w-md text-xs md:text-sm">
+          Add a Company and create User data related to the Company.
+        </p>
+      </div>
+    </div>
   );
 }
