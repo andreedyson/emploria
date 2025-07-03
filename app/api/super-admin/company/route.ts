@@ -78,7 +78,9 @@ export async function PUT(req: NextRequest) {
   const formData = await req.formData();
   const companyId = formData.get("companyId") as string;
   const name = formData.get("name") as string;
+  const isActive = formData.get("isActive") === "true";
   const image = formData.get("image") as File | null;
+
   let newFilename;
 
   try {
@@ -88,10 +90,11 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const validatedFields = companySchema.safeParse({ name, image });
+    const validatedFields = companySchema.safeParse({ name, image, isActive });
 
     if (!validatedFields.success) {
       const { errors } = validatedFields.error;
+      console.log(errors);
       return NextResponse.json({ message: errors[0].message }, { status: 400 });
     }
 
@@ -143,6 +146,7 @@ export async function PUT(req: NextRequest) {
       data: {
         name,
         image: newFilename,
+        isActive,
       },
     });
 
@@ -152,9 +156,10 @@ export async function PUT(req: NextRequest) {
       targetType: ActivityTarget.COMPANY,
       targetId: company.id,
       companyId: undefined,
-      description: `Admin ${token.name} updated company ${image ? "logo" : `name to "${editedCompany.name}"`}`,
+      description: `Admin ${token.name} updated company ${company.name} ${image ? "logo" : "data"}`,
       metadata: {
         name: editedCompany.name,
+        previousName: company.name,
       },
     });
 

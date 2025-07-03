@@ -32,6 +32,7 @@ import { companySchema } from "@/validations/super-admin";
 import { Pencil } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Switch } from "@/components/ui/switch";
 
 type EditCompanyDialogProps = {
   companyData: AllCompaniesProps;
@@ -49,14 +50,17 @@ function EditCompanyDialog({ companyData }: EditCompanyDialogProps) {
     defaultValues: {
       name: companyData.name,
       image: "",
+      isActive: companyData.isActive,
     },
   });
 
   useEffect(() => {
     form.reset({
       name: companyData.name,
+      image: "",
+      isActive: companyData.isActive,
     });
-  }, [companyData.name, form]);
+  }, [companyData, form]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -81,6 +85,7 @@ function EditCompanyDialog({ companyData }: EditCompanyDialogProps) {
       const formData = new FormData();
       formData.append("companyId", companyData.id);
       formData.append("name", values.name);
+      formData.append("isActive", values.isActive.toString());
       if (values.image instanceof File && values.image.size > 0) {
         formData.append("image", values.image);
       }
@@ -183,6 +188,24 @@ function EditCompanyDialog({ companyData }: EditCompanyDialogProps) {
                 </p>
               </div>
             )}
+
+            <FormField
+              control={form.control}
+              name="isActive"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                  <div className="space-y-0.5">
+                    <FormLabel>Is Active</FormLabel>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
 
             <DialogFooter className="flex gap-2">
               <SubmitButton

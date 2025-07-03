@@ -67,12 +67,14 @@ async function DashboardPage() {
         <Card className="col-span-1">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="flex items-center gap-1.5">
-                  <Users2 />
-                  User Per Company
-                </CardTitle>
-                <CardDescription>Total users from each company</CardDescription>
+              <div className="flex items-center gap-1.5">
+                <Users2 className="size-8" />
+                <div>
+                  <CardTitle>User Per Company</CardTitle>
+                  <CardDescription>
+                    Total users from each company
+                  </CardDescription>
+                </div>
               </div>
               <Link href={"/dashboard/super-admin/company"}>
                 <Button variant={"outline"} size={"sm"}>
@@ -89,22 +91,32 @@ async function DashboardPage() {
         {/* Recently Added Card */}
         <Card className="col-span-1">
           <CardHeader>
-            <CardTitle className="flex items-center gap-1.5">
-              <CalendarPlus />
-              Recently Added
-            </CardTitle>
-            <CardDescription>
-              Showing recently added Users and Companies
-            </CardDescription>
+            <div className="flex items-center gap-1.5">
+              <CalendarPlus className="size-8" />
+              <div>
+                <CardTitle>Recently Added</CardTitle>
+                <CardDescription>
+                  Showing recently added Users and Companies
+                </CardDescription>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="users" className="h-full w-full">
               <div className="w-full">
                 <TabsList className="w-[160px]">
-                  <TabsTrigger value="users" className="w-full">
+                  <TabsTrigger
+                    value="users"
+                    className="w-full"
+                    title="New Users"
+                  >
                     <Users2 size={20} />
                   </TabsTrigger>
-                  <TabsTrigger value="companies" className="w-full">
+                  <TabsTrigger
+                    value="companies"
+                    className="w-full"
+                    title="New Companies"
+                  >
                     <Building size={20} />
                   </TabsTrigger>
                 </TabsList>

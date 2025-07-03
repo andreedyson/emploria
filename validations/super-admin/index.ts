@@ -6,6 +6,7 @@ export const companySchema = z.object({
     .string({ required_error: "Name is required" })
     .min(1, { message: "Company Name should be atleast 1 character" })
     .max(50, { message: "Company Name should be less than 50 characters" }),
+  isActive: z.boolean(),
   image: z
     .any()
     .optional()
