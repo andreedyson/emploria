@@ -331,7 +331,7 @@ export async function PUT(req: NextRequest) {
       where: { id: userId },
       data: {
         name: validatedFields.data.name,
-        email: userExist.email,
+        email: validatedFields.data.email,
         phone: validatedFields.data.phone,
         address: validatedFields.data.address,
         gender: validatedFields.data.gender,
