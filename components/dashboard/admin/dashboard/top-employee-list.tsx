@@ -4,16 +4,12 @@ import Image from "next/image";
 import React from "react";
 
 type TopEmployeeListItemProps = {
-  number: number;
   employee: TopEmployeeListProps;
 };
 
-function TopEmployeeListItem({ number, employee }: TopEmployeeListItemProps) {
+function TopEmployeeListItem({ employee }: TopEmployeeListItemProps) {
   return (
     <div className="flex items-center gap-4">
-      <div>
-        <p className="text-2xl font-bold md:text-3xl lg:text-4xl">{number}</p>
-      </div>
       <div className="flex w-full items-center justify-between text-xs sm:text-sm">
         <div className="flex items-center gap-3">
           <div>

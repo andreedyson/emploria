@@ -1,6 +1,7 @@
 "use client";
 
 import SalaryInvoicePDF from "@/components/dashboard/admin/salary/salary-invoice-pdf";
+import SalaryInvoicePageSkeletons from "@/components/skeletons/user/salary-invoice-page-skeletons";
 import { getSalaryById } from "@/lib/data/admin/salary";
 import { SalaryColumnsProps } from "@/types/admin/salary";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
@@ -34,7 +35,12 @@ export default function SalaryInvoicePDFViewer({
     }
   }, [data, user.id, user.role, router]);
 
-  if (isLoading) return <div>Loading PDF...</div>;
+  if (isLoading)
+    return (
+      <div>
+        <SalaryInvoicePageSkeletons />
+      </div>
+    );
   if (!data || isError)
     return <div className="text-red-500">Failed to load data</div>;
 

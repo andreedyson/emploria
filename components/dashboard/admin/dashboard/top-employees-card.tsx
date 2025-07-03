@@ -36,13 +36,9 @@ function TopEmployeesCard({ topEmployees }: TopEmployeesCardProps) {
 
       <CardContent className="space-y-4">
         {topEmployees.length > 0 ? (
-          <div>
-            {topEmployees.map((employee, index) => (
-              <TopEmployeeListItem
-                key={employee.id}
-                number={index + 1}
-                employee={employee}
-              />
+          <div className="space-y-3">
+            {topEmployees.map((employee) => (
+              <TopEmployeeListItem key={employee.id} employee={employee} />
             ))}
           </div>
         ) : (
