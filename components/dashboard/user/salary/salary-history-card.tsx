@@ -68,7 +68,7 @@ function SalaryHistoryCard({
     },
   ];
   return (
-    <Card className="bg-background space-y-3 rounded-lg border-2">
+    <Card className="bg-card space-y-3 rounded-lg border-2">
       {employeeRole === "STAFF" && (
         <CardHeader className="flex flex-col items-center justify-between gap-4 md:flex-row">
           <div className="w-full space-y-2">

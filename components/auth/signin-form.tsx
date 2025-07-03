@@ -93,98 +93,113 @@ export function SignInForm() {
   }
 
   return (
-    <div className="rounded-xl border px-4 py-6 shadow-lg md:px-8 md:py-10">
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className={`flex flex-col gap-4 ${inter.className}`}
-        >
-          <section className="mb-2 text-center">
-            <Link
-              href="/"
-              className={`mb-3 flex items-center justify-center gap-2 text-2xl font-bold md:text-3xl ${lexend.className}`}
-            >
-              <div className="bg-primary text-primary-foreground flex h-8 w-8 items-center justify-center rounded-md">
-                <Image
-                  src={"/assets/emploria-logo.svg"}
-                  width={80}
-                  height={80}
-                  alt="Emploria Logo"
-                />
+    <div className="grid p-0 md:grid-cols-2">
+      {/* Left Form */}
+      <div className="rounded-xl border px-4 py-6 shadow-lg md:rounded-l-xl md:rounded-r-none md:px-8 md:py-10">
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className={`flex flex-col gap-4 ${inter.className}`}
+          >
+            <section className="mb-2 text-center">
+              <Link
+                href="/"
+                className={`mb-3 flex items-center justify-center gap-2 text-2xl font-bold md:text-3xl ${lexend.className}`}
+              >
+                <div className="bg-primary text-primary-foreground flex h-8 w-8 items-center justify-center rounded-md">
+                  <Image
+                    src={"/assets/emploria-logo.svg"}
+                    width={80}
+                    height={80}
+                    alt="Emploria Logo"
+                  />
+                </div>
+                Emploria
+              </Link>
+              <div className="flex flex-col items-center justify-center">
+                <h2 className="text-lg font-bold md:text-xl">
+                  Welcome Back 👋
+                </h2>
+                <p className="text-muted-foreground max-w-[300px] text-sm">
+                  Let&apos;s get back to tracking your data, salaries, and leave
+                  entitlements.
+                </p>
               </div>
-              Emploria
-            </Link>
-            <div className="flex flex-col items-center justify-center">
-              <h2 className="text-lg font-bold md:text-xl">Welcome Back 👋</h2>
-              <p className="text-muted-foreground max-w-[300px] text-sm">
-                Let&apos;s get back to tracking your data, salaries, and leave
-                entitlements.
-              </p>
-            </div>
-          </section>
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <div className="border-input flex items-center justify-center rounded-md border dark:bg-zinc-700">
-                  <Mail size={24} className="mx-2" />
-                  <FormControl>
-                    <Input
-                      placeholder="user@mail.com"
-                      {...field}
-                      autoComplete="off"
-                      className="rounded-l-none"
-                    />
-                  </FormControl>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <div className="border-input relative flex items-center justify-center rounded-md border dark:bg-zinc-700">
-                  <Lock size={24} className="mx-2" />
-                  <FormControl>
-                    <Input
-                      placeholder={showPassword ? "Your Password" : "******"}
-                      {...field}
-                      autoComplete="off"
-                      type={showPassword ? "text" : "password"}
-                      className="rounded-l-none"
-                    />
-                  </FormControl>
-                  <div
-                    className="desc-2 absolute right-3 cursor-pointer"
-                    onClick={() => setShowPassword((prev) => !prev)}
-                  >
-                    {!showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+            </section>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <div className="border-input flex items-center justify-center rounded-md border dark:bg-zinc-700">
+                    <Mail size={24} className="mx-2" />
+                    <FormControl>
+                      <Input
+                        placeholder="user@mail.com"
+                        {...field}
+                        autoComplete="off"
+                        className="rounded-l-none"
+                      />
+                    </FormControl>
                   </div>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div>
-            <Button
-              type="submit"
-              disabled={submitting}
-              className="bg-picton-blue-500 hover:bg-picton-blue-700 w-full cursor-pointer text-white duration-200"
-            >
-              {submitting ? "Signing In..." : "Sign In"}
-            </Button>
-          </div>
-          <p className="mt-2 text-center text-sm">
-            © {new Date().getFullYear()} Emploria
-          </p>
-        </form>
-      </Form>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <div className="border-input relative flex items-center justify-center rounded-md border dark:bg-zinc-700">
+                    <Lock size={24} className="mx-2" />
+                    <FormControl>
+                      <Input
+                        placeholder={showPassword ? "Your Password" : "******"}
+                        {...field}
+                        autoComplete="off"
+                        type={showPassword ? "text" : "password"}
+                        className="rounded-l-none"
+                      />
+                    </FormControl>
+                    <div
+                      className="desc-2 absolute right-3 cursor-pointer"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                    >
+                      {!showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+                    </div>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div>
+              <Button
+                type="submit"
+                disabled={submitting}
+                className="bg-picton-blue-500 hover:bg-picton-blue-700 w-full cursor-pointer text-white duration-200"
+              >
+                {submitting ? "Signing In..." : "Sign In"}
+              </Button>
+            </div>
+            <p className="mt-2 text-center text-sm">
+              © {new Date().getFullYear()} Emploria
+            </p>
+          </form>
+        </Form>
+      </div>
+      {/* Right Image */}
+      <div className="bg-muted relative hidden md:block">
+        <Image
+          src="/assets/office-sign-in.jpg"
+          width={500}
+          height={500}
+          alt="Image"
+          className="absolute inset-0 h-full w-full rounded-r-xl object-cover dark:brightness-[0.2] dark:grayscale"
+        />
+      </div>
     </div>
   );
 }
