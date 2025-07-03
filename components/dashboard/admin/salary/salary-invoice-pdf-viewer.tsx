@@ -23,7 +23,11 @@ export default function SalaryInvoicePDFViewer({
   const router = useRouter();
 
   useEffect(() => {
-    if (data && data.employee.userId !== user.id) {
+    if (
+      data &&
+      user.role !== "SUPER_ADMIN_COMPANY" &&
+      data.employee.userId !== user.id
+    ) {
       router.push(
         `/dashboard/${user.role === "SUPER_ADMIN_COMPANY" ? "admin" : "user"}/salary`,
       );

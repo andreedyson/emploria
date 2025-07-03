@@ -36,6 +36,7 @@ export default async function AdminLayout({
   }
 
   const company = await getCompanyById(session.user.companyId ?? "");
+
   return (
     // ⚠️ Wraps the dashboard with React Query so all pages inside can use hooks like `useQuery`
     <ReactQueryProvider>
