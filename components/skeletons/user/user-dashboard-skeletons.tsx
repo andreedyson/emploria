@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 function UsersDashboardSkeletons() {
   return (
-    <div>
+    <>
       {/* Welcome Header Skeleton */}
       <div>
         <Skeleton className="h-6 w-full max-w-[280px] md:max-w-[400px]" />
@@ -30,7 +30,7 @@ function UsersDashboardSkeletons() {
         <Skeleton className="h-[300px] w-full md:h-[350px]" />
         <Skeleton className="h-[300px] w-full md:h-[350px]" />
       </div>
-    </div>
+    </>
   );
 }
 
