@@ -27,11 +27,13 @@ async function SuperAdminCompanyPage() {
   }
   const companyId = session.user.companyId ?? "";
 
-  const statsCardData = await getSuperAdminCompanyStatsCardData(
-    companyId as string,
-  );
-  const departments = await getEmployeesPerDepartments(companyId);
-  const topEmployees = await getTopEmployeesList(companyId);
+  const [statsCardData, departments, topEmployees] = await Promise.all([
+    getSuperAdminCompanyStatsCardData(companyId),
+    getEmployeesPerDepartments(companyId),
+    getTopEmployeesList(companyId),
+  ]);
+
+  // const activities = await getActivitiesByCompany(companyId);
 
   return (
     <section className="space-y-4">

@@ -24,8 +24,10 @@ async function UserDashboardPage() {
     redirect("/");
   }
   const userId = session.user.id;
-  const statsCardData = await getUserStatsCardData(userId);
-  const todaysAttendance = await getTodayAttendanceStatus(userId);
+  const [statsCardData, todaysAttendance] = await Promise.all([
+    getUserStatsCardData(userId),
+    getTodayAttendanceStatus(userId),
+  ]);
 
   return (
     <section className="space-y-4">
