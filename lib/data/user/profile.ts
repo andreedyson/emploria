@@ -21,6 +21,7 @@ export async function getUserProfileData(
         phone: true,
         createdAt: true,
         isActive: true,
+        role: true,
         company: {
           select: {
             id: true,
@@ -44,10 +45,11 @@ export async function getUserProfileData(
       image: user.image,
       gender: user.gender,
       address: user.address,
-      dateOfBirth: user.dateOfBirth ?? new Date(),
+      dateOfBirth: user.dateOfBirth as Date,
       phone: user.phone ?? "",
       joinedDate: user.createdAt,
       isActive: user.isActive,
+      systemRole: user.role,
       company: {
         id: user.company?.id ?? "",
         name: user.company?.name ?? "",

@@ -44,7 +44,7 @@ type Props = {
     phone?: string;
     address?: string;
     gender?: "MALE" | "FEMALE";
-    dateOfBirth?: Date;
+    dateOfBirth?: Date | null;
   };
 };
 

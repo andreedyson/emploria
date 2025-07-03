@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   LogOut,
   Settings,
+  User,
   Users,
 } from "lucide-react";
 
@@ -65,6 +66,11 @@ const items = [
     title: "Settings",
     url: "/dashboard/admin/settings",
     icon: Settings,
+  },
+  {
+    title: "Profile",
+    url: "/dashboard/admin/profile",
+    icon: User,
   },
 ];
 

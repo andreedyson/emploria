@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Building,
-  ChartColumn,
-  LayoutDashboard,
-  LogOut,
-  User,
-} from "lucide-react";
+import { Building, LayoutDashboard, LogOut, User, Users } from "lucide-react";
 
 import {
   Sidebar,
@@ -37,14 +31,14 @@ const items = [
     icon: Building,
   },
   {
-    title: "User",
+    title: "Users",
     url: "/dashboard/super-admin/user",
-    icon: User,
+    icon: Users,
   },
   {
-    title: "Activity",
-    url: "/dashboard/super-admin/activity",
-    icon: ChartColumn,
+    title: "Profile",
+    url: "/dashboard/super-admin/profile",
+    icon: User,
   },
 ];
 

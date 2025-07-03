@@ -22,6 +22,7 @@ function SalaryTable({ salaries }: SalaryTableProps) {
       toggleIcon: Loader,
     },
   ];
+
   return (
     <DataTable
       columns={SalaryColumns}

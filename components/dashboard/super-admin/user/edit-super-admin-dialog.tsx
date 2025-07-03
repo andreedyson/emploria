@@ -202,7 +202,7 @@ function EditSuperAdminUserDialog({ user }: EditSuperAdminUserDialogProps) {
             <DialogFooter>
               <SubmitButton
                 isSubmitting={submitting}
-                className="bg-picton-blue-400 hover:bg-picton-blue-500 w-full"
+                className="w-full bg-yellow-400 hover:bg-yellow-500"
               >
                 {submitting ? "Updating..." : "Update User"}
               </SubmitButton>

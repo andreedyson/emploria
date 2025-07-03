@@ -93,7 +93,9 @@ export const SuperAdminUserColumns: ColumnDef<SuperAdminCompanyUserProps>[] = [
     },
   },
   {
+    id: "company",
     accessorKey: "company",
+    filterFn: (row, id, value) => value.includes(row.getValue(id)),
     enableSorting: true,
     header: ({ column }) => {
       return (

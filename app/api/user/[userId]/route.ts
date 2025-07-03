@@ -20,7 +20,7 @@ export async function PATCH(
   try {
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
-    if (!token || token.role !== "USER") {
+    if (!token) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 

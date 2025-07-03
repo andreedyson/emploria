@@ -8,16 +8,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { getUserProfileData } from "@/lib/data/user/profile";
 import { calculateAge, formatDate } from "@/lib/utils";
 import { Gender } from "@prisma/client";
 import {
-  Building,
-  Building2,
   Calendar1,
   CalendarCheck,
-  Contact,
   Hash,
   IdCard,
   MapPinHouse,
@@ -30,14 +26,16 @@ import { getServerSession } from "next-auth";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
-async function UserProfilePage() {
+async function CompanyAdminProfilePage() {
   const session = await getServerSession(authOptions);
   if (!session) {
     redirect("/");
   }
   const userId = session.user.id;
   const userProfile = await getUserProfileData(userId);
-  const userAge = calculateAge(userProfile?.dateOfBirth as Date);
+  const userAge = userProfile?.dateOfBirth
+    ? calculateAge(userProfile?.dateOfBirth)
+    : "";
   return (
     <section className="w-full space-y-4">
       <div className="grid w-full grid-cols-1 gap-4 lg:grid-cols-4">
@@ -93,24 +91,6 @@ async function UserProfilePage() {
                   </div>
                 </div>
                 <div className="text-muted-foreground flex items-center gap-2 text-sm">
-                  <MapPinHouse size={20} />
-                  <div>
-                    <p className="font-medium">Address</p>
-                    <p className="text-foreground line-clamp-1 font-semibold">
-                      {userProfile?.address ? userProfile.address : "-"}
-                    </p>
-                  </div>
-                </div>
-                <div className="text-muted-foreground flex items-center gap-2 text-sm">
-                  <PhoneCall size={20} />
-                  <div>
-                    <p className="font-medium">Phone</p>
-                    <p className="text-foreground line-clamp-1 font-semibold">
-                      {userProfile?.phone ? userProfile.phone : "-"}
-                    </p>
-                  </div>
-                </div>
-                <div className="text-muted-foreground flex items-center gap-2 text-sm">
                   <MarsStroke size={20} />
                   <div>
                     <p className="font-medium">Gender</p>
@@ -136,54 +116,38 @@ async function UserProfilePage() {
         {/* Employee Profile Details */}
         <Card className="col-span-1 space-y-2 rounded-md border lg:col-span-3">
           <CardHeader>
-            <CardTitle className="font-semibold">Employee Details</CardTitle>
+            <CardTitle className="font-semibold">Admin Details</CardTitle>
             <CardDescription>
-              An overview of your employment information
+              An overview of your personal data.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 place-items-center gap-4">
-              <div className="text-muted-foreground flex items-center gap-2 text-sm">
-                <Building size={20} />
-                <div>
-                  <p className="font-medium">Company</p>
-                  <p className="text-foreground line-clamp-1 font-semibold">
-                    {userProfile?.company.name ? userProfile.company.name : "-"}
-                  </p>
-                </div>
-              </div>
-              <div className="text-muted-foreground flex items-center gap-2 text-sm">
-                <Building2 size={20} />
-                <div>
-                  <p className="font-medium">Department</p>
-                  <p className="text-foreground line-clamp-1 font-semibold">
-                    {userProfile?.department.name
-                      ? userProfile.department.name
-                      : "-"}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <Separator className="my-4" />
-
             <div className="space-y-3">
-              <div className="text-muted-foreground flex items-center justify-between text-sm">
-                <div className="flex items-center gap-1">
-                  <Contact size={20} />
-                  <p className="font-medium">Employee ID</p>
-                </div>
-                <p className="text-foreground line-clamp-1 font-semibold">
-                  {userProfile?.employee.id}
-                </p>
-              </div>
               <div className="text-muted-foreground flex items-center justify-between text-sm">
                 <div className="flex items-center gap-1">
                   <UserCog size={20} />
                   <p className="font-medium">Role</p>
                 </div>
                 <p className="text-foreground line-clamp-1 font-semibold">
-                  {userProfile?.employee.role ? userProfile.employee.role : "-"}
+                  {userProfile?.systemRole.split("_").join(" ")}
+                </p>
+              </div>
+              <div className="text-muted-foreground flex items-center justify-between text-sm">
+                <div className="flex items-center gap-1">
+                  <PhoneCall size={20} />
+                  <p className="font-medium">Phone</p>
+                </div>
+                <p className="text-foreground line-clamp-1 font-semibold">
+                  {userProfile?.phone ? userProfile.phone : "-"}
+                </p>
+              </div>
+              <div className="text-muted-foreground flex items-center justify-between text-sm">
+                <div className="flex items-center gap-1">
+                  <MapPinHouse size={20} />
+                  <p className="font-medium">Address</p>
+                </div>
+                <p className="text-foreground line-clamp-1 font-semibold">
+                  {userProfile?.address ? userProfile.address : "-"}
                 </p>
               </div>
               <div className="text-muted-foreground flex items-center justify-between text-sm">
@@ -225,4 +189,4 @@ async function UserProfilePage() {
   );
 }
 
-export default UserProfilePage;
+export default CompanyAdminProfilePage;

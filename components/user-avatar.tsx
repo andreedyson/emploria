@@ -11,16 +11,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { getImageUrl } from "@/lib/supabase";
-import {
-  ChartBarStacked,
-  House,
-  LogOutIcon,
-  Settings2,
-  User,
-} from "lucide-react";
+import { House, LogOutIcon, User } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 type UserAvatarProps = {
   fullname: string;
@@ -30,7 +23,6 @@ type UserAvatarProps = {
 };
 
 function UserAvatar({ fullname, role, email, image }: UserAvatarProps) {
-  const pathname = usePathname();
   const nameParts = fullname.trim().split(" ");
   const userInitial = nameParts
     .slice(0, 2)
@@ -39,22 +31,13 @@ function UserAvatar({ fullname, role, email, image }: UserAvatarProps) {
 
   const isUserAdmin = role === "SUPER_ADMIN" || role === "SUPER_ADMIN_COMPANY";
 
-  const isOnDashboard = pathname.includes("/dashboard");
-  const linkHref = isUserAdmin
+  const dashboardLinkHref = isUserAdmin
     ? `/dashboard/${role === "SUPER_ADMIN" ? "super-admin" : "admin"}`
+    : "/dashboard/user";
+
+  const profileLinkHref = isUserAdmin
+    ? `/dashboard/${role === "SUPER_ADMIN" ? "super-admin" : "admin"}/profile`
     : "/dashboard/user/profile";
-
-  const linkLabel = isUserAdmin ? "Dashboard" : "Profile";
-
-  const linkIcon = isUserAdmin ? (
-    isOnDashboard ? (
-      <House className="dark:text-background text-foreground" />
-    ) : (
-      <ChartBarStacked className="dark:text-background text-foreground" />
-    )
-  ) : (
-    <User className="dark:text-background text-foreground" />
-  );
 
   return (
     <DropdownMenu>
@@ -90,47 +73,47 @@ function UserAvatar({ fullname, role, email, image }: UserAvatarProps) {
                 isUserAdmin ? "text-red-500" : "text-slate-400"
               }`}
             >
-              {isUserAdmin ? "Admin" : "User"}
+              {isUserAdmin ? "Admin" : "Employee"}
             </p>
           </div>
         </DropdownMenuLabel>
 
         <DropdownMenuGroup>
+          {/* Main Dashboard Button */}
           <DropdownMenuItem asChild className="cursor-pointer">
-            <Link href={linkHref} className="flex w-full items-center gap-2">
+            <Link
+              href={dashboardLinkHref}
+              className="flex w-full items-center gap-2"
+            >
               <div className="grid size-7 place-items-center rounded-full bg-slate-200">
-                {linkIcon}
+                <House className="dark:text-background text-foreground" />
               </div>
               <div>
-                <p className="text-sm">{linkLabel}</p>
+                <p className="text-sm">Dashboard</p>
                 <p className="text-muted-foreground text-xs">
-                  {isUserAdmin
-                    ? "View main dashboard"
-                    : "View  your user profile"}
+                  View main dashboard
                 </p>
               </div>
             </Link>
           </DropdownMenuItem>
-          {isUserAdmin && (
-            <DropdownMenuItem asChild className="cursor-pointer">
-              <Link
-                href={`/dashboard/${role === "SUPER_ADMIN" ? "super-admin" : "admin"}/settings`}
-                className="flex w-full items-center gap-3"
-              >
-                <div className="grid size-7 place-items-center rounded-full bg-slate-200">
-                  <Settings2 className="dark:text-background text-foreground" />
-                </div>
-                <div>
-                  <p className="text-sm">Settings</p>
-                  <p className="text-muted-foreground text-xs">
-                    {role === "SUPER_ADMIN"
-                      ? "View application configuration"
-                      : "View company settings"}
-                  </p>
-                </div>
-              </Link>
-            </DropdownMenuItem>
-          )}
+          {/* Profile Button */}
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link
+              href={profileLinkHref}
+              className="flex w-full items-center gap-2"
+            >
+              <div className="grid size-7 place-items-center rounded-full bg-slate-200">
+                <User className="dark:text-background text-foreground" />
+              </div>
+              <div>
+                <p className="text-sm">Profile</p>
+                <p className="text-muted-foreground text-xs">
+                  View your user profile
+                </p>
+              </div>
+            </Link>
+          </DropdownMenuItem>
+          {/* Logout Button */}
           <DropdownMenuItem
             onClick={() => signOut({ redirect: true })}
             className="cursor-pointer text-red-500"

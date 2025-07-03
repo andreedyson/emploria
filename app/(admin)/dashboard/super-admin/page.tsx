@@ -1,6 +1,8 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { UserPerCompaniesCharts } from "@/components/charts/user-per-companies-charts";
 import StatsCard from "@/components/dashboard/super-admin/stats-card";
+import RecentlyAddedCompaniesList from "@/components/lists/recently-added-companies-list";
+import RecentlyAddedUsersList from "@/components/lists/recently-added-users-list";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,19 +11,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   getRecentCompanies,
   getRecentUsers,
   getStatsCardData,
 } from "@/lib/data/super-admin/dashboard";
 import { Building, CalendarPlus, Users2 } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import RecentlyAddedUsersList from "@/components/lists/recently-added-users-list";
-import RecentlyAddedCompaniesList from "@/components/lists/recently-added-companies-list";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -35,7 +35,7 @@ async function DashboardPage() {
 
   const statsCardData = await getStatsCardData();
   const recentlyAddedUsers = await getRecentUsers();
-  const recentlyAddedCompanis = await getRecentCompanies();
+  const recentlyAddedCompanies = await getRecentCompanies();
 
   return (
     <div className="space-y-6">
@@ -137,8 +137,8 @@ async function DashboardPage() {
                 value="companies"
                 className="mt-2 grid h-full grid-cols-1 gap-4"
               >
-                {recentlyAddedCompanis.length > 0 ? (
-                  recentlyAddedCompanis.map((company, i) => (
+                {recentlyAddedCompanies.length > 0 ? (
+                  recentlyAddedCompanies.map((company, i) => (
                     <RecentlyAddedCompaniesList key={i} company={company} />
                   ))
                 ) : (

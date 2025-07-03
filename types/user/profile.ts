@@ -1,4 +1,4 @@
-import { EmployeeRole, Gender } from "@prisma/client";
+import { EmployeeRole, Gender, SystemRole } from "@prisma/client";
 
 export type UserProfileProps = {
   id: string;
@@ -11,6 +11,7 @@ export type UserProfileProps = {
   joinedDate: Date;
   phone: string;
   isActive: boolean;
+  systemRole: SystemRole;
   company: {
     id: string;
     name: string;
