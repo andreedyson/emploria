@@ -7,6 +7,7 @@ import { getAllEmployees } from "@/lib/data/admin/employee";
 import { Image as ImageIcon, Table, Users, UserX2 } from "lucide-react";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -97,9 +98,34 @@ async function SuperAdminCompanyEmployeePage() {
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                {employees.map((employee) => (
-                  <EmployeeGalleryCard key={employee.id} employee={employee} />
-                ))}
+                {employees.length > 0 ? (
+                  employees.map((employee) => (
+                    <EmployeeGalleryCard
+                      key={employee.id}
+                      employee={employee}
+                    />
+                  ))
+                ) : (
+                  <div className="col-span-full flex h-full flex-col items-center justify-center gap-3 text-center">
+                    <Image
+                      src={"/assets/empty-gallery.svg"}
+                      width={500}
+                      height={300}
+                      alt="Employees Not Found"
+                      className="aspect-video w-[180px] md:h-[300px] lg:w-[280px]"
+                      priority
+                    />
+                    <div className="space-y-0.5">
+                      <h4 className="text-sm font-semibold md:text-base">
+                        No Employees Found
+                      </h4>
+                      <p className="text-muted-foreground max-w-sm text-xs md:text-sm">
+                        Showing a gallery view of the employees that are in this
+                        company.
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
             </TabsContent>
             <TabsContent

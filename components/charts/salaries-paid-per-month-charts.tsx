@@ -10,7 +10,10 @@ import {
 } from "@/components/ui/chart";
 import { getSalariesPaidPerMonth } from "@/lib/data/admin/dashboard";
 import { useQuery } from "@tanstack/react-query";
-import { LoaderCircle } from "lucide-react";
+import { LoaderCircle, Plus } from "lucide-react";
+import Image from "next/image";
+import { Button } from "../ui/button";
+import Link from "next/link";
 
 export const description = "A line chart with a label";
 
@@ -40,7 +43,7 @@ export function SalariesPaidPerMonthCharts({
       </div>
     );
 
-  return (
+  return chartData && chartData.length > 0 ? (
     <ChartContainer
       config={chartConfig}
       className="h-[80%] min-h-[200px] w-full md:h-[85%]"
@@ -87,5 +90,33 @@ export function SalariesPaidPerMonthCharts({
         </Line>
       </LineChart>
     </ChartContainer>
+  ) : (
+    <div className="col-span-full flex h-full flex-col items-center justify-center gap-3 text-center">
+      <Image
+        src={"/assets/empty-salaries-paid-per-month.svg"}
+        width={500}
+        height={300}
+        alt="Salaries Not Found"
+        className="aspect-video w-[180px] lg:w-[280px]"
+        priority
+      />
+      <div className="space-y-0.5">
+        <h4 className="text-sm font-semibold">No Salaries Found</h4>
+        <p className="text-muted-foreground max-w-sm text-xs md:text-sm">
+          Showing the list of total salaries paid per month from the past 6
+          month.
+        </p>
+        <div className="mt-3 flex items-center justify-center">
+          <Button
+            size={"sm"}
+            variant={"outline"}
+            className="flex items-center gap-2"
+          >
+            <Plus />
+            <Link href={"/dashboard/admin/salary"}>Add Salary</Link>
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }

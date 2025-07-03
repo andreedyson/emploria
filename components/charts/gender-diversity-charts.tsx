@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/chart";
 import { getGenderDiversityTotal } from "@/lib/data/admin/dashboard";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import { useMemo } from "react";
 
 type GenderDiversityChartsProps = {
@@ -45,7 +46,7 @@ export function GenderDiversityCharts({
       </div>
     );
 
-  return (
+  return chartData && chartData.length > 0 ? (
     <ChartContainer
       config={chartConfig}
       className="h-[80%] min-h-[200px] w-full md:h-[85%]"
@@ -94,5 +95,22 @@ export function GenderDiversityCharts({
         </Pie>
       </PieChart>
     </ChartContainer>
+  ) : (
+    <div className="col-span-full flex h-full flex-col items-center justify-center gap-3 text-center">
+      <Image
+        src={"/assets/empty-gallery.svg"}
+        width={500}
+        height={300}
+        alt="Employees Not Found"
+        className="aspect-video w-[180px] lg:w-[280px]"
+        priority
+      />
+      <div className="space-y-0.5">
+        <h4 className="text-sm font-semibold">No Gender Diversity Charts</h4>
+        <p className="text-muted-foreground max-w-sm text-xs leading-4 md:text-sm">
+          Showing the allocation of Male and Female employees.
+        </p>
+      </div>
+    </div>
   );
 }

@@ -5,11 +5,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ChevronRight } from "lucide-react";
-import Link from "next/link";
-import React from "react";
-import TopEmployeeListItem from "./top-employee-list";
 import { TopEmployeeListProps } from "@/types/admin/dashboard";
+import { ChevronRight } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import TopEmployeeListItem from "./top-employee-list";
 
 type TopEmployeesCardProps = {
   topEmployees: TopEmployeeListProps[];
@@ -35,13 +35,35 @@ function TopEmployeesCard({ topEmployees }: TopEmployeesCardProps) {
       </CardHeader>
 
       <CardContent className="space-y-4">
-        {topEmployees.map((employee, index) => (
-          <TopEmployeeListItem
-            key={employee.id}
-            number={index + 1}
-            employee={employee}
-          />
-        ))}
+        {topEmployees.length > 0 ? (
+          <div>
+            {topEmployees.map((employee, index) => (
+              <TopEmployeeListItem
+                key={employee.id}
+                number={index + 1}
+                employee={employee}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="col-span-full flex h-full flex-col items-center justify-center gap-3 text-center">
+            <Image
+              src={"/assets/empty-list.svg"}
+              width={500}
+              height={300}
+              alt="No Top Employees Found"
+              className="aspect-video w-[180px] lg:w-[280px]"
+              priority
+            />
+            <div className="space-y-0.5">
+              <h4 className="text-sm font-semibold">No Top Employees Found</h4>
+              <p className="text-muted-foreground max-w-sm text-xs md:text-sm">
+                Showing the list of employees with the highest amount of
+                attendance in the current month.
+              </p>
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
