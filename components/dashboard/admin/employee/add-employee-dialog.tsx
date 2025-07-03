@@ -122,6 +122,7 @@ function AddEmployeeDialog() {
         setSubmitting(false);
         setOpen(false);
         customToast("success", "Success 🎉", data.message);
+        form.reset();
         router.push("/dashboard/admin/employee");
       }
     } catch (error) {

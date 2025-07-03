@@ -38,7 +38,7 @@ function DepartmentOverviewCard({ departments }: DepartmentOverviewCardProps) {
 
       <CardContent className="space-y-4">
         {departments.length > 0 ? (
-          <div>
+          <div className="space-y-4">
             <div className="flex items-center gap-2 text-lg font-medium">
               <User size={32} />
               <p>
