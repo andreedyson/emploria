@@ -9,8 +9,14 @@ import {
   getUserStatsCardData,
 } from "@/lib/data/user/dashboard";
 import { convertToGmt7TimeString } from "@/lib/utils";
+import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Home",
+  description: "Home page view for Emploria Employee Dashboard",
+};
 
 async function UserDashboardPage() {
   const session = await getServerSession(authOptions);

@@ -26,9 +26,15 @@ import {
   UserCheck,
   UserCog,
 } from "lucide-react";
+import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Profile",
+  description: "Profile page view for Emploria Employee Dashboard",
+};
 
 async function UserProfilePage() {
   const session = await getServerSession(authOptions);
