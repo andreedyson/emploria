@@ -1,5 +1,6 @@
 import RecentlyAddedCompaniesList from "@/components/lists/recently-added-companies-list";
 import RecentlyAddedUsersList from "@/components/lists/recently-added-users-list";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -12,8 +13,9 @@ import {
   RecentlyAddedCompaniesProps,
   RecentlyAddedUsersProps,
 } from "@/types/super-admin/dashboard";
-import { Building, CalendarPlus, Users2 } from "lucide-react";
+import { Building, CalendarPlus, Plus, Users2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 type RecentlyAddedCompaniesUserscardProps = {
@@ -77,6 +79,16 @@ function RecentlyAddedCompaniesUserscard({
                     Showing the list of recently added users from the past one
                     month.
                   </p>
+                  <div className="mt-3 flex items-center justify-center">
+                    <Button
+                      variant={"outline"}
+                      size={"sm"}
+                      className="flex items-center gap-2"
+                    >
+                      <Plus />
+                      <Link href={"/dashboard/super-admin/user"}>Add User</Link>
+                    </Button>
+                  </div>
                 </div>
               </div>
             )}
@@ -107,6 +119,18 @@ function RecentlyAddedCompaniesUserscard({
                     Showing the list of recently added companies from the past
                     one month.
                   </p>
+                  <div className="mt-3 flex items-center justify-center">
+                    <Button
+                      size={"sm"}
+                      variant={"outline"}
+                      className="flex items-center gap-2"
+                    >
+                      <Plus />
+                      <Link href={"/dashboard/super-admin/company"}>
+                        Add Company
+                      </Link>
+                    </Button>
+                  </div>
                 </div>
               </div>
             )}
