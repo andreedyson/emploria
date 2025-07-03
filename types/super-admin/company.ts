@@ -1,3 +1,5 @@
+import { Department } from "@prisma/client";
+
 export type AllCompaniesProps = {
   id: string;
   name: string;
@@ -6,4 +8,5 @@ export type AllCompaniesProps = {
   totalUsers: number;
   createdAt: Date;
   updatedAt: Date;
+  department: Department[];
 };

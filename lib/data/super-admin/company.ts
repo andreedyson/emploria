@@ -15,12 +15,14 @@ export async function getAllCompanies(): Promise<AllCompaniesProps[]> {
             email: true,
           },
         },
+        department: true,
       },
     });
 
     const data = companies.map(({ ...company }) => ({
       ...company,
       totalUsers: company.users.length,
+      department: company.department,
     }));
 
     return data;

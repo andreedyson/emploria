@@ -11,7 +11,14 @@ import {
 import { getImageUrl } from "@/lib/supabase";
 import { formatDate } from "@/lib/utils";
 import { AllCompaniesProps } from "@/types/super-admin/company";
-import { Calendar, Copy, Eye, IdCard, LetterText } from "lucide-react";
+import {
+  Building2,
+  Calendar,
+  Copy,
+  Eye,
+  IdCard,
+  LetterText,
+} from "lucide-react";
 import Image from "next/image";
 import toast from "react-hot-toast";
 
@@ -96,6 +103,16 @@ function ViewCompanyDialog({ company }: ViewCompanyDialogProps) {
                 <p>Created</p>
               </div>
               <p className="font-semibold">{formatDate(company.createdAt)}</p>
+            </div>
+            <div className="text-sm">
+              <div className="text-muted-foreground flex items-center gap-1">
+                <Building2 size={14} />
+                <p>Total Departments</p>
+              </div>
+              <p className="font-semibold">
+                {company.department.length}{" "}
+                {company.department.length > 1 ? "Departments" : "Department"}
+              </p>
             </div>
           </div>
         </div>
