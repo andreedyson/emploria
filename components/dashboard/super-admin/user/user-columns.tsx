@@ -6,19 +6,12 @@ import { getImageUrl } from "@/lib/supabase";
 import { formatDate } from "@/lib/utils";
 import { SuperAdminCompanyUserProps } from "@/types/super-admin/user";
 import { ColumnDef } from "@tanstack/react-table";
-import { Calendar, IdCard, LetterText, Mail } from "lucide-react";
+import { Calendar, LetterText, Mail, User } from "lucide-react";
 import Image from "next/image";
-import ViewSuperAdminDialog from "./view-super-admin-dialog";
 import EditSuperAdminUserDialog from "./edit-super-admin-dialog";
+import ViewSuperAdminDialog from "./view-super-admin-dialog";
 
 export const SuperAdminUserColumns: ColumnDef<SuperAdminCompanyUserProps>[] = [
-  {
-    accessorKey: "id",
-    enableSorting: true,
-    header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="ID" icon={IdCard} />;
-    },
-  },
   {
     accessorKey: "name",
     enableSorting: true,
@@ -89,6 +82,21 @@ export const SuperAdminUserColumns: ColumnDef<SuperAdminCompanyUserProps>[] = [
         >
           {company.isActive ? "Active" : "Inactive"}
         </Badge>
+      );
+    },
+  },
+  {
+    id: "role",
+    accessorKey: "role",
+    filterFn: (row, id, value) => value.includes(row.getValue(id)),
+    enableSorting: true,
+    header: ({ column }) => {
+      return <DataTableColumnHeader column={column} title="Role" icon={User} />;
+    },
+    cell: ({ row }) => {
+      const user = row.original;
+      return (
+        <div className="font-semibold">{user.role.split("_").join(" ")}</div>
       );
     },
   },

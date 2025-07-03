@@ -1,3 +1,5 @@
+import { SystemRole } from "@prisma/client";
+
 export type SuperAdminCompanyUserProps = {
   id: string;
   name: string;
@@ -5,6 +7,7 @@ export type SuperAdminCompanyUserProps = {
   isActive: boolean;
   image: string | null;
   createdAt: Date;
+  role: SystemRole;
   company: {
     id?: string;
     name?: string;

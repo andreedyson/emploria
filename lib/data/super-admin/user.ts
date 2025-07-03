@@ -14,6 +14,7 @@ export async function getAllSuperAdminCompanyUsers(): Promise<
         image: true,
         company: true,
         createdAt: true,
+        role: true,
       },
     });
 
@@ -24,6 +25,7 @@ export async function getAllSuperAdminCompanyUsers(): Promise<
       isActive: user.isActive,
       image: user.image,
       createdAt: user.createdAt,
+      role: user.role,
       company: {
         id: user.company?.id,
         name: user.company?.name,
