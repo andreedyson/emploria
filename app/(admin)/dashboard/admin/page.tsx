@@ -33,8 +33,6 @@ async function SuperAdminCompanyPage() {
     getTopEmployeesList(companyId),
   ]);
 
-  // const activities = await getActivitiesByCompany(companyId);
-
   return (
     <section className="space-y-4">
       {/* Company Admin Dashboard Header */}

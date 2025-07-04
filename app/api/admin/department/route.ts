@@ -1,7 +1,7 @@
 import prisma from "@/lib/db";
 import { logActivity } from "@/lib/log-activity";
 import { departmentSchema } from "@/validations/admin";
-import { ActivityAction, ActivityTarget } from "@prisma/client";
+import { ActivityAction, ActivityTarget, Prisma } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -284,8 +284,20 @@ export async function DELETE(req: NextRequest) {
     );
   } catch (error) {
     console.error("[DELETE_DEPARTMENT_ERROR]", error);
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2003") {
+        return NextResponse.json(
+          {
+            message:
+              "Cannot delete department because it's related to other data",
+          },
+          { status: 400 },
+        );
+      }
+    }
+
     return NextResponse.json(
-      { message: "An error occured deleting department" },
+      { message: "Internal server error" },
       { status: 500 },
     );
   }

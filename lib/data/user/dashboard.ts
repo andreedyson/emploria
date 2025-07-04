@@ -6,6 +6,7 @@ import { SalariesPaidPerMonthProps } from "@/types/admin/dashboard";
 import { UserStatsCardDataProps } from "@/types/user/dashboard";
 import { endOfDay, endOfMonth, startOfDay, startOfMonth } from "date-fns";
 import { Banknote, Calendar1, CalendarCog, CalendarX } from "lucide-react";
+import { toZonedTime } from "date-fns-tz";
 
 export async function getUserStatsCardData(
   userId: string,
@@ -149,9 +150,12 @@ export async function getUserStatsCardData(
 }
 
 export async function getTodayAttendanceStatus(userId: string) {
-  const today = new Date();
-  const start = startOfDay(today);
-  const end = endOfDay(today);
+  const timeZone = "Asia/Jakarta";
+  const now = new Date();
+  const zonedNow = toZonedTime(now, timeZone);
+
+  const start = startOfDay(zonedNow);
+  const end = endOfDay(zonedNow);
 
   const attendance = await prisma.attendance.findFirst({
     where: {

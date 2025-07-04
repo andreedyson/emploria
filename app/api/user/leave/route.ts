@@ -88,6 +88,30 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Check if leave request overlaps with any existing APPROVED leave
+    const overlappingLeave = await prisma.leave.findFirst({
+      where: {
+        employeeId: employee.id,
+        status: { in: ["APPROVED", "PENDING"] },
+        OR: [
+          {
+            startDate: { lte: end },
+            endDate: { gte: start },
+          },
+        ],
+      },
+    });
+
+    if (overlappingLeave) {
+      return NextResponse.json(
+        {
+          message:
+            "You already have an approved leave that overlaps with this request.",
+        },
+        { status: 400 },
+      );
+    }
+
     if (
       leaveType === LeaveType.MATERNITY &&
       employee.user.gender !== "FEMALE"

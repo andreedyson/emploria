@@ -74,13 +74,16 @@ function DepartmentOverviewCard({ departments }: DepartmentOverviewCardProps) {
                     className="flex items-center justify-between"
                   >
                     <div className="flex items-center space-x-2">
-                      {/* colored dot */}
+                      {/* Colored dot */}
                       <span
                         className="h-3 w-3 rounded-full"
                         style={{ backgroundColor: dept.color || "#000" }}
                       />
                       <div>
-                        <p className="line-clamp-1 text-sm font-medium">
+                        <p
+                          className="line-clamp-1 max-w-[150px] text-sm font-medium"
+                          title={dept.name}
+                        >
                           {dept.name}
                         </p>
                         <p className="text-sm text-gray-500">
