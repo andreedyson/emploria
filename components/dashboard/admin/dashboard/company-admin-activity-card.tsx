@@ -9,6 +9,8 @@ import { Activity } from "@prisma/client";
 import Image from "next/image";
 import React from "react";
 import ActivityList from "./activity-list";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 type CompanyAdminActivityCardProps = {
   activities: Activity[];
@@ -19,11 +21,18 @@ function CompanyAdminActivityCard({
 }: CompanyAdminActivityCardProps) {
   return (
     <Card className="col-span-1 w-full">
-      <CardHeader>
-        <CardTitle className="text-sm font-semibold">Activities</CardTitle>
-        <CardDescription>
-          Latest activities by users of this company
-        </CardDescription>
+      <CardHeader className="flex items-center justify-between">
+        <div>
+          <CardTitle className="text-sm font-semibold">Activities</CardTitle>
+          <CardDescription>
+            Latest activities by users of this company
+          </CardDescription>
+        </div>
+        <Link href={"/dashboard/admin/activity"}>
+          <Button variant={"outline"} size={"sm"}>
+            View All
+          </Button>
+        </Link>
       </CardHeader>
 
       <CardContent className="space-y-4">
