@@ -3,7 +3,9 @@
 import SalaryInvoicePDF from "@/components/dashboard/admin/salary/salary-invoice-pdf";
 import SalaryInvoicePageSkeletons from "@/components/skeletons/user/salary-invoice-page-skeletons";
 import { getSalaryById } from "@/lib/data/admin/salary";
+import { logActivity } from "@/lib/log-activity";
 import { SalaryColumnsProps } from "@/types/admin/salary";
+import { ActivityAction, ActivityTarget } from "@prisma/client";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import { useQuery } from "@tanstack/react-query";
 import { Receipt } from "lucide-react";
@@ -50,6 +52,22 @@ export default function SalaryInvoicePDFViewer({
       .replace(/\s+/g, "_")
       .replace(/[^\w\-]/g, "") + ".pdf";
 
+  const logExportActivity = async () => {
+    await logActivity({
+      userId: user.id,
+      companyId: data.company.id,
+      action: ActivityAction.EXPORT,
+      targetType: ActivityTarget.SALARY,
+      targetId: data.id,
+      description: `User ${user.email} exported salary invoice for ${data.employee.name} - ${data.month}/${data.year}`,
+      metadata: {
+        employeeId: data.employee.id,
+        month: data.month,
+        year: data.year,
+      },
+    });
+  };
+
   return (
     <>
       <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between">
@@ -74,6 +92,9 @@ export default function SalaryInvoicePDFViewer({
               color: "white",
               borderRadius: 4,
               fontWeight: 500,
+            }}
+            onClick={async () => {
+              await logExportActivity();
             }}
           >
             {({ loading }) =>

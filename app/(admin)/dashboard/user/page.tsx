@@ -4,6 +4,7 @@ import SalariesGrowthCard from "@/components/dashboard/user/dashboard/salaries-g
 import UserActivityCard from "@/components/dashboard/user/dashboard/user-activity-card";
 import UserStatsCard from "@/components/dashboard/user/dashboard/user-stats-card";
 import { Separator } from "@/components/ui/separator";
+import { getActivitiesByUserId } from "@/lib/data/user/activity";
 import {
   getTodayAttendanceStatus,
   getUserStatsCardData,
@@ -24,9 +25,10 @@ async function UserDashboardPage() {
     redirect("/");
   }
   const userId = session.user.id;
-  const [statsCardData, todaysAttendance] = await Promise.all([
+  const [statsCardData, todaysAttendance, activities] = await Promise.all([
     getUserStatsCardData(userId),
     getTodayAttendanceStatus(userId),
+    getActivitiesByUserId(userId),
   ]);
 
   return (
@@ -63,7 +65,7 @@ async function UserDashboardPage() {
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <SalariesGrowthCard userId={userId} />
-        <UserActivityCard />
+        <UserActivityCard activities={activities} />
       </div>
     </section>
   );

@@ -1,3 +1,5 @@
+"use server";
+
 import { ActivityAction, ActivityTarget, Prisma } from "@prisma/client";
 import prisma from "./db";
 

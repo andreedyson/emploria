@@ -6,10 +6,25 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Activity } from "@prisma/client";
 import { Banknote, CalendarDays, CalendarX } from "lucide-react";
-import React from "react";
+import ActivityList from "../../admin/dashboard/activity-list";
+import Image from "next/image";
 
-function UserActivityCard() {
+type UserActivityCardProps = {
+  activities: Activity[];
+};
+
+function UserActivityCard({ activities }: UserActivityCardProps) {
+  const attendanceActivities = activities
+    .filter((act) => act.targetType === "ATTENDANCE")
+    .slice(0, 5);
+  const salaryActivities = activities
+    .filter((act) => act.targetType === "SALARY")
+    .slice(0, 5);
+  const leaveActivities = activities
+    .filter((act) => act.targetType === "LEAVE")
+    .slice(0, 5);
   return (
     <Card className="col-span-1 w-full">
       <CardHeader>
@@ -36,19 +51,88 @@ function UserActivityCard() {
             value="attendance"
             className="mt-2 grid grid-cols-1 gap-4"
           >
-            Attendance Tabs
+            {attendanceActivities.length > 0 ? (
+              attendanceActivities.map((act) => (
+                <ActivityList key={act.id} activity={act} />
+              ))
+            ) : (
+              <div className="col-span-full flex h-full flex-col items-center justify-center gap-3 text-center">
+                <Image
+                  src={"/assets/empty-activities-card.svg"}
+                  width={500}
+                  height={300}
+                  alt="Activities Not Found"
+                  className="aspect-video w-[180px] lg:w-[280px]"
+                  priority
+                />
+                <div className="space-y-0.5">
+                  <h4 className="text-sm font-semibold md:text-base">
+                    No Activities Found
+                  </h4>
+                  <p className="text-muted-foreground max-w-sm text-xs md:text-sm">
+                    Showing a list of your latest attendance activities.
+                  </p>
+                </div>
+              </div>
+            )}
           </TabsContent>
           <TabsContent
             value="salary"
             className="mt-2 grid h-full grid-cols-1 gap-4"
           >
-            Salary Tabs
+            {salaryActivities.length > 0 ? (
+              salaryActivities.map((act) => (
+                <ActivityList key={act.id} activity={act} />
+              ))
+            ) : (
+              <div className="col-span-full flex h-full flex-col items-center justify-center gap-3 text-center">
+                <Image
+                  src={"/assets/empty-activities-card.svg"}
+                  width={500}
+                  height={300}
+                  alt="Activities Not Found"
+                  className="aspect-video w-[180px] lg:w-[280px]"
+                  priority
+                />
+                <div className="space-y-0.5">
+                  <h4 className="text-sm font-semibold md:text-base">
+                    No Activities Found
+                  </h4>
+                  <p className="text-muted-foreground max-w-sm text-xs md:text-sm">
+                    Showing a list of your latest salary activities.
+                  </p>
+                </div>
+              </div>
+            )}
           </TabsContent>
           <TabsContent
             value="leave"
             className="mt-2 grid h-full grid-cols-1 gap-4"
           >
-            Leave Tabs
+            {leaveActivities.length > 0 ? (
+              leaveActivities.map((act) => (
+                <ActivityList key={act.id} activity={act} />
+              ))
+            ) : (
+              <div className="col-span-full flex h-full flex-col items-center justify-center gap-3 text-center">
+                <Image
+                  src={"/assets/empty-activities-card.svg"}
+                  width={500}
+                  height={300}
+                  alt="Activities Not Found"
+                  className="aspect-video w-[180px] lg:w-[280px]"
+                  priority
+                />
+                <div className="space-y-0.5">
+                  <h4 className="text-sm font-semibold md:text-base">
+                    No Activities Found
+                  </h4>
+                  <p className="text-muted-foreground max-w-sm text-xs md:text-sm">
+                    Showing a list of your latest leave activities.
+                  </p>
+                </div>
+              </div>
+            )}
           </TabsContent>
         </Tabs>
       </CardContent>
