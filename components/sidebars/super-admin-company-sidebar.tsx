@@ -5,6 +5,7 @@ import {
   Building2,
   CalendarDays,
   CalendarX,
+  ChartColumnStacked,
   LayoutDashboard,
   LogOut,
   Settings,
@@ -61,6 +62,11 @@ const items = [
     title: "Salary",
     url: "/dashboard/admin/salary",
     icon: Banknote,
+  },
+  {
+    title: "Activity",
+    url: "/dashboard/admin/activity",
+    icon: ChartColumnStacked,
   },
   {
     title: "Settings",
