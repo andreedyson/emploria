@@ -37,6 +37,9 @@ export default function AttendanceButton({
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
+  const now = new Date();
+  const wibHour = (now.getUTCHours() + 7) % 24;
+  const disabledByTime = wibHour >= 18;
   const alreadyCheckedIn = !!attendance?.checkIn;
   const alreadyCheckedOut = !!attendance?.checkOut;
 
@@ -83,7 +86,11 @@ export default function AttendanceButton({
       ) : (
         <AlertDialogTrigger asChild>
           <Button
-            className={`flex items-center gap-2 text-sm text-white duration-200 ${buttonColor}`}
+            disabled={disabledByTime}
+            className={`flex items-center gap-2 text-sm text-white duration-200 ${buttonColor} ${
+              disabledByTime ? "cursor-not-allowed opacity-50" : ""
+            }`}
+            title={disabledByTime ? "Attendance is closed after 18:00 WIB" : ""}
           >
             {icon}
             {buttonLabel}

@@ -46,7 +46,7 @@ export function SalariesPaidPerMonthCharts({
   return chartData && chartData.length > 0 ? (
     <ChartContainer
       config={chartConfig}
-      className="h-[80%] min-h-[200px] w-full md:h-[85%]"
+      className="h-[80%] min-h-[200px] w-full md:h-full"
     >
       <LineChart
         accessibilityLayer

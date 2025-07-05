@@ -14,6 +14,7 @@ import GenderDiversityCard from "@/components/dashboard/admin/dashboard/gender-d
 import SalariesPaidPerMonthCard from "@/components/dashboard/admin/dashboard/salaries-paid-per-month-card";
 import TopEmployeesCard from "@/components/dashboard/admin/dashboard/top-employees-card";
 import { Metadata } from "next";
+import { getActivitiesByCompany } from "@/lib/data/admin/activity";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -27,11 +28,13 @@ async function SuperAdminCompanyPage() {
   }
   const companyId = session.user.companyId ?? "";
 
-  const [statsCardData, departments, topEmployees] = await Promise.all([
-    getSuperAdminCompanyStatsCardData(companyId),
-    getEmployeesPerDepartments(companyId),
-    getTopEmployeesList(companyId),
-  ]);
+  const [statsCardData, departments, topEmployees, activities] =
+    await Promise.all([
+      getSuperAdminCompanyStatsCardData(companyId),
+      getEmployeesPerDepartments(companyId),
+      getTopEmployeesList(companyId),
+      getActivitiesByCompany(companyId),
+    ]);
 
   return (
     <section className="space-y-4">
@@ -69,7 +72,7 @@ async function SuperAdminCompanyPage() {
       {/* 3rd Grid */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <SalariesPaidPerMonthCard companyId={companyId} />
-        <CompanyAdminActivityCard />
+        <CompanyAdminActivityCard activities={activities.slice(0, 5)} />
       </div>
     </section>
   );
