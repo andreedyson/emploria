@@ -11,8 +11,14 @@ import {
 import { getTodayAttendanceStatus } from "@/lib/data/user/dashboard";
 import { getUserProfileData } from "@/lib/data/user/profile";
 import { convertToGmt7TimeString } from "@/lib/utils";
+import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Attendance",
+  description: "Attendance page view for Emploria User Dashboard",
+};
 
 async function UserAttendancePage() {
   const session = await getServerSession(authOptions);

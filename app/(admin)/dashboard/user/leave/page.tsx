@@ -8,8 +8,14 @@ import {
   getEmployeeLeaveSummary,
 } from "@/lib/data/user/leave";
 import { getUserProfileData } from "@/lib/data/user/profile";
+import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Leave",
+  description: "Leave page view for Emploria User Dashboard",
+};
 
 async function UserLeavePage() {
   const session = await getServerSession(authOptions);
