@@ -7,6 +7,7 @@ import { Leave } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { Calendar, Layers, Text } from "lucide-react";
 import UserViewLeaveDialog from "./user-view-leave-dialog";
+import UserCancelLeaveDialog from "./user-cancel-leave-dialog";
 export const UserLeaveColumns: ColumnDef<Leave>[] = [
   {
     accessorKey: "status",
@@ -94,9 +95,10 @@ export const UserLeaveColumns: ColumnDef<Leave>[] = [
       const leave = row.original;
 
       return (
-        <>
+        <div className="flex items-center gap-2">
           <UserViewLeaveDialog leave={leave} />
-        </>
+          <UserCancelLeaveDialog leave={leave} />
+        </div>
       );
     },
   },
