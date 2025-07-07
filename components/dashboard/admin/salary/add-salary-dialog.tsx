@@ -39,6 +39,7 @@ import { salarySchema } from "@/validations/admin";
 import { Banknote } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Label } from "@/components/ui/label";
+import { useQueryClient } from "@tanstack/react-query";
 
 type AddSalaryDialogProps = {
   companyId: string;
@@ -49,6 +50,7 @@ function AddSalaryDialog({ companyId }: AddSalaryDialogProps) {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const today = new Date();
   const currentMonth = today.getMonth() + 1;
@@ -99,6 +101,7 @@ function AddSalaryDialog({ companyId }: AddSalaryDialogProps) {
         setOpen(false);
         setSubmitting(false);
         customToast("success", "Success 🎉", data.message);
+        queryClient.invalidateQueries({ queryKey: ["employee-salaries"] });
         form.reset();
         router.refresh();
       }

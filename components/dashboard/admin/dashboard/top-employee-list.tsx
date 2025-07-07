@@ -21,7 +21,7 @@ function TopEmployeeListItem({ employee }: TopEmployeeListItemProps) {
               width={80}
               height={80}
               alt={employee.name}
-              className="size-12 rounded-lg"
+              className="size-12 rounded-lg object-contain"
             />
           </div>
           <div>

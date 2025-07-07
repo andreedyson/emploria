@@ -197,7 +197,7 @@ export function SignInForm() {
           width={500}
           height={500}
           alt="Image"
-          className="absolute inset-0 h-full w-full rounded-r-xl object-cover dark:brightness-[0.2] dark:grayscale"
+          className="absolute inset-0 h-full w-full rounded-r-xl object-cover dark:brightness-[0.6] dark:grayscale"
         />
       </div>
     </div>
