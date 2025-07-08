@@ -13,7 +13,7 @@ function UserStatsCard({ stats }: UserStatsCardProps) {
   const Icon3 = stats[2].icon;
   const Icon4 = stats[3].icon;
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
       {/* Card 1 */}
       <div
         className={cn(

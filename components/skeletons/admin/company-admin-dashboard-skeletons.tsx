@@ -24,7 +24,7 @@ function CompanyAdminDashboardSkeletons() {
       </div>
 
       {/* 3rd Grid Cards Skeletons */}
-      <div className="mt-4 grid h-full w-full grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="mt-4 grid h-full w-full grid-cols-1 gap-4 lg:grid-cols-2">
         <Skeleton className="col-span-1 h-[250px] w-full" />
         <Skeleton className="col-span-1 h-[250px] w-full" />
       </div>

@@ -45,7 +45,7 @@ async function UserDashboardPage() {
 
       {/* Employee Today's Attendance */}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-col gap-1.5 text-xs font-semibold md:h-5 md:flex-row md:items-center md:text-sm">
+        <div className="flex flex-col gap-1.5 text-xs font-semibold md:h-5 md:flex-row md:items-center lg:text-sm">
           <p aria-label="Check in for today" title="Check in for today">
             {todaysAttendance?.checkIn
               ? `✅ You checked-in at ${convertToGmt7TimeString(todaysAttendance.checkIn)}`
@@ -63,7 +63,7 @@ async function UserDashboardPage() {
 
       <UserStatsCard stats={statsCardData} />
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
         <SalariesGrowthCard userId={userId} />
         <UserActivityCard activities={activities} />
       </div>

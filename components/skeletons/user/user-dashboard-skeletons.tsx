@@ -19,14 +19,14 @@ function UsersDashboardSkeletons() {
       </div>
 
       {/* Stats Card Skeletons */}
-      <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {Array.from({ length: 4 }, (_, index) => (
           <Skeleton className="h-[80px] w-full md:h-[120px]" key={index} />
         ))}
       </div>
 
       {/* Salaries Growth and Activities Card Skeletons */}
-      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-2">
         <Skeleton className="h-[300px] w-full md:h-[350px]" />
         <Skeleton className="h-[300px] w-full md:h-[350px]" />
       </div>

@@ -18,7 +18,7 @@ type DepartmentOverviewCardProps = {
 function DepartmentOverviewCard({ departments }: DepartmentOverviewCardProps) {
   const total = departments.reduce((sum, d) => sum + d.count, 0);
   return (
-    <Card className="col-span-1 w-full lg:col-span-2">
+    <Card className="col-span-1 w-full xl:col-span-2">
       <CardHeader className="flex items-center justify-between">
         <div>
           <CardTitle className="text-sm font-semibold">

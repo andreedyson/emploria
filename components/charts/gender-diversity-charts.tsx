@@ -41,7 +41,7 @@ export function GenderDiversityCharts({
 
   if (isLoading)
     return (
-      <div className="flex h-[200px] w-full flex-col items-center justify-center md:h-[350px]">
+      <div className="flex h-[200px] w-full flex-col items-center justify-center md:h-[300px]">
         <LoaderCircle className="text-main-violet-700 size-10 animate-spin" />
       </div>
     );
@@ -49,7 +49,7 @@ export function GenderDiversityCharts({
   return chartData && chartData.length > 0 ? (
     <ChartContainer
       config={chartConfig}
-      className="h-[80%] min-h-[200px] w-full md:h-[85%]"
+      className="h-[80%] min-h-[200px] w-full md:h-[280px]"
     >
       <PieChart>
         <ChartTooltip

@@ -49,7 +49,7 @@ async function SuperAdminCompanyPage() {
       </div>
 
       {/* Statistics Card */}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         {statsCardData.map((data) => (
           <SuperAdminCompanyStatsCard
             key={data.title}
@@ -63,14 +63,14 @@ async function SuperAdminCompanyPage() {
       </div>
 
       {/* 2nd Grid */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-5">
         <DepartmentOverviewCard departments={departments} />
         <TopEmployeesCard topEmployees={topEmployees} />
         <GenderDiversityCard companyId={companyId} />
       </div>
 
       {/* 3rd Grid */}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
         <SalariesPaidPerMonthCard companyId={companyId} />
         <CompanyAdminActivityCard activities={activities.slice(0, 5)} />
       </div>
