@@ -35,7 +35,7 @@ export const LeaveColumns: ColumnDef<LeaveColumnProps>[] = [
               alt={leave.employee.name}
               width={80}
               height={80}
-              className="size-8 rounded-full object-contain"
+              className="size-8 rounded-full object-cover"
             />
           </div>
           <p>{leave.employee.name}</p>

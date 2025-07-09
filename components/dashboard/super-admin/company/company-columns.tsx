@@ -41,7 +41,7 @@ export const CompanyColumns: ColumnDef<AllCompaniesProps>[] = [
               alt={company.name}
               width={80}
               height={80}
-              className="size-16 rounded-lg object-contain md:size-20"
+              className="size-16 rounded-lg object-cover md:size-20"
             />
           </div>
           <p>{company.name}</p>

@@ -33,7 +33,7 @@ export const SuperAdminUserColumns: ColumnDef<SuperAdminCompanyUserProps>[] = [
               alt={user.name}
               width={80}
               height={80}
-              className="size-8 rounded-full object-contain"
+              className="size-8 rounded-full object-cover"
             />
           </div>
           <p>{user.name}</p>

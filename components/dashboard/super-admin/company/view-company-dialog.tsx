@@ -64,7 +64,7 @@ function ViewCompanyDialog({ company }: ViewCompanyDialogProps) {
               alt={company.name}
               width={80}
               height={80}
-              className="size-8 rounded-full border-2 object-contain md:size-10"
+              className="size-8 rounded-full border-2 object-cover md:size-10"
             />
             <div>
               <p className="text-lg font-semibold">{company.name}</p>

@@ -32,7 +32,8 @@ function TopEmployeeListItem({ employee }: TopEmployeeListItemProps) {
           </div>
         </div>
         <p className="line-clamp-1 font-semibold">
-          {employee.attendance} Attendance
+          {employee.attendance}{" "}
+          {employee.attendance > 1 ? "Attendances" : "Attendance"}
         </p>
       </div>
     </div>

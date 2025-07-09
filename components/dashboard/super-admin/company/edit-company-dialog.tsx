@@ -178,7 +178,7 @@ function EditCompanyDialog({ companyData }: EditCompanyDialogProps) {
                   width={200}
                   height={200}
                   alt="Selected Logo"
-                  className="max-h-[200px] object-contain"
+                  className="max-h-[200px] object-cover"
                 />
                 <p
                   onClick={handleClearImage}

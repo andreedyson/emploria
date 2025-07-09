@@ -70,7 +70,7 @@ function ViewEmployeeDialog({ employeeData }: ViewEmployeeDialogProps) {
               alt={employeeData.name}
               width={80}
               height={80}
-              className="size-8 rounded-full border-2 object-contain md:size-10"
+              className="size-8 rounded-full border-2 object-cover md:size-10"
             />
             <div className="text-xs sm:text-sm">
               <p className="font-semibold">{employeeData.name}</p>

@@ -87,7 +87,7 @@ function ViewSalaryDialog({ salaryData }: ViewSalaryDialogProps) {
               alt={salaryData.employee.name}
               width={80}
               height={80}
-              className="size-10 rounded-full border-2 object-contain md:size-14"
+              className="size-10 rounded-full border-2 object-cover md:size-14"
             />
 
             <div>

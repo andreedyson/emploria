@@ -169,7 +169,7 @@ function AddCompanyDialog() {
                   width={200}
                   height={200}
                   alt="Company Logo"
-                  className="max-h-[200px] object-contain"
+                  className="max-h-[200px] object-cover"
                 />
                 <p
                   onClick={handleClearImage}
