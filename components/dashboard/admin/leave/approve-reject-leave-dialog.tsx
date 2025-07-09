@@ -86,7 +86,7 @@ function ApproveRejectLeaveDialog({
       <DialogTrigger asChild>
         <Button
           size={"icon"}
-          disabled={currentStatus == "APPROVED"}
+          disabled={currentStatus !== "PENDING"}
           className="flex cursor-pointer items-center gap-2 bg-blue-500 text-white duration-200 hover:bg-blue-600"
         >
           <Loader size={16} />
