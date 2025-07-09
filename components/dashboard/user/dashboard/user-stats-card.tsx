@@ -74,7 +74,7 @@ function UserStatsCard({ stats }: UserStatsCardProps) {
               <h4 className="line-clamp-1 text-sm font-bold lg:text-base">
                 {convertRupiah(stats[2].data?.total ?? 0)}
               </h4>
-              <p className="text-muted text-xs font-medium">
+              <p className="text-muted text-xs font-medium dark:text-gray-300">
                 {
                   months.find((month) => month.value === stats[2].data?.month)
                     ?.label
