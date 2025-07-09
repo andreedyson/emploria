@@ -1,5 +1,8 @@
 # 🚀 Emploria – SAP Employee Management Dashboard
 
+![Emploria - README](https://github.com/user-attachments/assets/1464e3e0-bffc-460a-915b-01343e815660)
+
+
 SaaS Open Source sistem SAP untuk pengelolaan karyawan. Mendukung multi-tenant, akses berbasis role, pembuatan slip gaji dalam PDF, dan masih banyak lagi. Dibangun dengan Next.js, Prisma, PostgreSQL, Supabase, TailwindCSS.
 
 ## 📋 <a name="table">Table of Contents</a>
