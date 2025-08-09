@@ -70,7 +70,7 @@ async function UserAttendancePage() {
                 : "🕔 You haven't checked out yet"}
             </p>
           </div>
-          <AttendanceButton userId={userId} attendance={todaysAttendance} />
+          <AttendanceButton userId={userId} />
         </div>
       </div>
 
