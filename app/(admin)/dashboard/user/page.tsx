@@ -58,7 +58,7 @@ async function UserDashboardPage() {
               : "🕔 You haven't checked out yet"}
           </p>
         </div>
-        <AttendanceButton userId={userId} attendance={todaysAttendance} />
+        <AttendanceButton userId={userId} />
       </div>
 
       <UserStatsCard stats={statsCardData} />

@@ -1,8 +1,7 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Clock5, Clock9 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { customToast } from "@/components/custom-toast";
@@ -19,38 +18,24 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { BASE_URL } from "@/constants";
+import { getTodayAttendanceStatus } from "@/lib/data/user/dashboard";
 import { formatDate } from "@/lib/utils";
 
 type AttendanceButtonProps = {
   userId: string;
-  attendance: {
-    id: string;
-    checkIn: Date | null;
-    checkOut: Date | null;
-  } | null;
 };
 
 type AttendanceEndpoint = { endpoint: "check-in" | "check-out" };
 
-export default function AttendanceButton({
-  userId,
-  attendance,
-}: AttendanceButtonProps) {
+export default function AttendanceButton({ userId }: AttendanceButtonProps) {
   const [open, setOpen] = useState(false);
-  const router = useRouter();
+  const queryClient = useQueryClient();
 
-  // Business rules
-  const now = new Date();
-  const wibHour = (now.getUTCHours() + 7) % 24;
-  const disabledByTime = wibHour >= 18;
-  const alreadyCheckedIn = !!attendance?.checkIn;
-  const alreadyCheckedOut = !!attendance?.checkOut;
-
-  const buttonLabel = alreadyCheckedIn ? "Check Out" : "Check In";
-  const icon = alreadyCheckedIn ? <Clock5 size={16} /> : <Clock9 size={16} />;
-  const buttonColor = alreadyCheckedIn
-    ? "bg-orange-500 hover:bg-orange-600"
-    : "bg-green-500 hover:bg-green-600";
+  const { data: attendance, isPending } = useQuery({
+    queryKey: ["attendance", userId],
+    queryFn: () => getTodayAttendanceStatus(userId),
+    enabled: !!userId,
+  });
 
   const mutation = useMutation({
     mutationFn: async ({ endpoint }: AttendanceEndpoint) => {
@@ -68,7 +53,7 @@ export default function AttendanceButton({
     },
     onSuccess: (data) => {
       customToast("success", "Success 🎉", data.message);
-      router.refresh();
+      queryClient.invalidateQueries({ queryKey: ["attendance", userId] });
     },
     onError: (err: unknown) => {
       const message =
@@ -79,6 +64,26 @@ export default function AttendanceButton({
       setOpen(false);
     },
   });
+
+  const now = new Date();
+  const wibHour = (now.getUTCHours() + 7) % 24;
+  const disabledByTime = wibHour >= 18;
+
+  const alreadyCheckedIn = !!attendance?.checkIn;
+  const alreadyCheckedOut = !!attendance?.checkOut;
+
+  const isAfterCutoff = wibHour >= 18;
+  const canCheckIn = !alreadyCheckedIn && !alreadyCheckedOut && !isAfterCutoff;
+  const canCheckOut = alreadyCheckedIn && !alreadyCheckedOut; // allow after 18:00
+
+  const isDisabled =
+    isPending || mutation.isPending || (!canCheckIn && !canCheckOut);
+
+  const buttonLabel = alreadyCheckedIn ? "Check Out" : "Check In";
+  const icon = alreadyCheckedIn ? <Clock5 size={16} /> : <Clock9 size={16} />;
+  const buttonColor = alreadyCheckedIn
+    ? "bg-orange-500 hover:bg-orange-600"
+    : "bg-green-500 hover:bg-green-600";
 
   return (
     <AlertDialog
@@ -92,11 +97,9 @@ export default function AttendanceButton({
       ) : (
         <AlertDialogTrigger asChild>
           <Button
-            disabled={disabledByTime || mutation.isPending}
+            disabled={isDisabled}
             className={`flex items-center gap-2 text-sm text-white duration-200 ${buttonColor} ${
-              disabledByTime || mutation.isPending
-                ? "cursor-not-allowed opacity-50"
-                : ""
+              isDisabled ? "cursor-not-allowed opacity-50" : ""
             }`}
             title={
               disabledByTime
