@@ -64,7 +64,7 @@ Aplikasi ini dirancang untuk membantu manajemen operasional perusahaan dengan fi
 
 Aplikasi ini menggunakan sistem role-based access control (RBAC) untuk membatasi dan mengatur hak akses pengguna berdasarkan peran mereka. Terdapat tiga jenis role utama:
 
-**🛠️ SUPER_ADMIN**:
+**1. 🛠️ SUPER_ADMIN**:
 Role tertinggi yang memiliki kontrol penuh atas seluruh sistem.
 
 **Hak akses:**
@@ -72,8 +72,8 @@ Role tertinggi yang memiliki kontrol penuh atas seluruh sistem.
 - Mengelola akun SUPER_ADMIN_COMPANY
 - Melihat seluruh aktivitas pengguna di semua perusahaan
 - Melihat dan mengatur konfigurasi global sistem
-
-**🧑‍💼 SUPER_ADMIN_COMPANY**:
+---
+**2. 🧑‍💼 SUPER_ADMIN_COMPANY**:
 Role untuk admin perusahaan yang memiliki akses penuh terhadap data perusahaannya sendiri.
 
 **Hak akses:**
@@ -81,8 +81,8 @@ Role untuk admin perusahaan yang memiliki akses penuh terhadap data perusahaanny
 - Mengelola data gaji, absensi, dan cuti untuk karyawan di perusahaannya
 - Melihat aktivitas karyawan di perusahaannya
 - Tidak dapat melihat atau mengelola data perusahaan lain
-
-**👤 USER**:
+---
+**3. 👤 USER**:
 Role default untuk karyawan.
 
 **Hak akses:**
