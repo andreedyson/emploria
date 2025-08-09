@@ -1,7 +1,7 @@
 "use client";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Clock5, Clock9 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { customToast } from "@/components/custom-toast";
@@ -18,37 +18,27 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { BASE_URL } from "@/constants";
+import { getTodayAttendanceStatus } from "@/lib/data/user/dashboard";
 import { formatDate } from "@/lib/utils";
-import { useMutation } from "@tanstack/react-query";
 
 type AttendanceButtonProps = {
   userId: string;
-  attendance: {
-    id: string;
-    checkIn: Date | null;
-    checkOut: Date | null;
-  };
 };
 
-export default function AttendanceButton({
-  userId,
-  attendance,
-}: AttendanceButtonProps) {
-  const [submitting, setSubmitting] = useState(false);
+type AttendanceEndpoint = { endpoint: "check-in" | "check-out" };
+
+export default function AttendanceButton({ userId }: AttendanceButtonProps) {
   const [open, setOpen] = useState(false);
-  const router = useRouter();
+  const queryClient = useQueryClient();
 
-  const now = new Date();
-  const wibHour = (now.getUTCHours() + 7) % 24;
-  const disabledByTime = wibHour >= 18;
-  const alreadyCheckedIn = !!attendance?.checkIn;
-  const alreadyCheckedOut = !!attendance?.checkOut;
+  const { data: attendance, isPending } = useQuery({
+    queryKey: ["attendance", userId],
+    queryFn: () => getTodayAttendanceStatus(userId),
+    enabled: !!userId,
+  });
 
-  const handleAttendance = async () => {
-    setSubmitting(true);
-    const endpoint = alreadyCheckedIn ? "check-out" : "check-in";
-
-    try {
+  const mutation = useMutation({
+    mutationFn: async ({ endpoint }: AttendanceEndpoint) => {
       const res = await fetch(`${BASE_URL}/api/admin/attendance/${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -56,27 +46,38 @@ export default function AttendanceButton({
       });
 
       const data = await res.json();
-
       if (!res.ok) {
-        customToast("error", "Uh oh! Something went wrong 😵", data.message);
-      } else {
-        customToast("success", "Success 🎉", data.message);
-        router.refresh();
+        throw new Error(data?.message || "Request failed");
       }
-    } catch (error) {
-      console.error(error);
-      customToast("error", "Network error", "Please try again later.");
-    } finally {
-      setSubmitting(false);
+      return data as { message: string };
+    },
+    onSuccess: (data) => {
+      customToast("success", "Success 🎉", data.message);
+      queryClient.invalidateQueries({ queryKey: ["attendance", userId] });
+    },
+    onError: (err: unknown) => {
+      const message =
+        err instanceof Error ? err.message : "Please try again later.";
+      customToast("error", "Uh oh! Something went wrong 😵", message);
+    },
+    onSettled: () => {
       setOpen(false);
-    }
-  };
-
-  const mutation = useMutation({
-    mutationFn: async () => {
-      await handleAttendance();
     },
   });
+
+  const now = new Date();
+  const wibHour = (now.getUTCHours() + 7) % 24;
+  const disabledByTime = wibHour >= 18;
+
+  const alreadyCheckedIn = !!attendance?.checkIn;
+  const alreadyCheckedOut = !!attendance?.checkOut;
+
+  const isAfterCutoff = wibHour >= 18;
+  const canCheckIn = !alreadyCheckedIn && !alreadyCheckedOut && !isAfterCutoff;
+  const canCheckOut = alreadyCheckedIn && !alreadyCheckedOut; // allow after 18:00
+
+  const isDisabled =
+    isPending || mutation.isPending || (!canCheckIn && !canCheckOut);
 
   const buttonLabel = alreadyCheckedIn ? "Check Out" : "Check In";
   const icon = alreadyCheckedIn ? <Clock5 size={16} /> : <Clock9 size={16} />;
@@ -85,7 +86,10 @@ export default function AttendanceButton({
     : "bg-green-500 hover:bg-green-600";
 
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
+    <AlertDialog
+      open={open}
+      onOpenChange={(val) => !mutation.isPending && setOpen(val)}
+    >
       {alreadyCheckedIn && alreadyCheckedOut ? (
         <Button disabled className="cursor-not-allowed bg-gray-400 text-white">
           ✅ Attendance Completed
@@ -93,11 +97,15 @@ export default function AttendanceButton({
       ) : (
         <AlertDialogTrigger asChild>
           <Button
-            disabled={disabledByTime}
+            disabled={isDisabled}
             className={`flex items-center gap-2 text-sm text-white duration-200 ${buttonColor} ${
-              disabledByTime ? "cursor-not-allowed opacity-50" : ""
+              isDisabled ? "cursor-not-allowed opacity-50" : ""
             }`}
-            title={disabledByTime ? "Attendance is closed after 18:00 WIB" : ""}
+            title={
+              disabledByTime
+                ? "Attendance is closed after 18:00 WIB"
+                : undefined
+            }
           >
             {icon}
             {buttonLabel}
@@ -123,13 +131,24 @@ export default function AttendanceButton({
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel className="w-[130px]">Cancel</AlertDialogCancel>
+          <AlertDialogCancel
+            className="w-[130px]"
+            disabled={mutation.isPending}
+          >
+            Cancel
+          </AlertDialogCancel>
           <SubmitButton
-            onClick={() => mutation.mutate()}
-            isSubmitting={submitting}
+            onClick={() =>
+              mutation.mutate({
+                endpoint: alreadyCheckedIn
+                  ? ("check-out" as const)
+                  : ("check-in" as const),
+              })
+            }
+            isSubmitting={mutation.isPending}
             className="w-[130px] bg-emerald-500 text-white hover:bg-emerald-300"
           >
-            {submitting ? "Confirming..." : "Confirm"}
+            {mutation.isPending ? "Confirming..." : "Confirm"}
           </SubmitButton>
         </AlertDialogFooter>
       </AlertDialogContent>
