@@ -1,5 +1,6 @@
 "use client";
 
+import { useMutation } from "@tanstack/react-query";
 import { Clock5, Clock9 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -19,7 +20,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { BASE_URL } from "@/constants";
 import { formatDate } from "@/lib/utils";
-import { useMutation } from "@tanstack/react-query";
 
 type AttendanceButtonProps = {
   userId: string;
@@ -27,56 +27,24 @@ type AttendanceButtonProps = {
     id: string;
     checkIn: Date | null;
     checkOut: Date | null;
-  };
+  } | null;
 };
+
+type AttendanceEndpoint = { endpoint: "check-in" | "check-out" };
 
 export default function AttendanceButton({
   userId,
   attendance,
 }: AttendanceButtonProps) {
-  const [submitting, setSubmitting] = useState(false);
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
+  // Business rules
   const now = new Date();
   const wibHour = (now.getUTCHours() + 7) % 24;
   const disabledByTime = wibHour >= 18;
   const alreadyCheckedIn = !!attendance?.checkIn;
   const alreadyCheckedOut = !!attendance?.checkOut;
-
-  const handleAttendance = async () => {
-    setSubmitting(true);
-    const endpoint = alreadyCheckedIn ? "check-out" : "check-in";
-
-    try {
-      const res = await fetch(`${BASE_URL}/api/admin/attendance/${endpoint}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        customToast("error", "Uh oh! Something went wrong 😵", data.message);
-      } else {
-        customToast("success", "Success 🎉", data.message);
-        router.refresh();
-      }
-    } catch (error) {
-      console.error(error);
-      customToast("error", "Network error", "Please try again later.");
-    } finally {
-      setSubmitting(false);
-      setOpen(false);
-    }
-  };
-
-  const mutation = useMutation({
-    mutationFn: async () => {
-      await handleAttendance();
-    },
-  });
 
   const buttonLabel = alreadyCheckedIn ? "Check Out" : "Check In";
   const icon = alreadyCheckedIn ? <Clock5 size={16} /> : <Clock9 size={16} />;
@@ -84,8 +52,39 @@ export default function AttendanceButton({
     ? "bg-orange-500 hover:bg-orange-600"
     : "bg-green-500 hover:bg-green-600";
 
+  const mutation = useMutation({
+    mutationFn: async ({ endpoint }: AttendanceEndpoint) => {
+      const res = await fetch(`${BASE_URL}/api/admin/attendance/${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data?.message || "Request failed");
+      }
+      return data as { message: string };
+    },
+    onSuccess: (data) => {
+      customToast("success", "Success 🎉", data.message);
+      router.refresh();
+    },
+    onError: (err: unknown) => {
+      const message =
+        err instanceof Error ? err.message : "Please try again later.";
+      customToast("error", "Uh oh! Something went wrong 😵", message);
+    },
+    onSettled: () => {
+      setOpen(false);
+    },
+  });
+
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
+    <AlertDialog
+      open={open}
+      onOpenChange={(val) => !mutation.isPending && setOpen(val)}
+    >
       {alreadyCheckedIn && alreadyCheckedOut ? (
         <Button disabled className="cursor-not-allowed bg-gray-400 text-white">
           ✅ Attendance Completed
@@ -93,11 +92,17 @@ export default function AttendanceButton({
       ) : (
         <AlertDialogTrigger asChild>
           <Button
-            disabled={disabledByTime}
+            disabled={disabledByTime || mutation.isPending}
             className={`flex items-center gap-2 text-sm text-white duration-200 ${buttonColor} ${
-              disabledByTime ? "cursor-not-allowed opacity-50" : ""
+              disabledByTime || mutation.isPending
+                ? "cursor-not-allowed opacity-50"
+                : ""
             }`}
-            title={disabledByTime ? "Attendance is closed after 18:00 WIB" : ""}
+            title={
+              disabledByTime
+                ? "Attendance is closed after 18:00 WIB"
+                : undefined
+            }
           >
             {icon}
             {buttonLabel}
@@ -123,13 +128,24 @@ export default function AttendanceButton({
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel className="w-[130px]">Cancel</AlertDialogCancel>
+          <AlertDialogCancel
+            className="w-[130px]"
+            disabled={mutation.isPending}
+          >
+            Cancel
+          </AlertDialogCancel>
           <SubmitButton
-            onClick={() => mutation.mutate()}
-            isSubmitting={submitting}
+            onClick={() =>
+              mutation.mutate({
+                endpoint: alreadyCheckedIn
+                  ? ("check-out" as const)
+                  : ("check-in" as const),
+              })
+            }
+            isSubmitting={mutation.isPending}
             className="w-[130px] bg-emerald-500 text-white hover:bg-emerald-300"
           >
-            {submitting ? "Confirming..." : "Confirm"}
+            {mutation.isPending ? "Confirming..." : "Confirm"}
           </SubmitButton>
         </AlertDialogFooter>
       </AlertDialogContent>

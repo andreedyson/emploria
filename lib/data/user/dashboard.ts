@@ -7,6 +7,7 @@ import { UserStatsCardDataProps } from "@/types/user/dashboard";
 import { endOfDay, endOfMonth, startOfDay, startOfMonth } from "date-fns";
 import { Banknote, Calendar1, CalendarCog, CalendarX } from "lucide-react";
 import { toZonedTime } from "date-fns-tz";
+import { Attendance } from "@prisma/client";
 
 export async function getUserStatsCardData(
   userId: string,
@@ -149,7 +150,9 @@ export async function getUserStatsCardData(
   }
 }
 
-export async function getTodayAttendanceStatus(userId: string) {
+export async function getTodayAttendanceStatus(
+  userId: string,
+): Promise<Attendance | null> {
   const timeZone = "Asia/Jakarta";
   const now = new Date();
   const zonedNow = toZonedTime(now, timeZone);
