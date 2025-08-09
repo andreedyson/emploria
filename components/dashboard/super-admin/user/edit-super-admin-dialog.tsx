@@ -39,6 +39,7 @@ import { useCompanies } from "@/hooks/use-company";
 import { SuperAdminCompanyUserProps } from "@/types/super-admin/user";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const editSuperAdminUserSchema = z.object({
   name: z.string().min(1),
@@ -52,6 +53,7 @@ type EditSuperAdminUserDialogProps = {
 };
 
 function EditSuperAdminUserDialog({ user }: EditSuperAdminUserDialogProps) {
+  const session = useSession();
   const { data: companies } = useCompanies();
   const [open, setOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -107,7 +109,14 @@ function EditSuperAdminUserDialog({ user }: EditSuperAdminUserDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+      <DialogTrigger
+        asChild
+        disabled={
+          session.status === "loading" ||
+          session?.data?.user.id === user.id ||
+          session.data?.user.role === "SUPER_ADMIN"
+        }
+      >
         <Button
           size={"icon"}
           className="flex cursor-pointer items-center gap-2 bg-yellow-500 text-white duration-200 hover:bg-yellow-600"

@@ -1,24 +1,25 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Clock5, Clock9 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 import { customToast } from "@/components/custom-toast";
 import { SubmitButton } from "@/components/submit-button";
 import {
   AlertDialog,
-  AlertDialogTrigger,
+  AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
   AlertDialogDescription,
   AlertDialogFooter,
-  AlertDialogCancel,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { BASE_URL } from "@/constants";
 import { formatDate } from "@/lib/utils";
+import { useMutation } from "@tanstack/react-query";
 
 type AttendanceButtonProps = {
   userId: string;
@@ -26,7 +27,7 @@ type AttendanceButtonProps = {
     id: string;
     checkIn: Date | null;
     checkOut: Date | null;
-  } | null;
+  };
 };
 
 export default function AttendanceButton({
@@ -70,6 +71,12 @@ export default function AttendanceButton({
       setOpen(false);
     }
   };
+
+  const mutation = useMutation({
+    mutationFn: async () => {
+      await handleAttendance();
+    },
+  });
 
   const buttonLabel = alreadyCheckedIn ? "Check Out" : "Check In";
   const icon = alreadyCheckedIn ? <Clock5 size={16} /> : <Clock9 size={16} />;
@@ -118,7 +125,7 @@ export default function AttendanceButton({
         <AlertDialogFooter>
           <AlertDialogCancel className="w-[130px]">Cancel</AlertDialogCancel>
           <SubmitButton
-            onClick={handleAttendance}
+            onClick={() => mutation.mutate()}
             isSubmitting={submitting}
             className="w-[130px] bg-emerald-500 text-white hover:bg-emerald-300"
           >
