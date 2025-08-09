@@ -20,8 +20,12 @@ export default function SalaryInvoicePDFViewer({
   user,
 }: SalaryInvoicePDFViewerProps) {
   const { data, isLoading, isError } = useQuery<SalaryColumnsProps | null>({
-    queryKey: ["salary-invoice"],
+    queryKey: ["salary-invoice", id],
     queryFn: async () => await getSalaryById(id),
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchInterval: false,
+    staleTime: 5 * 60 * 1000,
   });
   const router = useRouter();
 
